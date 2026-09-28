@@ -19,6 +19,34 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Debug: shows the role being assumed and the OIDC claims AWS will compare against the trust policy
+      - name: Debug OIDC Role and Token Claims
+        env:
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$ROLE_ARN" ]; then
+            echo "::error::AWS_ROLE_ARN secret is empty or not visible to this workflow"
+            exit 1
+          fi
+          if [[ "$ROLE_ARN" =~ [[:space:]] ]]; then
+            echo "::error::AWS_ROLE_ARN contains spaces or a newline. Re-save the secret without them."
+          fi
+          if [[ "$ROLE_ARN" =~ ^arn:aws:iam::[0-9]{12}:role/.+$ ]]; then
+            echo "Role ARN format: OK"
+          else
+            echo "::error::AWS_ROLE_ARN is not in the form arn:aws:iam::<12-digit-account>:role/<name>"
+          fi
+          echo "Account ID : $(echo "$ROLE_ARN" | cut -d: -f5)"
+          echo "Role name  : ${ROLE_ARN##*/}"
+
+          RESPONSE=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com")
+          PAYLOAD=$(echo "$RESPONSE" | jq -r '.value' | cut -d. -f2 | tr '_-' '/+')
+          while [ $(( ${#PAYLOAD} % 4 )) -ne 0 ]; do PAYLOAD="${PAYLOAD}="; done
+          echo "OIDC token claims (the trust policy must match iss, aud and sub):"
+          echo "$PAYLOAD" | base64 -d | jq '{iss, aud, sub, repository, ref, environment, job_workflow_ref}'
+
       # 2. Authenticate securely with AWS using your IAM OIDC Role
       - name: Configure AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
@@ -69,6 +97,25 @@ jobs:
       # 1. Checkout the repository code into the runner workspace
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      # Debug: the apply job runs in the production environment, so its sub claim differs from the plan job
+      - name: Debug OIDC Role and Token Claims
+        env:
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$ROLE_ARN" ]; then
+            echo "::error::AWS_ROLE_ARN secret is empty or not visible to this workflow"
+            exit 1
+          fi
+          echo "Account ID : $(echo "$ROLE_ARN" | cut -d: -f5)"
+          echo "Role name  : ${ROLE_ARN##*/}"
+          RESPONSE=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com")
+          PAYLOAD=$(echo "$RESPONSE" | jq -r '.value' | cut -d. -f2 | tr '_-' '/+')
+          while [ $(( ${#PAYLOAD} % 4 )) -ne 0 ]; do PAYLOAD="${PAYLOAD}="; done
+          echo "OIDC token claims (the trust policy must match iss, aud and sub):"
+          echo "$PAYLOAD" | base64 -d | jq '{iss, aud, sub, repository, ref, environment, job_workflow_ref}'
 
       # 2. Authenticate securely with AWS using your IAM OIDC Role
       - name: Configure AWS Credentials via OIDC

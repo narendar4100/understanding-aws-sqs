@@ -1,0 +1,51 @@
+name: AWS SQS Demo Infrastructure Deployment
+
+on:
+  push:
+    branches:
+      - feature/sqs-demo # Triggers the deployment whenever you push to this branch
+
+permissions:
+  id-token: write # MANDATORY for OIDC authentication
+  contents: read  # Allows GitHub to check out your repository code
+
+jobs:
+  deploy:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository code into the runner workspace
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Authenticate securely with AWS using your IAM OIDC Role
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }} # Fetches the Role ARN you saved in GitHub Secrets
+          aws-region: us-east-1
+
+      # 3. Setup the Terraform CLI binary on the runner environment
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      # 4. Initialize Terraform and download the required AWS/Archive providers
+      - name: Terraform Init
+        run: |
+          cd terraform
+          terraform init
+
+      # 5. Validate the syntactical correctness of your code configuration blocks
+      - name: Terraform Validate
+        run: |
+          cd terraform
+          terraform validate
+
+      # 6. Build the entire core banking cloud ecosystem natively
+      - name: Terraform Apply
+        run: |
+          cd terraform
+          terraform apply --auto-approve

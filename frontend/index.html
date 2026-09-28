@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Core Banking Ledger &amp; SQS Training Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    body {
+      font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    }
+    .font-mono {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <header class="border-b border-slate-800">
+    <div class="mx-auto max-w-6xl px-6 py-8">
+      <div class="mb-4 flex flex-wrap items-center gap-2">
+        <span class="rounded-full border border-amber-700/70 bg-amber-950/80 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-amber-200">Enterprise</span>
+        <span class="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-300">Mission-critical ledger</span>
+      </div>
+      <h1 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Core Banking Ledger &amp; SQS Training Simulator</h1>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400 sm:text-base">
+        Account <span class="font-mono text-slate-200">ACC-9941</span> submits one hundred transfers of
+        <span class="font-mono text-slate-200">250.00</span> in the same millisecond.
+        Architecture A writes the ledger on the request path and is capped at two concurrent executions.
+        Architecture B accepts the transfer into SQS and commits after the caller has already received 200.
+      </p>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-6 py-8">
+    <div class="grid gap-6 lg:grid-cols-2">
+      <section class="rounded-xl border border-slate-800 border-t-2 border-t-amber-500 bg-slate-900 p-6" aria-labelledby="arch-a-title">
+        <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-amber-300">Synchronous path</p>
+        <h2 id="arch-a-title" class="mt-2 text-xl font-semibold text-white">Architecture A: Unbuffered Processing</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-400">
+          Targets <span id="target-direct" class="font-mono text-slate-200">https://sisuraphotography.com</span>.
+          API Gateway invokes Lambda directly. Reserved concurrency is 2, so the surplus returns 429 while two calls spend 1.5 seconds inside the simulated commit.
+        </p>
+        <button id="btn-direct" type="button" class="mt-5 w-full rounded-lg bg-amber-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50">
+          Execute 100 High-Load Transfers
+        </button>
+        <p id="state-direct" class="mt-3 min-h-5 font-mono text-xs text-slate-500">Idle</p>
+        <div class="mt-5 grid grid-cols-3 gap-3" aria-live="polite">
+          <article class="rounded-lg border border-slate-800 bg-slate-950 p-3">
+            <p class="text-[11px] uppercase tracking-wider text-slate-500">Total Actions</p>
+            <p id="total-direct" class="mt-2 font-mono text-3xl tabular-nums text-white">0</p>
+          </article>
+          <article class="rounded-lg border border-emerald-900/80 bg-slate-950 p-3">
+            <p class="text-[11px] uppercase tracking-wider text-emerald-500">Audited (200 OK)</p>
+            <p id="ok-direct" class="mt-2 font-mono text-3xl tabular-nums text-emerald-400">0</p>
+          </article>
+          <article class="rounded-lg border border-rose-900/80 bg-slate-950 p-3">
+            <p class="text-[11px] uppercase tracking-wider text-rose-400">Failed (429/Throttled)</p>
+            <p id="fail-direct" class="mt-2 font-mono text-3xl tabular-nums text-rose-400">0</p>
+          </article>
+        </div>
+        <p id="mix-direct" class="mt-3 font-mono text-xs leading-5 text-slate-500"></p>
+      </section>
+
+      <section class="rounded-xl border border-slate-800 border-t-2 border-t-emerald-500 bg-slate-900 p-6" aria-labelledby="arch-b-title">
+        <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-emerald-300">Buffered path</p>
+        <h2 id="arch-b-title" class="mt-2 text-xl font-semibold text-white">Architecture B: SQS Vault Buffer</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-400">
+          Targets <span id="target-queue" class="font-mono text-slate-200">https://sisuraphotography.com</span>.
+          API Gateway calls SQS SendMessage and returns as soon as the queue accepts the body. A 200 here means the transfer is durable in the buffer. The 1.5 second ledger commit runs later on the consumer.
+        </p>
+        <button id="btn-queue" type="button" class="mt-5 w-full rounded-lg bg-emerald-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50">
+          Execute 100 High-Load Transfers
+        </button>
+        <p id="state-queue" class="mt-3 min-h-5 font-mono text-xs text-slate-500">Idle</p>
+        <div class="mt-5 grid grid-cols-3 gap-3" aria-live="polite">
+          <article class="rounded-lg border border-slate-800 bg-slate-950 p-3">
+            <p class="text-[11px] uppercase tracking-wider text-slate-500">Total Actions</p>
+            <p id="total-queue" class="mt-2 font-mono text-3xl tabular-nums text-white">0</p>
+          </article>
+          <article class="rounded-lg border border-emerald-900/80 bg-slate-950 p-3">
+            <p class="text-[11px] uppercase tracking-wider text-emerald-500">Audited (200 OK)</p>
+            <p id="ok-queue" class="mt-2 font-mono text-3xl tabular-nums text-emerald-400">0</p>
+          </article>
+          <article class="rounded-lg border border-rose-900/80 bg-slate-950 p-3">
+            <p class="text-[11px] uppercase tracking-wider text-rose-400">Failed (429/Throttled)</p>
+            <p id="fail-queue" class="mt-2 font-mono text-3xl tabular-nums text-rose-400">0</p>
+          </article>
+        </div>
+        <p id="mix-queue" class="mt-3 font-mono text-xs leading-5 text-slate-500"></p>
+      </section>
+    </div>
+
+    <section class="mt-10 rounded-xl border border-slate-800 bg-slate-900 px-6 py-8" aria-labelledby="deep-dive-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-500">Technical deep-dive</p>
+      <h2 id="deep-dive-title" class="mt-2 text-2xl font-semibold tracking-tight text-white">Why a ledger cannot stop at SQS Standard</h2>
+      <div class="mt-6 space-y-6 text-sm leading-7 text-slate-300">
+        <div>
+          <h3 class="text-base font-semibold text-white">What this burst actually measures</h3>
+          <p class="mt-2">
+            Each button starts exactly 100 <span class="font-mono text-slate-100">fetch()</span> calls inside one synchronous loop, then waits with <span class="font-mono text-slate-100">Promise.all()</span>. The ledger function sleeps 1.5 seconds to stand in for a database transaction: pin the account row, append the journal, flush, commit. Architecture A is allowed two of those critical sections at a time (<span class="font-mono text-slate-100">reserved_concurrent_executions = 2</span>). Lambda rejects the rest with HTTP 429 before they touch the ledger. The service stays up. The customer transfers that were rejected are simply gone.
+          </p>
+          <p class="mt-2">
+            Architecture B removes compute from the admission path. <span class="font-mono text-slate-100">POST /buy-queue</span> is an API Gateway AWS service integration (<span class="font-mono text-slate-100">SQS-SendMessage</span>). The gateway writes <span class="font-mono text-slate-100">$request.body</span> onto the Standard queue <span class="font-mono text-slate-100">training-buffer-queue</span> and returns 200 when SQS has the message. The consumer Lambda, batch size 10, runs the same 1.5 second commit after the browser has finished. The green column fills because the queue absorbed the spike, and the caller no longer shares a fate with the slow commit.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-white">SQS Standard: out-of-order delivery</h3>
+          <p class="mt-2">
+            A Standard queue offers best-effort ordering only. SQS can hand the consumer a later transfer for <span class="font-mono text-slate-100">ACC-9941</span> before an earlier one: a release before the hold that funded it, or a reversal before the original debit. If the ledger applies each message to a running balance as it arrives, that balance is wrong even though every message is eventually processed. Interest accrual, overdraft decisions, and the end-of-day regulatory snapshot all read that number. The bytes in the queue are intact. The books are not, because posting order is part of the meaning of a ledger.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-white">SQS Standard: duplicate delivery</h3>
+          <p class="mt-2">
+            Standard queues are at-least-once. A message is delivered again when the consumer crashes after commit and before delete, when the visibility timeout expires during the 1.5 second critical section, or when the function retries. The second delivery is another instruction to move 250.00. A consumer that posts every receive will credit or debit the customer twice. That is how an otherwise healthy buffer corrupts a bank: the retry is indistinguishable from a new transfer unless the ledger itself rejects a repeated transaction id.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-white">Why SQS FIFO is the standard for financial ledgers</h3>
+          <p class="mt-2">
+            FIFO is the queue type used for posting pipelines because it supplies the two guarantees Standard withholds, scoped to a message group. Set <span class="font-mono text-slate-100">MessageGroupId</span> to the account id. Transfers for ACC-9941 stay in submission order, while other accounts remain separate groups and still run in parallel, so one hot account does not freeze the bank. Set <span class="font-mono text-slate-100">MessageDeduplicationId</span> to a stable client transfer id (or enable content-based deduplication). For five minutes, a second send of that id is discarded instead of posted again.
+          </p>
+          <p class="mt-2">
+            FIFO does not replace an idempotency key stored with the ledger. The deduplication window is five minutes, and a consumer can still observe a retry after it has committed. Production posting is FIFO for order, plus a unique transaction id that a database constraint rejects on replay. Exactly-once customer effect is an application property. FIFO is what makes that property operable at queue scale.
+          </p>
+          <p class="mt-2">
+            The throughput ceiling is the reason teams are tempted to stay on Standard: 300 sends per second without batching, 3,000 with batching, and higher in high-throughput FIFO mode, with a per-group cap so a single account cannot consume the queue. A core ledger takes that ceiling. An unbounded Standard queue that double-posts a transfer costs more than a FIFO queue that makes one account wait a few hundred milliseconds.
+          </p>
+          <p class="mt-2">
+            This stack provisions a Standard queue on purpose, so the class can see the buffering result on its own. Moving Architecture B onto a real posting path means making that queue FIFO, grouping by account, and deduplicating on the transfer id.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const BASE_URL = "https://sisuraphotography.com";
+    const BURST_SIZE = 100;
+    const TRANSFER = { accountId: "ACC-9941", amount: 250.00 };
+
+    const panels = {
+      direct: {
+        path: "/buy-direct",
+        button: document.getElementById("btn-direct"),
+        state: document.getElementById("state-direct"),
+        total: document.getElementById("total-direct"),
+        ok: document.getElementById("ok-direct"),
+        fail: document.getElementById("fail-direct"),
+        mix: document.getElementById("mix-direct"),
+        target: document.getElementById("target-direct"),
+      },
+      queue: {
+        path: "/buy-queue",
+        button: document.getElementById("btn-queue"),
+        state: document.getElementById("state-queue"),
+        total: document.getElementById("total-queue"),
+        ok: document.getElementById("ok-queue"),
+        fail: document.getElementById("fail-queue"),
+        mix: document.getElementById("mix-queue"),
+        target: document.getElementById("target-queue"),
+      },
+    };
+
+    function endpoint(path) {
+      return BASE_URL.replace(/\/$/, "") + path;
+    }
+
+    function render(panel, snapshot) {
+      panel.total.textContent = String(snapshot.total);
+      panel.ok.textContent = String(snapshot.audited);
+      panel.fail.textContent = String(snapshot.failed);
+      const parts = Object.keys(snapshot.counts)
+        .sort((left, right) => Number(left) - Number(right))
+        .map(function (code) {
+          const label = code === "0" ? "network" : code;
+          return label + "×" + snapshot.counts[code];
+        });
+      panel.mix.textContent = parts.join("   ");
+    }
+
+    async function executeBurst(key) {
+      const panel = panels[key];
+      const snapshot = { total: BURST_SIZE, audited: 0, failed: 0, counts: {} };
+      panel.button.disabled = true;
+      panel.state.textContent = "Burst in flight — 100 requests started together";
+      render(panel, snapshot);
+      const started = performance.now();
+      const url = endpoint(panel.path);
+      const body = JSON.stringify(TRANSFER);
+
+      const requests = [];
+      for (let index = 0; index < BURST_SIZE; index += 1) {
+        requests.push(
+          fetch(url, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: body,
+          })
+            .then(async function (response) {
+              await response.text();
+              return response.status;
+            })
+            .catch(function () {
+              return 0;
+            })
+            .then(function (status) {
+              const code = String(status);
+              snapshot.counts[code] = (snapshot.counts[code] || 0) + 1;
+              if (status === 200) {
+                snapshot.audited += 1;
+              } else {
+                snapshot.failed += 1;
+              }
+              render(panel, snapshot);
+              return status;
+            })
+        );
+      }
+
+      await Promise.all(requests);
+      const elapsed = Math.round(performance.now() - started);
+      panel.state.textContent = "Burst complete in " + elapsed + " ms";
+      if (snapshot.counts["0"] === BURST_SIZE) {
+        panel.mix.textContent =
+          "No HTTP response. Set BASE_URL to the terraform output api_gateway_custom_domain_url (https://demo.sisuraphotography.com with the supplied tfvars) and reload.";
+      }
+      panel.button.disabled = false;
+    }
+
+    Object.keys(panels).forEach(function (key) {
+      const panel = panels[key];
+      panel.target.textContent = endpoint(panel.path);
+      panel.button.addEventListener("click", function () {
+        executeBurst(key);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -40,7 +40,7 @@
         <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-amber-300">Synchronous path</p>
         <h2 id="arch-a-title" class="mt-2 text-xl font-semibold text-white">Architecture A: Unbuffered Processing</h2>
         <p class="mt-2 text-sm leading-6 text-slate-400">
-          Targets <span id="target-direct" class="font-mono text-slate-200">https://sisuraphotography.com</span>.
+          Targets <span id="target-direct" class="font-mono text-slate-200">https://demo.sisuraphotography.com</span>.
           API Gateway invokes Lambda directly. This account's Lambda concurrency quota is 10, so the surplus of the 100-call burst returns 429 while the accepted calls spend 1.5 seconds inside the simulated commit.
         </p>
         <button id="btn-direct" type="button" class="mt-5 w-full rounded-lg bg-amber-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50">
@@ -68,7 +68,7 @@
         <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-emerald-300">Buffered path</p>
         <h2 id="arch-b-title" class="mt-2 text-xl font-semibold text-white">Architecture B: SQS Vault Buffer</h2>
         <p class="mt-2 text-sm leading-6 text-slate-400">
-          Targets <span id="target-queue" class="font-mono text-slate-200">https://sisuraphotography.com</span>.
+          Targets <span id="target-queue" class="font-mono text-slate-200">https://demo.sisuraphotography.com</span>.
           API Gateway calls SQS SendMessage and returns as soon as the queue accepts the body. A 200 here means the transfer is durable in the buffer. The 1.5 second ledger commit runs later on the consumer.
         </p>
         <button id="btn-queue" type="button" class="mt-5 w-full rounded-lg bg-emerald-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50">
@@ -138,7 +138,8 @@
   </main>
 
   <script>
-    const BASE_URL = "https://sisuraphotography.com";
+    // Must match Terraform's api_gateway_custom_domain_url output.
+    const BASE_URL = "https://demo.sisuraphotography.com";
     const BURST_SIZE = 100;
     const TRANSFER = { accountId: "ACC-9941", amount: 250.00 };
 

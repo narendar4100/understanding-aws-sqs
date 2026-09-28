@@ -82,11 +82,32 @@ resource "aws_apigatewayv2_route" "buy_queue" {
   target    = "integrations/${aws_apigatewayv2_integration.queue.id}"
 }
 
+resource "aws_cloudwatch_log_group" "apigateway_access" {
+  name              = "/aws/apigateway/${var.environment}-ledger-http-api"
+  retention_in_days = 14
+}
+
 resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.ledger.id
   name        = "$default"
   auto_deploy = true
   description = "Auto-deployed default stage for the ledger training API."
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.apigateway_access.arn
+    format = jsonencode({
+      requestId               = "$context.requestId"
+      requestTime             = "$context.requestTime"
+      sourceIp                = "$context.identity.sourceIp"
+      httpMethod              = "$context.httpMethod"
+      routeKey                = "$context.routeKey"
+      status                  = "$context.status"
+      responseLatency         = "$context.responseLatency"
+      integrationLatency      = "$context.integrationLatency"
+      integrationErrorMessage = "$context.integrationErrorMessage"
+      errorMessage            = "$context.error.message"
+    })
+  }
 }
 
 resource "aws_apigatewayv2_domain_name" "api" {

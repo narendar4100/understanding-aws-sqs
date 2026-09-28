@@ -1,3 +1,11 @@
+# -----------------------------------------------------------------------------
+# TEMPORARILY COMMENTED — already exists / depends on commented Lambda + IAM resources.
+# Delete these in the console, then uncomment this file and re-apply:
+#   - IAM role: training-ledger-apigw-sqs
+#   - API Gateway HTTP API: training-ledger-http-api
+#   - Custom domain: demo.sisuraphotography.com (API Gateway domain name)
+# -----------------------------------------------------------------------------
+/*
 resource "aws_apigatewayv2_api" "ledger" {
   name          = "${var.environment}-ledger-http-api"
   protocol_type = "HTTP"
@@ -116,3 +124,4 @@ resource "aws_route53_record" "api" {
     evaluate_target_health = false
   }
 }
+*/

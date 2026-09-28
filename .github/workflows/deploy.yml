@@ -36,7 +36,7 @@ jobs:
       # 4. Initialize Terraform and download the required AWS/Archive providers
       - name: Terraform Init
         working-directory: terraform
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config=backend.hcl
 
       # 5. Validate the syntactical correctness of your code configuration blocks
       - name: Terraform Validate
@@ -113,7 +113,7 @@ jobs:
       # 5. Re-initialize with the same provider versions the plan was built with
       - name: Terraform Init
         working-directory: terraform
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config=backend.hcl
 
       # 6. Apply exactly the approved plan, nothing more
       - name: Terraform Apply

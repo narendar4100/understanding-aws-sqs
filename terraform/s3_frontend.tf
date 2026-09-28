@@ -1,3 +1,9 @@
+# -----------------------------------------------------------------------------
+# TEMPORARILY COMMENTED — bucket already exists in AWS.
+# Delete this in the console, then uncomment and re-apply:
+#   - S3 bucket: demo.sisuraphotography.com
+# -----------------------------------------------------------------------------
+/*
 resource "aws_s3_bucket" "frontend" {
   bucket        = local.frontend_bucket
   force_destroy = true
@@ -66,3 +72,4 @@ resource "aws_s3_object" "index" {
   content_type  = "text/html; charset=utf-8"
   cache_control = "no-cache"
 }
+*/

@@ -11,6 +11,9 @@ terraform {
       version = "~> 2.4"
     }
   }
+
+  # Values come from backend.hcl via: terraform init -backend-config=backend.hcl
+  backend "s3" {}
 }
 
 provider "aws" {

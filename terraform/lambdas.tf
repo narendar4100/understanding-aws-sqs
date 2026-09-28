@@ -15,6 +15,14 @@ data "aws_iam_policy_document" "lambda_assume" {
   }
 }
 
+# -----------------------------------------------------------------------------
+# TEMPORARILY COMMENTED — already exists in AWS from a prior apply with no remote state.
+# Delete these in the console, then uncomment this block and re-apply:
+#   - IAM role: training-ledger-lambda-exec
+#   - Log groups: /aws/lambda/training-direct-lambda, /aws/lambda/training-queue-lambda
+#   - Lambdas: training-direct-lambda, training-queue-lambda
+# -----------------------------------------------------------------------------
+/*
 resource "aws_iam_role" "lambda_exec" {
   name               = "${var.environment}-ledger-lambda-exec"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
@@ -98,3 +106,4 @@ resource "aws_lambda_event_source_mapping" "queue" {
   function_name    = aws_lambda_function.queue_lambda.arn
   batch_size       = 10
 }
+*/

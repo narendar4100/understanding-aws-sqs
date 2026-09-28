@@ -10,8 +10,8 @@ permissions:
   contents: read  # Allows GitHub to check out your repository code
 
 jobs:
-  deploy:
-    name: Terraform Apply
+  plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
 
     steps:
@@ -34,18 +34,68 @@ jobs:
 
       # 4. Initialize Terraform and download the required AWS/Archive providers
       - name: Terraform Init
-        run: |
-          cd terraform
-          terraform init
+        working-directory: terraform
+        run: terraform init -input=false
 
       # 5. Validate the syntactical correctness of your code configuration blocks
       - name: Terraform Validate
-        run: |
-          cd terraform
-          terraform validate
+        working-directory: terraform
+        run: terraform validate
 
-      # 6. Build the entire core banking cloud ecosystem natively
+      # 6. Preview every change and save it as a binary plan file
+      - name: Terraform Plan
+        working-directory: terraform
+        run: terraform plan -input=false -out=tfplan
+
+      # 7. Hand the exact plan, the Lambda zip it references, and the provider lock file to the apply job
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          include-hidden-files: true
+          retention-days: 1
+          path: |
+            terraform/tfplan
+            terraform/lambda_codes.zip
+            terraform/.terraform.lock.hcl
+
+  apply:
+    name: Terraform Apply
+    needs: plan
+    runs-on: ubuntu-latest
+    environment: production # Add required reviewers to this environment so apply waits for approval
+
+    steps:
+      # 1. Checkout the repository code into the runner workspace
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Authenticate securely with AWS using your IAM OIDC Role
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      # 3. Setup the Terraform CLI binary on the runner environment
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      # 4. Restore the reviewed plan produced by the plan job
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+          path: terraform
+
+      # 5. Re-initialize with the same provider versions the plan was built with
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init -input=false
+
+      # 6. Apply exactly the approved plan, nothing more
       - name: Terraform Apply
-        run: |
-          cd terraform
-          terraform apply --auto-approve
+        working-directory: terraform
+        run: terraform apply -input=false tfplan

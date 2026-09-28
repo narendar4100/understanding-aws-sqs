@@ -48,12 +48,14 @@ resource "aws_lambda_function" "direct_lambda" {
   runtime       = "python3.12"
   filename      = data.archive_file.lambda_codes.output_path
   source_code_hash = data.archive_file.lambda_codes.output_base64sha256
-  timeout       = 20
-  memory_size   = 256
+  timeout     = 20
+  memory_size = 256
 
-  # Two reserved slots. The other 98 of a 100-wide burst are throttled with 429
-  # before they can enter the 1.5 second ledger critical section.
-  reserved_concurrent_executions = 2
+  # A new account's Lambda concurrency quota is 10, and AWS requires at least 10
+  # of those executions to remain unreserved. Setting reserved_concurrent_executions
+  # to 2 drops the unreserved pool below that minimum, so PutFunctionConcurrency
+  # returns InvalidParameterValueException. Leave the cap unset until the account
+  # quota is raised above 12, then set reserved_concurrent_executions = 2.
 
   environment {
     variables = {

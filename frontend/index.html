@@ -41,7 +41,7 @@
         <h2 id="arch-a-title" class="mt-2 text-xl font-semibold text-white">Architecture A: Unbuffered Processing</h2>
         <p class="mt-2 text-sm leading-6 text-slate-400">
           Targets <span id="target-direct" class="font-mono text-slate-200">https://sisuraphotography.com</span>.
-          API Gateway invokes Lambda directly. Reserved concurrency is 2, so the surplus returns 429 while two calls spend 1.5 seconds inside the simulated commit.
+          API Gateway invokes Lambda directly. This account's Lambda concurrency quota is 10, so the surplus of the 100-call burst returns 429 while the accepted calls spend 1.5 seconds inside the simulated commit.
         </p>
         <button id="btn-direct" type="button" class="mt-5 w-full rounded-lg bg-amber-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50">
           Execute 100 High-Load Transfers
@@ -100,7 +100,7 @@
         <div>
           <h3 class="text-base font-semibold text-white">What this burst actually measures</h3>
           <p class="mt-2">
-            Each button starts exactly 100 <span class="font-mono text-slate-100">fetch()</span> calls inside one synchronous loop, then waits with <span class="font-mono text-slate-100">Promise.all()</span>. The ledger function sleeps 1.5 seconds to stand in for a database transaction: pin the account row, append the journal, flush, commit. Architecture A is allowed two of those critical sections at a time (<span class="font-mono text-slate-100">reserved_concurrent_executions = 2</span>). Lambda rejects the rest with HTTP 429 before they touch the ledger. The service stays up. The customer transfers that were rejected are simply gone.
+            Each button starts exactly 100 <span class="font-mono text-slate-100">fetch()</span> calls inside one synchronous loop, then waits with <span class="font-mono text-slate-100">Promise.all()</span>. The ledger function sleeps 1.5 seconds to stand in for a database transaction: pin the account row, append the journal, flush, commit. Architecture A shares this account's Lambda concurrency quota of 10. Lambda rejects the overflow with HTTP 429 before those calls touch the ledger. The service stays up. The customer transfers that were rejected are simply gone. A reserved cap of 2 can be added after the account quota is raised above 12.
           </p>
           <p class="mt-2">
             Architecture B removes compute from the admission path. <span class="font-mono text-slate-100">POST /buy-queue</span> is an API Gateway AWS service integration (<span class="font-mono text-slate-100">SQS-SendMessage</span>). The gateway writes <span class="font-mono text-slate-100">$request.body</span> onto the Standard queue <span class="font-mono text-slate-100">training-buffer-queue</span> and returns 200 when SQS has the message. The consumer Lambda, batch size 10, runs the same 1.5 second commit after the browser has finished. The green column fills because the queue absorbed the spike, and the caller no longer shares a fate with the slow commit.

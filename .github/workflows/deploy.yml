@@ -3,7 +3,7 @@ name: AWS SQS Demo Infrastructure Deployment
 on:
   push:
     branches:
-      - feature/sqs-demo # Triggers the deployment whenever you push to this branch
+      - feature/* # Triggers the deployment whenever you push to this branch
 
 permissions:
   id-token: write # MANDATORY for OIDC authentication

@@ -50,7 +50,16 @@ def _decode_http_body(event):
     return _parse_json(raw_body)
 
 
-def _commit_ledger_entry(entry, request_id):
+def _queue_kind(record):
+    source_arn = record.get("eventSourceARN", "")
+    if source_arn.endswith(".fifo"):
+        return "FIFO"
+    if source_arn:
+        return "STANDARD"
+    return "DIRECT"
+
+
+def _commit_ledger_entry(entry, request_id, queue_kind="DIRECT", message_id="-"):
     """Simulate an enterprise ledger write and its ACID critical section.
 
     BEGIN pins the account row, the sleep stands in for the journal flush
@@ -59,24 +68,38 @@ def _commit_ledger_entry(entry, request_id):
     """
     account_id = entry.get("accountId", "UNKNOWN")
     amount = entry.get("amount", 0)
+    sequence = entry.get("seq", "-")
+    transfer_id = entry.get("transferId", "-")
+    description = entry.get("description", "-")
     logger.info(
-        "BEGIN ledger transaction mode=%s request_id=%s account=%s amount=%s",
+        "BEGIN ledger transaction mode=%s queue=%s seq=%s transfer_id=%s message_id=%s account=%s amount=%s description=%s",
         LEDGER_MODE,
-        request_id,
+        queue_kind,
+        sequence,
+        transfer_id,
+        message_id,
         account_id,
         amount,
+        description,
     )
     time.sleep(1.5)
     logger.info(
-        "COMMIT ledger transaction mode=%s request_id=%s account=%s amount=%s",
+        "COMMIT ledger transaction mode=%s queue=%s seq=%s transfer_id=%s message_id=%s account=%s amount=%s description=%s",
         LEDGER_MODE,
-        request_id,
+        queue_kind,
+        sequence,
+        transfer_id,
+        message_id,
         account_id,
         amount,
+        description,
     )
     return {
         "status": "COMMITTED",
         "mode": LEDGER_MODE,
+        "queue": queue_kind,
+        "seq": sequence,
+        "transferId": transfer_id,
         "accountId": account_id,
         "amount": amount,
         "requestId": request_id,
@@ -99,7 +122,14 @@ def handler(event, context):
         committed = []
         for record in records:
             payload = _parse_json(record.get("body"))
-            committed.append(_commit_ledger_entry(payload, request_id))
+            committed.append(
+                _commit_ledger_entry(
+                    payload,
+                    request_id,
+                    _queue_kind(record),
+                    record.get("messageId", "-"),
+                )
+            )
         return _http_response(200, {"committed": committed})
 
     method = (

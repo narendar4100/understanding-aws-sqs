@@ -93,6 +93,87 @@
       </section>
     </div>
 
+    <section class="mt-6 rounded-xl border border-slate-800 border-t-2 border-t-sky-500 bg-slate-900 p-6" aria-labelledby="arch-c-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-sky-300">Queue semantics</p>
+      <h2 id="arch-c-title" class="mt-2 text-xl font-semibold text-white">Architecture C: Standard vs FIFO</h2>
+      <p class="mt-2 text-sm leading-6 text-slate-400">
+        Posts the same five JSON transactions, then repeats the Netflix transfer, to
+        <span id="target-compare" class="font-mono text-slate-200">https://demo.sisuraphotography.com/buy-queue</span>
+        and <span class="font-mono text-slate-200">/buy-fifo</span>.
+        A 200 means the API call was accepted. FIFO still drops the repeated transfer id inside SQS. Commit order and the duplicate show up in the queue Lambda log.
+      </p>
+      <div class="mt-5 text-left">
+        <label for="comparison-payload" class="mb-1 block text-[10px] uppercase tracking-wider text-slate-400">
+          Five transaction payloads — edit before sending
+        </label>
+        <textarea id="comparison-payload" rows="15" spellcheck="false" class="w-full resize-y rounded-xl border border-slate-800 bg-slate-950 p-3 font-mono text-[11px] leading-5 text-sky-300 focus:border-sky-500 focus:outline-none">[
+  {
+    "seq": 1,
+    "transferId": "txn-salary-001",
+    "accountId": "ACC-9941",
+    "amount": 3500,
+    "description": "Salary Credit from HDFC Corp (+ $3,500.00)"
+  },
+  {
+    "seq": 2,
+    "transferId": "txn-netflix-002",
+    "accountId": "ACC-9941",
+    "amount": -15.49,
+    "description": "Netflix Auto-Pay (- $15.49)"
+  },
+  {
+    "seq": 3,
+    "transferId": "txn-aws-003",
+    "accountId": "ACC-9941",
+    "amount": -842.10,
+    "description": "AWS Infrastructure Bill (- $842.10)"
+  },
+  {
+    "seq": 4,
+    "transferId": "txn-atm-004",
+    "accountId": "ACC-9941",
+    "amount": -200,
+    "description": "ATM Cash Withdrawal (- $200.00)"
+  },
+  {
+    "seq": 5,
+    "transferId": "txn-coffee-005",
+    "accountId": "ACC-9941",
+    "amount": -6.75,
+    "description": "Starbucks Coffee Swipe (- $6.75)"
+  }
+]</textarea>
+        <p class="mt-1 font-mono text-[10px] text-slate-600">
+          Each array item becomes a separate SQS message. The second item is sent once more to demonstrate FIFO deduplication.
+        </p>
+      </div>
+      <button id="btn-compare" type="button" class="mt-5 w-full rounded-lg bg-sky-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-50">
+        Send 5 Transactions to Standard and FIFO
+      </button>
+      <p id="state-compare" class="mt-3 min-h-5 font-mono text-xs text-slate-500">Idle</p>
+      <div class="mt-5 grid grid-cols-3 gap-3" aria-live="polite">
+        <article class="rounded-lg border border-slate-800 bg-slate-950 p-3">
+          <p class="text-[11px] uppercase tracking-wider text-slate-500">Total Actions</p>
+          <p id="total-compare" class="mt-2 font-mono text-3xl tabular-nums text-white">0</p>
+        </article>
+        <article class="rounded-lg border border-emerald-900/80 bg-slate-950 p-3">
+          <p class="text-[11px] uppercase tracking-wider text-emerald-500">Accepted (200)</p>
+          <p id="ok-compare" class="mt-2 font-mono text-3xl tabular-nums text-emerald-400">0</p>
+        </article>
+        <article class="rounded-lg border border-rose-900/80 bg-slate-950 p-3">
+          <p class="text-[11px] uppercase tracking-wider text-rose-400">Failed</p>
+          <p id="fail-compare" class="mt-2 font-mono text-3xl tabular-nums text-rose-400">0</p>
+        </article>
+      </div>
+      <div class="mt-4">
+        <p class="text-[10px] uppercase tracking-wider text-slate-500 mb-1 text-left font-mono">Live Send Audit Log</p>
+        <div id="ledger-log" class="h-48 overflow-y-auto bg-black font-mono text-[11px] p-3 rounded-xl border border-slate-900 text-left space-y-1 text-slate-400 select-none">
+          <span class="text-slate-600 italic block">[Console Idle - Awaiting the five-transaction comparison]</span>
+        </div>
+      </div>
+      <p id="mix-compare" class="mt-3 font-mono text-xs leading-5 text-slate-500"></p>
+    </section>
+
     <section class="mt-10 rounded-xl border border-slate-800 bg-slate-900 px-6 py-8" aria-labelledby="deep-dive-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-500">Technical deep-dive</p>
       <h2 id="deep-dive-title" class="mt-2 text-2xl font-semibold tracking-tight text-white">Why a ledger cannot stop at SQS Standard</h2>
@@ -130,7 +211,7 @@
             The throughput ceiling is the reason teams are tempted to stay on Standard: 300 sends per second without batching, 3,000 with batching, and higher in high-throughput FIFO mode, with a per-group cap so a single account cannot consume the queue. A core ledger takes that ceiling. An unbounded Standard queue that double-posts a transfer costs more than a FIFO queue that makes one account wait a few hundred milliseconds.
           </p>
           <p class="mt-2">
-            This stack provisions a Standard queue on purpose, so the class can see the buffering result on its own. Moving Architecture B onto a real posting path means making that queue FIFO, grouping by account, and deduplicating on the transfer id.
+            Architecture B keeps the Standard queue so the class can see buffering on its own. Architecture C posts the same five transfers, including one repeated Netflix transfer id, to that Standard queue and to the FIFO queue.
           </p>
         </div>
       </div>
@@ -142,6 +223,9 @@
     const BASE_URL = "https://demo.sisuraphotography.com";
     const BURST_SIZE = 100;
     const TRANSFER = { accountId: "ACC-9941", amount: 250.00 };
+    const ledgerLog = document.getElementById("ledger-log");
+    const compareButton = document.getElementById("btn-compare");
+    const comparisonPayload = document.getElementById("comparison-payload");
 
     const panels = {
       direct: {
@@ -181,6 +265,90 @@
           return label + "×" + snapshot.counts[code];
         });
       panel.mix.textContent = parts.join("   ");
+    }
+
+    function appendLedgerLine(className, text) {
+      const line = document.createElement("div");
+      line.className = className;
+      line.textContent = text;
+      ledgerLog.appendChild(line);
+      ledgerLog.scrollTop = ledgerLog.scrollHeight;
+    }
+
+    async function postTransaction(path, transaction) {
+      const headers = { "Content-Type": "application/json" };
+      if (path === "/buy-fifo") {
+        headers["x-message-group-id"] = transaction.accountId;
+        headers["x-deduplication-id"] = transaction.transferId;
+      }
+      const response = await fetch(endpoint(path), {
+        method: "POST",
+        mode: "cors",
+        headers: headers,
+        body: JSON.stringify(transaction),
+      });
+      await response.text();
+      return response.status;
+    }
+
+    function readComparisonPayload() {
+      const transactions = JSON.parse(comparisonPayload.value);
+      if (!Array.isArray(transactions) || transactions.length !== 5) {
+        throw new Error("Payload must be a JSON array containing exactly five transactions.");
+      }
+      transactions.forEach(function (transaction, index) {
+        if (!transaction || typeof transaction !== "object") {
+          throw new Error("Transaction " + (index + 1) + " must be a JSON object.");
+        }
+        ["seq", "transferId", "accountId", "amount", "description"].forEach(function (field) {
+          if (transaction[field] === undefined || transaction[field] === "") {
+            throw new Error("Transaction " + (index + 1) + " is missing " + field + ".");
+          }
+        });
+      });
+      return transactions;
+    }
+
+    async function sendQueueComparison(snapshot, panel, transactions) {
+      const deliveries = transactions.concat([transactions[1]]);
+      ledgerLog.innerHTML = "";
+      snapshot.total = deliveries.length * 2;
+      render(panel, snapshot);
+
+      for (let index = 0; index < deliveries.length; index += 1) {
+        const transaction = deliveries[index];
+        const repeated = index >= transactions.length;
+        const label = (repeated ? "RESEND" : "SEND") + " seq=" + transaction.seq + " transferId=" + transaction.transferId;
+        const results = await Promise.all([
+          postTransaction("/buy-queue", transaction).catch(function () { return 0; }),
+          postTransaction("/buy-fifo", transaction).catch(function () { return 0; }),
+        ]);
+        recordQueueStatus(snapshot, results[0]);
+        recordQueueStatus(snapshot, results[1]);
+        appendLedgerLine(
+          results[0] === 200 ? "text-emerald-500" : "text-rose-400",
+          "[STANDARD " + results[0] + "] " + label + " -> " + transaction.description
+        );
+        appendLedgerLine(
+          results[1] === 200 ? "text-emerald-500" : "text-rose-400",
+          "[FIFO " + results[1] + "] " + label + " -> " + transaction.description
+        );
+        render(panel, snapshot);
+      }
+      appendLedgerLine(
+        "text-amber-500 font-bold",
+        "[CHECK LAMBDA LOG] FIFO returns 200 for the Netflix resend, then drops it. Standard commits txn-netflix-002 twice."
+      );
+    }
+
+    function recordQueueStatus(snapshot, status) {
+      const code = String(status);
+      snapshot.counts[code] = (snapshot.counts[code] || 0) + 1;
+      if (status === 200) {
+        snapshot.audited += 1;
+      } else {
+        snapshot.failed += 1;
+      }
     }
 
     async function executeBurst(key) {
@@ -239,6 +407,37 @@
       panel.button.addEventListener("click", function () {
         executeBurst(key);
       });
+    });
+
+    const comparePanel = {
+      button: compareButton,
+      state: document.getElementById("state-compare"),
+      total: document.getElementById("total-compare"),
+      ok: document.getElementById("ok-compare"),
+      fail: document.getElementById("fail-compare"),
+      mix: document.getElementById("mix-compare"),
+      target: document.getElementById("target-compare"),
+    };
+    comparePanel.target.textContent = endpoint("/buy-queue") + " and " + endpoint("/buy-fifo");
+    compareButton.addEventListener("click", async function () {
+      const snapshot = { total: 0, audited: 0, failed: 0, counts: {} };
+      let transactions;
+      try {
+        transactions = readComparisonPayload();
+      } catch (error) {
+        ledgerLog.innerHTML = "";
+        appendLedgerLine("text-rose-400 font-semibold", "[INVALID PAYLOAD] " + error.message);
+        comparePanel.state.textContent = "Payload validation failed — no messages were sent";
+        return;
+      }
+      compareButton.disabled = true;
+      comparisonPayload.disabled = true;
+      comparePanel.state.textContent = "Sending 5 transactions, then one Netflix repeat, to both queues";
+      const started = performance.now();
+      await sendQueueComparison(snapshot, comparePanel, transactions);
+      comparePanel.state.textContent = "Both queues accepted the API calls in " + Math.round(performance.now() - started) + " ms";
+      compareButton.disabled = false;
+      comparisonPayload.disabled = false;
     });
   </script>
 </body>

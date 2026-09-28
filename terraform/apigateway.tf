@@ -6,7 +6,7 @@ resource "aws_apigatewayv2_api" "ledger" {
   cors_configuration {
     allow_origins = ["*"]
     allow_methods = ["OPTIONS", "POST"]
-    allow_headers = ["*"]
+    allow_headers = ["content-type", "x-message-group-id", "x-deduplication-id"]
     max_age       = 300
   }
 }
@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "apigw_assume" {
 data "aws_iam_policy_document" "apigw_sqs_send" {
   statement {
     actions   = ["sqs:SendMessage"]
-    resources = [aws_sqs_queue.buffer.arn]
+    resources = [aws_sqs_queue.buffer.arn, aws_sqs_queue.buffer_fifo.arn]
   }
 }
 
@@ -80,6 +80,28 @@ resource "aws_apigatewayv2_route" "buy_queue" {
   api_id    = aws_apigatewayv2_api.ledger.id
   route_key = "POST /buy-queue"
   target    = "integrations/${aws_apigatewayv2_integration.queue.id}"
+}
+
+resource "aws_apigatewayv2_integration" "queue_fifo" {
+  api_id              = aws_apigatewayv2_api.ledger.id
+  integration_type    = "AWS_PROXY"
+  integration_subtype = "SQS-SendMessage"
+  credentials_arn     = aws_iam_role.apigw_sqs.arn
+
+  request_parameters = {
+    QueueUrl               = aws_sqs_queue.buffer_fifo.url
+    MessageBody            = "$request.body"
+    MessageGroupId         = "$request.header.x-message-group-id"
+    MessageDeduplicationId = "$request.header.x-deduplication-id"
+  }
+
+  depends_on = [aws_iam_role_policy.apigw_sqs_send]
+}
+
+resource "aws_apigatewayv2_route" "buy_fifo" {
+  api_id    = aws_apigatewayv2_api.ledger.id
+  route_key = "POST /buy-fifo"
+  target    = "integrations/${aws_apigatewayv2_integration.queue_fifo.id}"
 }
 
 resource "aws_cloudwatch_log_group" "apigateway_access" {

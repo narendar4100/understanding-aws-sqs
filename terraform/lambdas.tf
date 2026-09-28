@@ -98,3 +98,9 @@ resource "aws_lambda_event_source_mapping" "queue" {
   function_name    = aws_lambda_function.queue_lambda.arn
   batch_size       = 10
 }
+
+resource "aws_lambda_event_source_mapping" "queue_fifo" {
+  event_source_arn = aws_sqs_queue.buffer_fifo.arn
+  function_name    = aws_lambda_function.queue_lambda.arn
+  batch_size       = 1
+}

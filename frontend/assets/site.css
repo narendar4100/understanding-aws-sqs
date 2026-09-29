@@ -149,6 +149,87 @@ button:disabled {
   background: rgb(255 255 255 / 85%);
 }
 
+.dlq-board {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.dlq-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 0.85rem;
+}
+
+.dlq-step {
+  display: flex;
+  width: 7.5rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.dlq-link {
+  display: flex;
+  min-width: 5.5rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  color: rgb(148 163 184);
+  font-size: 0.65rem;
+  line-height: 0.85rem;
+  text-align: center;
+}
+
+.dlq-link strong {
+  color: #fff;
+  font-size: 0.7rem;
+}
+
+.dlq-line {
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  position: relative;
+}
+
+.dlq-line::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  right: -1px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid currentColor;
+}
+
+.dlq-line--back::after {
+  right: auto;
+  left: -1px;
+  border-left: 0;
+  border-right: 7px solid currentColor;
+}
+
+.dlq-link--hot { color: rgb(251 113 133); }
+.dlq-link--ok { color: rgb(52 211 153); }
+.dlq-link--wait { color: rgb(251 191 36); }
+
+.dlq-span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: rgb(251 113 133);
+  font-size: 0.75rem;
+}
+
+.dlq-span i {
+  width: 2rem;
+  height: 2px;
+  background: currentColor;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .arch-arrow,
   .arch-drop {

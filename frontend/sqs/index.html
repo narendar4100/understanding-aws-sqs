@@ -61,6 +61,7 @@
         <a href="#core-concepts" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Core concepts</a>
         <a href="#live-labs" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Live labs</a>
         <a href="#controls-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Operations</a>
+        <a href="#dlq-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">DLQ</a>
         <a href="#cost-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Cost</a>
         <a href="#limits-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Limits</a>
         <a href="#alternatives-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Alternatives</a>
@@ -275,8 +276,8 @@
       <section class="rounded-xl border border-slate-800 border-t-2 border-t-amber-500 bg-slate-900 p-6" aria-labelledby="arch-a-title">
         <div class="flex items-start justify-between gap-3">
           <div>
-            <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-amber-300">Synchronous path</p>
-            <h2 id="arch-a-title" class="mt-2 text-xl font-semibold text-white">Architecture A: Unbuffered Processing</h2>
+        <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-amber-300">Synchronous path</p>
+        <h2 id="arch-a-title" class="mt-2 text-xl font-semibold text-white">Architecture A: Unbuffered Processing</h2>
           </div>
           <button type="button" data-snippet="direct" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-amber-700 text-xs font-semibold text-amber-300 hover:bg-amber-950" aria-label="Show Architecture A Logs Insights query">i</button>
         </div>
@@ -598,7 +599,7 @@
           <div>
             <p id="code-modal-eyebrow" class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">Integration code</p>
             <h3 id="code-modal-title" class="mt-1 text-lg font-semibold text-white">Integration code</h3>
-          </div>
+        </div>
           <button id="code-modal-close" type="button" class="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-800 hover:text-white" aria-label="Close">✕</button>
         </div>
         <div id="code-modal-body" class="px-6 py-5"></div>
@@ -709,6 +710,139 @@
           <p class="mt-1 text-sm font-semibold text-white">The Network Shield</p>
           <p class="mt-2 text-xs leading-5 text-slate-300">If a server automatically retries a request during a routine internet hiccup, the duplicate is killed at the gate before it can trigger double warehouse allocations or duplicate shipping labels.</p>
         </div>
+      </div>
+    </div>
+
+    <div hidden data-rich="broker-classic">
+      <p class="text-sm leading-6 text-slate-300">Teams rarely choose a self-run broker for a new cloud app. They keep one because something outside the queue forces it.</p>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Protocol lock-in</p>
+          <p class="mt-2 text-sm font-semibold text-white">A certified payment system on JMS</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">A bank's core system, built years ago, posts payments through IBM MQ using JMS and XA two-phase commit with its database. Rewriting it for SQS means re-certifying a payment platform. SQS has no XA transactions.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">No internet</p>
+          <p class="mt-2 text-sm font-semibold text-white">A factory floor with its own network</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Robots and sensors publish MQTT on a plant network with no route to AWS. Messages must flow even when the internet link is down. A local broker, such as RabbitMQ or Mosquitto, runs inside the plant.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Data residency</p>
+          <p class="mt-2 text-sm font-semibold text-white">A hospital or defense network</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Policy says patient or classified data never leaves the building. Every queue must run on hardware the organization owns and audits.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Broker features</p>
+          <p class="mt-2 text-sm font-semibold text-white">Routing inside the broker</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">RabbitMQ exchanges route by topic or header, and support priority queues and request-reply. SQS has none of these. On AWS you would add SNS or EventBridge, or split priorities into separate queues.</p>
+        </div>
+      </div>
+      <div class="mt-4 rounded-xl border border-rose-900/70 bg-rose-950/20 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-rose-300">What your team now owns</p>
+        <p class="mt-2 text-xs leading-5 text-slate-300">A cluster of at least three nodes for high availability, disk sizing, OS and broker patching, version upgrades, certificates, user accounts, monitoring, backups, and failover drills. A full disk or a split cluster at 3 AM is your incident.</p>
+      </div>
+      <p class="mt-4 border-l-2 border-emerald-500 pl-4 text-sm leading-6 text-slate-300"><span class="font-semibold text-white">Middle path:</span> if you need the protocol but not the servers, Amazon MQ runs ActiveMQ or RabbitMQ for you. AWS patches it. You still choose the broker size and a maintenance window.</p>
+    </div>
+
+    <div hidden data-rich="broker-sqs">
+      <p class="text-sm leading-6 text-slate-300">If nothing forces a broker, SQS is usually the default on AWS: no servers, no capacity plan, and you pay only per request.</p>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">Traffic spikes</p>
+          <p class="mt-2 text-sm font-semibold text-white">A flash sale at midnight</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Orders jump from 50 a minute to 50,000. A standard queue absorbs the spike with no resize, while the order workers drain it at a safe rate. A self-run broker would need disk and nodes sized for that peak in advance.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">Small team</p>
+          <p class="mt-2 text-sm font-semibold text-white">No one on call for a broker</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">A five-person product team ships features, not broker patches. SQS has no nodes to fail over, and IAM controls who can send and receive.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">Quiet workloads</p>
+          <p class="mt-2 text-sm font-semibold text-white">Nightly or seasonal jobs</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">A tax-filing app is busy for two months a year. An idle queue costs almost nothing. An idle broker cluster costs the same every hour.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">Serverless</p>
+          <p class="mt-2 text-sm font-semibold text-white">Lambda as the consumer</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Lambda polls SQS for you, scales consumers with the backlog, and moves failures to a dead-letter queue. No consumer servers to run either.</p>
+        </div>
+      </div>
+      <div class="mt-4 rounded-xl border border-amber-900/70 bg-amber-950/20 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">What changes when you move from a broker</p>
+        <ul class="mt-2 space-y-1 text-xs leading-5 text-slate-300">
+          <li>• Consumers poll. SQS does not push to them.</li>
+          <li>• The visibility timeout and <span class="font-mono">DeleteMessage</span> replace a broker acknowledgement.</li>
+          <li>• No exchanges or priorities. Use SNS or EventBridge to route, and separate queues for priority.</li>
+          <li>• Messages are capped at 1 MiB and kept at most 14 days.</li>
+          <li>• Clients use the AWS SDK. A JMS 1.1 library exists for Java, but it covers only part of JMS.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div hidden data-rich="alt-sqs">
+      <p class="text-sm leading-6 text-slate-300">A midnight sale sends 100 transfers at once. API Gateway stores each one in SQS and returns 200. One ledger worker pulls them at a safe rate.</p>
+      <div class="dlq-row mt-5">
+        <div class="dlq-step"><div class="arch-icon arch-icon--users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg></div><p class="arch-label">100 callers</p></div>
+        <div class="dlq-link dlq-link--hot"><span class="dlq-line"></span><strong>burst</strong></div>
+        <div class="dlq-step"><div class="arch-icon arch-icon--sqs"><div class="arch-stack w-5"><span></span><span></span><span></span><span></span></div></div><p class="arch-label">SQS</p><p class="arch-sub">one buffer</p></div>
+        <div class="dlq-link dlq-link--ok"><span class="dlq-line"></span><strong>poll</strong></div>
+        <div class="dlq-step"><div class="arch-icon arch-icon--lambda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 20l6-10M8 4h3l8 16"/></svg></div><p class="arch-label">One worker</p><p class="arch-sub">then delete</p></div>
+      </div>
+      <p class="mt-4 text-xs leading-5 text-slate-400">Use this when one consumer owns the work. A second independent team cannot read the same message after the first one deletes it.</p>
+    </div>
+    <div hidden data-rich="alt-sns">
+      <p class="text-sm leading-6 text-slate-300">An order is placed once. Billing, warehouse, and email each need their own copy. SNS fans the event out. Each team gets its own SQS queue.</p>
+      <div class="mt-5 grid gap-3 sm:grid-cols-[auto_1fr]">
+        <div class="dlq-step"><div class="arch-icon arch-icon--apigw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4H5v16h3M16 4h3v16h-3"/><path d="M9 12h6"/></svg></div><p class="arch-label">Order API</p><p class="arch-sub">one publish</p></div>
+        <div class="grid gap-2">
+          <div class="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2"><span class="text-xs text-pink-300">SNS topic</span><span class="text-slate-600">→</span><span class="text-sm text-white">Billing SQS → invoice worker</span></div>
+          <div class="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2"><span class="text-xs text-pink-300">SNS topic</span><span class="text-slate-600">→</span><span class="text-sm text-white">Warehouse SQS → pick worker</span></div>
+          <div class="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2"><span class="text-xs text-pink-300">SNS topic</span><span class="text-slate-600">→</span><span class="text-sm text-white">Email SQS → notification worker</span></div>
+        </div>
+      </div>
+      <p class="mt-4 text-xs leading-5 text-slate-400">One SQS queue cannot do this. The consumer that deletes the message is the only one that received it.</p>
+    </div>
+    <div hidden data-rich="alt-eventbridge">
+      <p class="text-sm leading-6 text-slate-300">A payment provider sends one event stream. EventBridge reads the event type and sends each kind to a different target. SQS cannot inspect the body and choose a destination.</p>
+      <div class="mt-5 grid gap-2">
+        <div class="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-slate-300">Stripe or the order service → <span class="text-white">EventBridge bus</span></div>
+        <div class="grid gap-2 sm:grid-cols-3">
+          <div class="rounded-lg border border-emerald-900/70 bg-emerald-950/20 p-3 text-xs leading-5 text-slate-300"><span class="block font-semibold text-white">payment.failed</span>rule matches → refund queue</div>
+          <div class="rounded-lg border border-sky-900/70 bg-sky-950/20 p-3 text-xs leading-5 text-slate-300"><span class="block font-semibold text-white">payment.captured</span>rule matches → ledger queue</div>
+          <div class="rounded-lg border border-amber-900/70 bg-amber-950/20 p-3 text-xs leading-5 text-slate-300"><span class="block font-semibold text-white">anything else</span>no matching rule → archive</div>
+        </div>
+      </div>
+    </div>
+    <div hidden data-rich="alt-kinesis">
+      <p class="text-sm leading-6 text-slate-300">Clickstream events stay in order inside a shard. Analytics reads them now. A second job reads the same hour again tomorrow. Deleting an SQS message would make that replay impossible.</p>
+      <div class="dlq-row mt-5">
+        <div class="dlq-step"><div class="arch-icon arch-icon--users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg></div><p class="arch-label">Clicks</p></div>
+        <div class="dlq-link dlq-link--ok"><span class="dlq-line"></span><strong>append</strong></div>
+        <div class="dlq-step"><div class="arch-icon arch-icon--db"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div><p class="arch-label">Kinesis</p><p class="arch-sub">kept in order</p></div>
+      </div>
+      <div class="mt-3 grid gap-2 sm:grid-cols-2">
+        <p class="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300">Reader A · live dashboard · its own position</p>
+        <p class="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300">Reader B · tomorrow’s rebuild · starts again at hour 0</p>
+      </div>
+    </div>
+    <div hidden data-rich="alt-mq">
+      <p class="text-sm leading-6 text-slate-300">A certified payments application already sends JMS messages to IBM MQ. Amazon MQ runs that broker. The application keeps its protocol and does not change to the SQS API.</p>
+      <div class="dlq-row mt-5">
+        <div class="dlq-step"><div class="arch-icon arch-icon--users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></div><p class="arch-label">Existing app</p><p class="arch-sub">JMS client</p></div>
+        <div class="dlq-link dlq-link--wait"><span class="dlq-line"></span><strong>JMS</strong>unchanged</div>
+        <div class="dlq-step"><div class="arch-icon arch-icon--users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/></svg></div><p class="arch-label">Amazon MQ</p><p class="arch-sub">managed broker</p></div>
+        <div class="dlq-link dlq-link--ok"><span class="dlq-line"></span><strong>consume</strong></div>
+        <div class="dlq-step"><div class="arch-icon arch-icon--lambda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 18h16M8 6h8v8H8z"/></svg></div><p class="arch-label">Same consumer</p></div>
+      </div>
+    </div>
+    <div hidden data-rich="alt-sfn">
+      <p class="text-sm leading-6 text-slate-300">A loan application must check identity, wait for a human review, then either pay out or reject. Step Functions owns that sequence. A queue can hold a task, but it cannot choose the branch or wait for the review.</p>
+      <div class="mt-5 grid gap-2 sm:grid-cols-4">
+        <div class="rounded-lg border border-slate-800 bg-slate-950 p-3 text-center text-xs text-slate-300"><span class="block font-semibold text-white">Start</span>application received</div>
+        <div class="rounded-lg border border-sky-900/70 bg-sky-950/20 p-3 text-center text-xs text-slate-300"><span class="block font-semibold text-white">Check</span>identity service</div>
+        <div class="rounded-lg border border-amber-900/70 bg-amber-950/20 p-3 text-center text-xs text-slate-300"><span class="block font-semibold text-white">Wait</span>human review</div>
+        <div class="rounded-lg border border-emerald-900/70 bg-emerald-950/20 p-3 text-center text-xs text-slate-300"><span class="block font-semibold text-white">Choice</span>pay or reject</div>
       </div>
     </div>
 
@@ -830,80 +964,93 @@
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Deduplication and idempotency</p>
       <h2 id="idempotency-title" class="mt-2 text-2xl font-semibold text-white">Two safety layers protect two different failure points</h2>
       <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
-        <strong class="text-white">FIFO deduplication protects the producer side:</strong> a repeated send with the same deduplication id is accepted but not delivered again during the five-minute window.
-        <strong class="text-white">Consumer idempotency protects the business side:</strong> if the same stored message reaches Lambda again, the debit still happens only once.
+        <strong class="text-white">Deduplication</strong> protects the send side: the queue refuses a second copy. <strong class="text-white">Idempotency</strong> protects the business side: if the same message is processed twice, the account is still debited once. You need both.
       </p>
 
-      <div class="mt-6 grid gap-4 lg:grid-cols-3">
-        <article class="rounded-xl border border-violet-900/70 bg-violet-950/20 p-5">
-          <p class="text-[11px] font-medium uppercase tracking-wider text-violet-300">Beginner · remember this</p>
-          <p class="mt-2 text-lg font-semibold text-white">Duplicate message ≠ duplicate outcome</p>
-          <p class="mt-2 text-sm leading-6 text-slate-400">The queue may hand over the same work again. Design the consumer so repeating it produces the same final result.</p>
-        </article>
-        <article class="rounded-xl border border-sky-900/70 bg-sky-950/20 p-5">
-          <p class="text-[11px] font-medium uppercase tracking-wider text-sky-300">Exam · know the boundary</p>
-          <p class="mt-2 text-lg font-semibold text-white">FIFO is not end-to-end exactly once</p>
-          <p class="mt-2 text-sm leading-6 text-slate-400">FIFO prevents duplicate sends inside five minutes and preserves order per message group. It cannot atomically join your database commit with SQS deletion.</p>
-        </article>
-        <article class="rounded-xl border border-amber-900/70 bg-amber-950/20 p-5">
-          <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Architect · use a durable key</p>
-          <p class="mt-2 text-lg font-semibold text-white">Claim and apply in one transaction</p>
-          <p class="mt-2 text-sm leading-6 text-slate-400">Store a stable business id with a unique constraint in the same database transaction as the debit or inventory change.</p>
-        </article>
-      </div>
-
-      <div class="mt-6 rounded-xl border border-slate-800 bg-slate-950 p-5">
-        <div class="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Failure architecture · commit succeeds, delete fails</p>
-            <p class="mt-1 text-sm text-slate-300">Transfer <span class="font-mono text-slate-200">txn-netflix-002</span> · debit <span class="font-mono text-slate-200">250.00</span></p>
-          </div>
-          <span class="rounded-full border border-rose-900 bg-rose-950/50 px-3 py-1 text-xs text-rose-300">This is a normal distributed-systems failure</span>
+      <div class="mt-6 grid gap-x-8 gap-y-3 rounded-xl border border-slate-800 bg-slate-950 p-5 text-sm leading-6 text-slate-300 md:grid-cols-2">
+        <p><span class="mr-2 font-mono text-amber-400">01</span><strong class="text-white">FIFO only.</strong> A send with the same <span class="font-mono text-slate-200">MessageDeduplicationId</span> within 5 minutes is accepted and not delivered again, even if the first copy was already deleted.</p>
+        <p><span class="mr-2 font-mono text-amber-400">02</span><strong class="text-white">Two ways to set the id.</strong> Pass it on every send, or turn on content-based deduplication, which hashes the body but not the attributes.</p>
+        <p><span class="mr-2 font-mono text-amber-400">03</span><strong class="text-white">Standard has no deduplication.</strong> Delivery is at least once, so a duplicate can reach the consumer.</p>
+        <p><span class="mr-2 font-mono text-amber-400">04</span><strong class="text-white">Redelivery happens on both queues.</strong> A timeout, a failed batch, or a crash before <span class="font-mono text-slate-200">DeleteMessage</span> makes the message visible again.</p>
+        <p><span class="mr-2 font-mono text-amber-400">05</span><strong class="text-white">Key on the business id.</strong> Use the transfer id, not the SQS <span class="font-mono text-slate-200">MessageId</span>. A producer retry gets a new MessageId for the same transfer.</p>
+        <p><span class="mr-2 font-mono text-amber-400">06</span><strong class="text-white">Claim and apply together.</strong> Insert the id behind a unique key in the same transaction as the debit. Delete from SQS only after that commit.</p>
         </div>
 
-        <div class="mt-5 grid gap-2 text-center sm:grid-cols-7">
-          <div class="rounded-lg border border-pink-900/70 bg-pink-950/20 p-3">
-            <p class="font-mono text-[10px] text-pink-300">1</p>
-            <p class="mt-1 text-sm font-semibold text-white">SQS</p>
-            <p class="mt-1 text-[11px] leading-4 text-slate-400">delivers message</p>
+      <p class="mt-8 text-[11px] font-medium uppercase tracking-wider text-amber-300">Failure architecture · the ledger commits, then the worker dies</p>
+      <p class="mt-1 text-sm text-slate-400">Transfer <span class="font-mono text-slate-200">txn-netflix-002</span>, debit <span class="font-mono text-slate-200">250.00</span>. This is a normal failure, not a rare one.</p>
+      <div class="mt-4 grid gap-5 lg:grid-cols-2">
+        <article class="rounded-xl border border-rose-900/70 bg-black px-3 py-5">
+          <p class="px-2 text-xs font-medium uppercase tracking-wider text-rose-400">1 · First delivery</p>
+          <div class="mt-5 rounded-lg border border-slate-800 bg-slate-950/70 px-2 py-6">
+            <div class="arch-flow">
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--sqs"><div class="arch-stack w-5"><span></span><span></span><span></span><span></span></div></div>
+                <p class="arch-label">SQS</p>
+                <p class="arch-sub">delivers</p>
+              </div>
+              <div class="arch-arrow arch-arrow--ok"></div>
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--lambda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg></div>
+                <p class="arch-label">Lambda<br><span class="text-orange-300">(Server)</span></p>
+                <p class="arch-sub">debits</p>
+              </div>
+              <div class="arch-arrow arch-arrow--ok"></div>
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--db">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>
+                  <span class="arch-badge bg-emerald-500 text-slate-950">SAVED</span>
+                </div>
+                <p class="arch-label">Ledger<br>DB</p>
+                <p class="arch-sub">250.00 out</p>
+              </div>
+              <div class="arch-arrow arch-arrow--hot"></div>
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--dlq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
+                <p class="arch-label">Crash</p>
+                <p class="arch-sub">no delete sent</p>
+              </div>
+            </div>
           </div>
-          <div class="flex items-center justify-center text-slate-600">→</div>
-          <div class="rounded-lg border border-orange-900/70 bg-orange-950/20 p-3">
-            <p class="font-mono text-[10px] text-orange-300">2</p>
-            <p class="mt-1 text-sm font-semibold text-white">Lambda</p>
-            <p class="mt-1 text-[11px] leading-4 text-slate-400">processes transfer</p>
-          </div>
-          <div class="flex items-center justify-center text-slate-600">→</div>
-          <div class="rounded-lg border border-emerald-900/70 bg-emerald-950/20 p-3">
-            <p class="font-mono text-[10px] text-emerald-300">3</p>
-            <p class="mt-1 text-sm font-semibold text-white">DB commits</p>
-            <p class="mt-1 text-[11px] leading-4 text-slate-400">debit is permanent</p>
-          </div>
-          <div class="flex items-center justify-center text-rose-500">✕</div>
-          <div class="rounded-lg border border-rose-900/70 bg-rose-950/20 p-3">
-            <p class="font-mono text-[10px] text-rose-300">4</p>
-            <p class="mt-1 text-sm font-semibold text-white">Worker dies</p>
-            <p class="mt-1 text-[11px] leading-4 text-slate-400">before SQS delete</p>
-          </div>
-        </div>
+          <p class="mt-4 px-2 text-sm leading-6 text-slate-400">The money has moved, but SQS still holds the message. When the visibility timeout ends, it is delivered again.</p>
+        </article>
 
-        <div class="mt-4 rounded-xl border border-amber-800/70 bg-amber-950/20 p-4">
-          <p class="text-xs font-semibold text-amber-200">Visibility timeout expires → SQS delivers the same message again</p>
-          <div class="mt-3 grid gap-3 sm:grid-cols-3">
-            <div class="rounded-lg bg-black/50 p-3">
-              <p class="text-xs font-semibold text-white">Look up business id</p>
-              <p class="mt-1 text-xs leading-5 text-slate-400"><span class="font-mono">txn-netflix-002</span> already exists.</p>
-            </div>
-            <div class="rounded-lg bg-black/50 p-3">
-              <p class="text-xs font-semibold text-white">Skip side effect</p>
-              <p class="mt-1 text-xs leading-5 text-slate-400">Do not debit 250.00 a second time.</p>
-            </div>
-            <div class="rounded-lg bg-black/50 p-3">
-              <p class="text-xs font-semibold text-white">Return success</p>
-              <p class="mt-1 text-xs leading-5 text-slate-400">Lambda deletes the message from SQS.</p>
+        <article class="rounded-xl border border-emerald-900/70 bg-black px-3 py-5">
+          <p class="px-2 text-xs font-medium uppercase tracking-wider text-emerald-400">2 · Redelivery after the timeout</p>
+          <div class="mt-5 rounded-lg border border-slate-800 bg-slate-950/70 px-2 py-6">
+            <div class="arch-flow">
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--sqs">
+                  <div class="arch-stack w-5"><span></span><span></span><span></span><span></span></div>
+                  <span class="arch-badge bg-amber-400 text-slate-950">AGAIN</span>
+                </div>
+                <p class="arch-label">SQS</p>
+                <p class="arch-sub">same message</p>
+              </div>
+              <div class="arch-arrow arch-arrow--ok"></div>
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--lambda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg></div>
+                <p class="arch-label">Lambda<br><span class="text-orange-300">(Server)</span></p>
+                <p class="arch-sub">claims id</p>
+              </div>
+              <div class="arch-arrow arch-arrow--ok"></div>
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--db">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>
+                  <span class="arch-badge bg-amber-400 text-slate-950">EXISTS</span>
+                </div>
+                <p class="arch-label">Ledger<br>DB</p>
+                <p class="arch-sub">debit skipped</p>
+              </div>
+              <div class="arch-arrow arch-arrow--ok"></div>
+              <div class="arch-node">
+                <div class="arch-icon arch-icon--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div>
+                <p class="arch-label">Deleted</p>
+                <p class="arch-sub">from SQS</p>
+              </div>
             </div>
           </div>
-        </div>
+          <p class="mt-4 px-2 text-sm leading-6 text-slate-400">The unique key on <span class="font-mono text-slate-200">txn-netflix-002</span> rejects the second claim. Nothing is debited. Lambda reports success, and the message is removed.</p>
+        </article>
       </div>
 
       <details class="mt-4 rounded-xl border border-slate-800 bg-black">
@@ -924,12 +1071,10 @@ INSERT INTO ledger_journal (...) VALUES (...);
 
 COMMIT;</pre>
           <p class="mt-3 text-xs leading-5 text-slate-500">Important: the id claim and the business update must commit together. A separate “check then update” has a race condition when two workers run concurrently.</p>
-        </div>
+      </div>
       </details>
 
-      <div class="mt-4 rounded-xl border border-slate-800 bg-black/50 p-4 text-sm leading-6 text-slate-300">
-        <strong class="text-white">When the side effect is outside your database:</strong> pass the same idempotency key to the payment or shipping API if it supports one. For multi-service workflows, use an inbox/outbox pattern or orchestration. A local SQL transaction cannot make an external API call and an SQS delete atomic.
-      </div>
+      <p class="mt-4 text-sm leading-6 text-slate-400"><strong class="text-slate-200">If the side effect is outside your database</strong>, such as a payment or shipping API, pass the same idempotency key to that API. One database transaction cannot cover an external call and the SQS delete together.</p>
       <p class="mt-4 text-xs leading-5 text-slate-500">
         Sources: <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues-exactly-once-processing.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">FIFO exactly-once processing</a>,
         <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues-at-least-once-delivery.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">at-least-once delivery</a>,
@@ -943,42 +1088,42 @@ COMMIT;</pre>
       <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <div class="flex items-start justify-between gap-3">
-            <h3 class="font-semibold text-white">Visibility timeout</h3>
+          <h3 class="font-semibold text-white">Visibility timeout</h3>
             <button type="button" data-snippet="ctrl-visibility" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show visibility timeout guidance">i</button>
           </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Hides a received message while processing. Set it longer than the expected job duration and extend it for variable work. If it expires, another consumer can receive the same message.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <div class="flex items-start justify-between gap-3">
-            <h3 class="font-semibold text-white">Long vs. short polling</h3>
+          <h3 class="font-semibold text-white">Long vs. short polling</h3>
             <button type="button" data-snippet="ctrl-polling" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show polling guidance">i</button>
           </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Long polling waits up to 20 seconds and checks all servers, reducing empty receives and cost. Short polling returns immediately and can produce empty responses.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <div class="flex items-start justify-between gap-3">
-            <h3 class="font-semibold text-white">Delay queue and timers</h3>
+          <h3 class="font-semibold text-white">Delay queue and timers</h3>
             <button type="button" data-snippet="ctrl-delay" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show delay guidance">i</button>
           </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">DelaySeconds postpones initial visibility for up to 15 minutes. Standard queues also support per-message timers; FIFO queues use the queue-level delay.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <div class="flex items-start justify-between gap-3">
-            <h3 class="font-semibold text-white">Dead-letter queue</h3>
+          <h3 class="font-semibold text-white">Dead-letter queue</h3>
             <button type="button" data-snippet="ctrl-dlq" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show dead-letter queue guidance">i</button>
           </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Move poison messages after maxReceiveCount is exceeded. Alarm on DLQ depth, retain enough context, fix the cause, then redrive safely.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <div class="flex items-start justify-between gap-3">
-            <h3 class="font-semibold text-white">Retention and payload size</h3>
+          <h3 class="font-semibold text-white">Retention and payload size</h3>
             <button type="button" data-snippet="ctrl-retention" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show retention and payload guidance">i</button>
           </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Retention ranges from one minute to 14 days. Keep messages compact; larger payloads are metered in 64 KB chunks and very large bodies belong in S3.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <div class="flex items-start justify-between gap-3">
-            <h3 class="font-semibold text-white">Batching and partial failures</h3>
+          <h3 class="font-semibold text-white">Batching and partial failures</h3>
             <button type="button" data-snippet="ctrl-batch" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show batching guidance">i</button>
           </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Send, receive, and delete up to 10 messages per batch. With Lambda, report partial batch failures so successful records are not retried with the failed record.</p>
@@ -1035,6 +1180,141 @@ COMMIT;</pre>
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="mt-12 rounded-2xl border border-rose-900/70 bg-slate-900 p-6 sm:p-8" aria-labelledby="dlq-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-rose-400">Failure isolation</p>
+      <h2 id="dlq-title" class="mt-2 text-2xl font-semibold text-white">A dead-letter queue stops one bad message from failing forever</h2>
+      <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
+        A DLQ is a separate SQS queue for messages the consumer could not process after repeated receives. It preserves the failed payload for investigation while healthy messages keep moving. SQS does not create, repair, or monitor the DLQ for you.
+      </p>
+
+      <div class="mt-6 rounded-xl border border-slate-800 bg-black p-5 sm:p-6">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Full path · a transfer is missing accountId</p>
+        <div class="dlq-board mt-6">
+          <div class="dlq-row">
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--users">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+              </div>
+              <p class="arch-label">Request</p>
+              <p class="arch-sub">accepted</p>
+            </div>
+            <div class="dlq-link dlq-link--ok"><span class="dlq-line"></span><strong>SendMessage</strong>stored</div>
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--sqs"><div class="arch-stack w-5"><span></span><span></span><span></span><span></span></div></div>
+              <p class="arch-label">Source SQS</p>
+              <p class="arch-sub">main queue</p>
+            </div>
+            <div class="dlq-link dlq-link--hot"><span class="dlq-line"></span><strong>Receive</strong>1st attempt</div>
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--lambda ring-2 ring-rose-500 ring-offset-2 ring-offset-black">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg>
+                <span class="arch-badge bg-rose-500 text-white">FAIL</span>
+              </div>
+              <p class="arch-label">Lambda<br><span class="text-orange-300">(Server)</span></p>
+              <p class="arch-sub">rejects body</p>
+            </div>
+          </div>
+
+          <div class="dlq-span">
+            <i></i>
+            <span>Failure returns the message to <strong class="text-white">Source SQS</strong> when the visibility timeout ends. Each return adds 1 to the receive count.</span>
+            <i></i>
+          </div>
+
+          <div class="dlq-span">
+            <i></i>
+            <span><strong class="text-white">RedrivePolicy</strong> · receive count exceeds <span class="font-mono">maxReceiveCount = 5</span> · SQS moves it out of the main queue</span>
+            <i></i>
+          </div>
+
+          <div class="dlq-row">
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--dlq">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4z"/><path d="M8 3h8v4M9 11h6M9 15h4"/></svg>
+                <span class="arch-badge bg-rose-500 text-white">DLQ</span>
+              </div>
+              <p class="arch-label">Dead-letter queue</p>
+              <p class="arch-sub">payload kept</p>
+            </div>
+            <div class="dlq-link dlq-link--wait"><span class="dlq-line"></span><strong>Alarm</strong>inspect and fix</div>
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--users">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M5 20c1-3.2 3.6-5 7-5s6 1.8 7 5"/></svg>
+              </div>
+              <p class="arch-label">Operator</p>
+              <p class="arch-sub">repairs cause</p>
+            </div>
+            <div class="dlq-link dlq-link--ok"><span class="dlq-line"></span><strong>DLQ redrive</strong>back to source</div>
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--sqs"><div class="arch-stack w-5"><span></span><span></span><span></span><span></span></div></div>
+              <p class="arch-label">Source SQS</p>
+              <p class="arch-sub">message returns</p>
+            </div>
+          </div>
+
+          <div class="dlq-row">
+            <div class="dlq-link dlq-link--ok"><span class="dlq-line"></span><strong>Receive</strong>after the fix</div>
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--lambda">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg>
+                <span class="arch-badge bg-emerald-500 text-slate-950">OK</span>
+              </div>
+              <p class="arch-label">Lambda<br><span class="text-orange-300">(Server)</span></p>
+              <p class="arch-sub">processes it</p>
+            </div>
+            <div class="dlq-link dlq-link--ok"><span class="dlq-line"></span><strong>Commit</strong>then delete</div>
+            <div class="dlq-step">
+              <div class="arch-icon arch-icon--db">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>
+              </div>
+              <p class="arch-label">Ledger DB</p>
+              <p class="arch-sub">finished</p>
+            </div>
+          </div>
+        </div>
+        <p class="mt-6 text-center text-xs leading-5 text-slate-500">Two different moves. <span class="font-mono text-slate-300">RedrivePolicy</span> sends the exhausted message into the DLQ. After the fix, a DLQ redrive sends it back to the source queue for a normal receive.</p>
+      </div>
+
+      <div class="mt-5 grid gap-4 lg:grid-cols-2">
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-emerald-400">The operational loop</p>
+          <ol class="mt-3 space-y-3 text-sm leading-6 text-slate-300">
+            <li><span class="mr-2 font-mono text-emerald-400">1</span>Alarm when <span class="font-mono">ApproximateNumberOfMessagesVisible</span> on the DLQ is greater than zero.</li>
+            <li><span class="mr-2 font-mono text-emerald-400">2</span>Inspect the body, attributes, receive count, logs, and trace or correlation id.</li>
+            <li><span class="mr-2 font-mono text-emerald-400">3</span>Fix the data or deploy a consumer that can process it safely.</li>
+            <li><span class="mr-2 font-mono text-emerald-400">4</span>Redrive to the source queue at a controlled rate, then verify the business commit.</li>
+          </ol>
+        </article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-amber-400">Configuration rules</p>
+          <ul class="mt-3 space-y-3 text-sm leading-6 text-slate-300">
+            <li>• Create the DLQ first. The source queue points to its ARN through a <span class="font-mono">RedrivePolicy</span>.</li>
+            <li>• Types must match: Standard → Standard, FIFO → FIFO.</li>
+            <li>• Choose <span class="font-mono">maxReceiveCount</span> from 1–1,000. Allow enough attempts for temporary failures, but do not retry a poison message for days.</li>
+            <li>• Set DLQ retention longer than source retention so operators have time to investigate.</li>
+            <li>• Restrict allowed source queues with a <span class="font-mono">RedriveAllowPolicy</span>.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="mt-5 grid gap-3 sm:grid-cols-3">
+        <div class="rounded-xl border border-rose-900/60 bg-rose-950/20 p-4">
+          <p class="text-sm font-semibold text-white">Not an automatic repair</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">The message waits. A team or runbook must diagnose, correct, and redrive it.</p>
+        </div>
+        <div class="rounded-xl border border-rose-900/60 bg-rose-950/20 p-4">
+          <p class="text-sm font-semibold text-white">Not a permanent archive</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">DLQ retention is still at most 14 days. Copy evidence elsewhere if audit rules require longer storage.</p>
+        </div>
+        <div class="rounded-xl border border-rose-900/60 bg-rose-950/20 p-4">
+          <p class="text-sm font-semibold text-white">Not always right for strict FIFO</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Moving one failed event aside can break an end-to-end sequence. Stop the group instead when later events must never pass it.</p>
+        </div>
+      </div>
+
+      <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html" target="_blank" rel="noreferrer" class="mt-5 inline-flex text-sm font-medium text-emerald-400 hover:text-emerald-300">Official AWS dead-letter queue guidance ↗</a>
     </section>
 
     <section class="mt-12 rounded-2xl border border-emerald-900/60 bg-slate-900 p-6 sm:p-8" aria-labelledby="cost-title">
@@ -1105,12 +1385,12 @@ COMMIT;</pre>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-800 bg-slate-950 text-slate-400">
-            <tr><td class="px-4 py-3 text-white">One worker to pull work, and a buffer for bursts</td><td class="px-4 py-3 text-emerald-300">Amazon SQS</td><td class="px-4 py-3">This is the fit. The consumer polls, then deletes the message.</td></tr>
-            <tr><td class="px-4 py-3 text-white">One event delivered to many subscribers</td><td class="px-4 py-3 text-white">Amazon SNS</td><td class="px-4 py-3">SNS pushes. The usual pattern is SNS to a separate SQS queue per subscriber.</td></tr>
-            <tr><td class="px-4 py-3 text-white">Route by event content, or take events from SaaS apps</td><td class="px-4 py-3 text-white">Amazon EventBridge</td><td class="px-4 py-3">Rules match fields in the event. SQS does not filter or route.</td></tr>
-            <tr><td class="px-4 py-3 text-white">An ordered stream several consumers can reread</td><td class="px-4 py-3 text-white">Kinesis Data Streams</td><td class="px-4 py-3">Records stay for the retention window. SQS has no replay after delete.</td></tr>
-            <tr><td class="px-4 py-3 text-white">Apps that already speak JMS, AMQP, STOMP, or MQTT</td><td class="px-4 py-3 text-white">Amazon MQ</td><td class="px-4 py-3">Managed ActiveMQ or RabbitMQ. SQS is an AWS API, not those protocols.</td></tr>
-            <tr><td class="px-4 py-3 text-white">A multi-step workflow with waits and branches</td><td class="px-4 py-3 text-white">AWS Step Functions</td><td class="px-4 py-3">It orchestrates steps. A queue only holds messages.</td></tr>
+            <tr><td class="px-4 py-3 text-white"><span class="inline-flex items-center gap-2">One worker to pull work, and a buffer for bursts<button type="button" data-snippet="alt-sqs" class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-emerald-700 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-950" aria-label="Show the SQS buffer architecture">i</button></span></td><td class="px-4 py-3 text-emerald-300">Amazon SQS</td><td class="px-4 py-3">This is the fit. The consumer polls, then deletes the message.</td></tr>
+            <tr><td class="px-4 py-3 text-white"><span class="inline-flex items-center gap-2">One event delivered to many subscribers<button type="button" data-snippet="alt-sns" class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-slate-600 text-[11px] font-semibold text-slate-300 hover:border-emerald-500" aria-label="Show the SNS fan-out architecture">i</button></span></td><td class="px-4 py-3 text-white">Amazon SNS</td><td class="px-4 py-3">SNS pushes. The usual pattern is SNS to a separate SQS queue per subscriber.</td></tr>
+            <tr><td class="px-4 py-3 text-white"><span class="inline-flex items-center gap-2">Route by event content, or take events from SaaS apps<button type="button" data-snippet="alt-eventbridge" class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-slate-600 text-[11px] font-semibold text-slate-300 hover:border-emerald-500" aria-label="Show the EventBridge routing architecture">i</button></span></td><td class="px-4 py-3 text-white">Amazon EventBridge</td><td class="px-4 py-3">Rules match fields in the event. SQS does not filter or route.</td></tr>
+            <tr><td class="px-4 py-3 text-white"><span class="inline-flex items-center gap-2">An ordered stream several consumers can reread<button type="button" data-snippet="alt-kinesis" class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-slate-600 text-[11px] font-semibold text-slate-300 hover:border-emerald-500" aria-label="Show the Kinesis stream architecture">i</button></span></td><td class="px-4 py-3 text-white">Kinesis Data Streams</td><td class="px-4 py-3">Records stay for the retention window. SQS has no replay after delete.</td></tr>
+            <tr><td class="px-4 py-3 text-white"><span class="inline-flex items-center gap-2">Apps that already speak JMS, AMQP, STOMP, or MQTT<button type="button" data-snippet="alt-mq" class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-slate-600 text-[11px] font-semibold text-slate-300 hover:border-emerald-500" aria-label="Show the Amazon MQ architecture">i</button></span></td><td class="px-4 py-3 text-white">Amazon MQ</td><td class="px-4 py-3">Managed ActiveMQ or RabbitMQ. SQS is an AWS API, not those protocols.</td></tr>
+            <tr><td class="px-4 py-3 text-white"><span class="inline-flex items-center gap-2">A multi-step workflow with waits and branches<button type="button" data-snippet="alt-sfn" class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-slate-600 text-[11px] font-semibold text-slate-300 hover:border-emerald-500" aria-label="Show the Step Functions architecture">i</button></span></td><td class="px-4 py-3 text-white">AWS Step Functions</td><td class="px-4 py-3">It orchestrates steps. A queue only holds messages.</td></tr>
           </tbody>
         </table>
       </div>
@@ -1147,8 +1427,18 @@ COMMIT;</pre>
       <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">On premises, a team runs the broker process on its own machines. In AWS, SQS is that broker, operated by AWS. You call an HTTPS API. You do not install, patch, or cluster it.</p>
       <div class="mt-6 grid gap-4 lg:grid-cols-2">
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Classic broker you operate</p>
-          <p class="mt-2 text-sm font-semibold text-white">RabbitMQ, ActiveMQ, IBM MQ</p>
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="arch-icon arch-icon--users" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="6" rx="1.5"/><rect x="4" y="11" width="16" height="6" rx="1.5"/><path d="M8 6h.01M8 14h.01M12 21h0M9 21h6"/></svg>
+              </div>
+              <div>
+                <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Classic broker you operate</p>
+                <p class="mt-1 text-sm font-semibold text-white">RabbitMQ, ActiveMQ, IBM MQ</p>
+              </div>
+            </div>
+            <button type="button" data-snippet="broker-classic" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="When a classic broker is required">i</button>
+          </div>
           <ol class="mt-3 space-y-2 text-sm leading-6 text-slate-400">
             <li>1. The producer connects to the broker.</li>
             <li>2. The broker writes the message to a durable queue and acknowledges.</li>
@@ -1157,8 +1447,18 @@ COMMIT;</pre>
           </ol>
         </article>
         <article class="rounded-xl border border-emerald-900/60 bg-slate-900 p-5">
-          <p class="text-xs font-medium uppercase tracking-wider text-emerald-400">Amazon SQS</p>
-          <p class="mt-2 text-sm font-semibold text-white">Same job, no broker in your account</p>
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="arch-icon arch-icon--sqs" aria-hidden="true">
+                <div class="arch-stack w-5"><span></span><span></span><span></span><span></span></div>
+              </div>
+              <div>
+                <p class="text-xs font-medium uppercase tracking-wider text-emerald-400">Amazon SQS</p>
+                <p class="mt-1 text-sm font-semibold text-white">Same job, no broker in your account</p>
+              </div>
+            </div>
+            <button type="button" data-snippet="broker-sqs" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-emerald-700 text-xs font-semibold text-emerald-300 hover:bg-emerald-950" aria-label="When SQS is the better choice">i</button>
+          </div>
           <ol class="mt-3 space-y-2 text-sm leading-6 text-slate-400">
             <li>1. The producer calls <span class="font-mono text-slate-300">SendMessage</span> over HTTPS.</li>
             <li>2. SQS stores redundant copies on its own servers and returns 200.</li>
@@ -1238,6 +1538,14 @@ COMMIT;</pre>
       "ctrl-dlq": { eyebrow: "Operational control", title: "Dead-letter queue", rich: true },
       "ctrl-retention": { eyebrow: "Operational control", title: "Retention and payload size", rich: true },
       "ctrl-batch": { eyebrow: "Operational control", title: "Batching and partial failures", rich: true },
+      "broker-classic": { eyebrow: "Classic broker", title: "When you are forced to run a broker", rich: true },
+      "broker-sqs": { eyebrow: "Amazon SQS", title: "When SQS is the better choice", rich: true },
+      "alt-sqs": { eyebrow: "Sample architecture", title: "One worker, one buffer", rich: true },
+      "alt-sns": { eyebrow: "Sample architecture", title: "One event, many subscribers", rich: true },
+      "alt-eventbridge": { eyebrow: "Sample architecture", title: "Route by what the event says", rich: true },
+      "alt-kinesis": { eyebrow: "Sample architecture", title: "One ordered stream, many readers", rich: true },
+      "alt-mq": { eyebrow: "Sample architecture", title: "Keep the existing protocol", rich: true },
+      "alt-sfn": { eyebrow: "Sample architecture", title: "A workflow, not a queue", rich: true },
       q01: { eyebrow: "Developer", title: "Commit succeeded, delete never happened", answer: "The visibility timeout expires and SQS delivers the message again. The ledger change is already saved, so a second run must notice the transfer id and skip the debit. Delete the message only after that commit succeeds." },
       q02: { eyebrow: "Developer", title: "The key that survives the five-minute window", answer: "FIFO suppresses the same MessageDeduplicationId for five minutes, including after the message is deleted. After that window, the same id is a new message. The durable key is the business id, such as the transfer id, stored with a unique constraint in the same database transaction as the ledger write." },
       q03: { eyebrow: "Architect", title: "A hot message group", answer: "Yes. SQS processes one message group in order, so a single busy group cannot run in parallel with itself. Other groups on the same queue still proceed. Choose a group id with many values, such as an account id, not one group for the whole system." },

@@ -26,6 +26,128 @@ button:disabled {
   background: rgb(16 185 129 / 35%);
 }
 
+.arch-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 1.25rem;
+}
+
+.arch-node {
+  display: flex;
+  width: 5.5rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.arch-icon {
+  position: relative;
+  display: flex;
+  width: 3.5rem;
+  height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  color: #fff;
+  box-shadow: 0 8px 24px -8px rgb(0 0 0 / 70%);
+}
+
+.arch-icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.arch-icon--users { background: linear-gradient(135deg, #475569, #1e293b); }
+.arch-icon--apigw { background: linear-gradient(135deg, #ff4f8b, #b0084d); }
+.arch-icon--sqs { background: linear-gradient(135deg, #ff4f8b, #b0084d); }
+.arch-icon--lambda { background: linear-gradient(135deg, #f78e04, #c8511b); }
+.arch-icon--db { background: linear-gradient(135deg, #4d72f3, #2e27ad); }
+
+.arch-label {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1rem;
+  color: #fff;
+}
+
+.arch-sub {
+  font-size: 0.625rem;
+  line-height: 0.9rem;
+  color: rgb(148 163 184);
+}
+
+.arch-badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.75rem;
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.arch-arrow {
+  position: relative;
+  width: 2.25rem;
+  height: 2px;
+  margin-top: 1.75rem;
+  flex-shrink: 0;
+  background-image: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  background-size: 10px 2px;
+  animation: arch-flow 0.8s linear infinite;
+}
+
+.arch-arrow::after {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid currentColor;
+  content: "";
+}
+
+.arch-arrow--ok { color: rgb(52 211 153); }
+.arch-arrow--hot { color: rgb(251 113 133); animation-duration: 0.35s; }
+.arch-arrow--slow { color: rgb(52 211 153); animation-duration: 1.6s; }
+
+@keyframes arch-flow {
+  to { background-position: 10px 0; }
+}
+
+.arch-drop {
+  animation: arch-drop 1.8s ease-in infinite;
+}
+
+.arch-drop:nth-child(2) { animation-delay: 0.6s; }
+.arch-drop:nth-child(3) { animation-delay: 1.2s; }
+
+@keyframes arch-drop {
+  0% { opacity: 0; transform: translateY(-4px); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(18px); }
+}
+
+.arch-stack span {
+  display: block;
+  height: 5px;
+  margin-top: 3px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 85%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-arrow,
+  .arch-drop {
+    animation: none;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

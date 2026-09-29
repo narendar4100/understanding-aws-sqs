@@ -51,29 +51,111 @@
           Amazon SQS stores messages until a consumer successfully processes and deletes them. Producers can keep accepting work while consumers scale independently, recover from failure, and control throughput. Standard queues optimize for scale; FIFO queues add ordered message groups and send deduplication.
         </p>
 
-        <div class="mt-8 grid gap-5 lg:grid-cols-2">
+        <div class="mt-8 grid gap-5">
           <article class="rounded-xl border border-rose-900/70 bg-black p-5">
             <p class="text-xs font-medium uppercase tracking-wider text-rose-400">Without a queue</p>
             <h3 class="mt-2 text-lg font-semibold text-white">Caller and worker share the same failure boundary</h3>
-            <pre class="mt-5 overflow-x-auto text-xs leading-7 text-rose-300">100 callers
-    │
-    ▼
-API Gateway ──▶ Lambda ──▶ slow ledger
-                    │
-                    └─ concurrency full
-                       excess requests fail</pre>
+            <div class="mt-6 rounded-lg border border-slate-800 bg-slate-950/70 px-3 py-6">
+              <div class="arch-flow">
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--users">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.9.4 5 2.8 5 5.8"/></svg>
+                    <span class="arch-badge bg-rose-500 text-white">×100</span>
+                  </div>
+                  <p class="arch-label">Users</p>
+                  <p class="arch-sub">all click at once</p>
+                </div>
+                <div class="arch-arrow arch-arrow--hot"></div>
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--apigw">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H5v16h3M16 4h3v16h-3"/><path d="M9 12h6M13 9l3 3-3 3"/></svg>
+                  </div>
+                  <p class="arch-label">API Gateway</p>
+                  <p class="arch-sub">front door</p>
+                </div>
+                <div class="arch-arrow arch-arrow--hot"></div>
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--lambda ring-2 ring-rose-500 ring-offset-2 ring-offset-slate-950">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg>
+                    <span class="arch-badge bg-rose-500 text-white">FULL</span>
+                  </div>
+                  <p class="arch-label">Lambda<br><span class="text-orange-300">(Server)</span></p>
+                  <div class="mt-1 flex h-6 flex-col items-center">
+                    <span class="arch-drop rounded bg-rose-500/20 px-1.5 font-mono text-[10px] text-rose-300">503 ✕</span>
+                  </div>
+                </div>
+                <div class="arch-arrow arch-arrow--hot"></div>
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--db">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>
+                  </div>
+                  <p class="arch-label">Ledger DB</p>
+                  <p class="arch-sub">slow · 1.5s / txn</p>
+                </div>
+              </div>
+              <div class="mt-5 flex flex-wrap justify-center gap-2 text-[11px]">
+                <span class="rounded-full border border-rose-800 bg-rose-950/60 px-2.5 py-1 text-rose-300">Server concurrency full</span>
+                <span class="rounded-full border border-rose-800 bg-rose-950/60 px-2.5 py-1 text-rose-300">Extra users get 503</span>
+                <span class="rounded-full border border-rose-800 bg-rose-950/60 px-2.5 py-1 text-rose-300">Request lost unless retried</span>
+              </div>
+            </div>
             <p class="mt-4 text-sm leading-6 text-slate-400">A traffic spike becomes a compute spike. If Lambda cannot start, the customer request is lost unless the caller retries safely.</p>
           </article>
           <article class="rounded-xl border border-emerald-900/70 bg-black p-5">
             <p class="text-xs font-medium uppercase tracking-wider text-emerald-400">With Amazon SQS</p>
             <h3 class="mt-2 text-lg font-semibold text-white">Acceptance is separated from processing</h3>
-            <pre class="mt-5 overflow-x-auto text-xs leading-7 text-emerald-300">100 callers
-    │
-    ▼
-API Gateway ──▶ SQS buffer ──▶ Lambda ──▶ ledger
-                    │              │
-                    │ durable      └─ drains at safe rate
-                    └─ absorbs burst</pre>
+            <div class="mt-6 rounded-lg border border-slate-800 bg-slate-950/70 px-3 py-6">
+              <div class="arch-flow">
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--users">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.9.4 5 2.8 5 5.8"/></svg>
+                    <span class="arch-badge bg-rose-500 text-white">×100</span>
+                  </div>
+                  <p class="arch-label">Users</p>
+                  <p class="arch-sub">all click at once</p>
+                </div>
+                <div class="arch-arrow arch-arrow--hot"></div>
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--apigw">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H5v16h3M16 4h3v16h-3"/><path d="M9 12h6M13 9l3 3-3 3"/></svg>
+                    <span class="arch-badge bg-emerald-500 text-slate-950">200</span>
+                  </div>
+                  <p class="arch-label">API Gateway</p>
+                  <p class="arch-sub">instant “accepted”</p>
+                </div>
+                <div class="arch-arrow arch-arrow--hot"></div>
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--sqs ring-2 ring-emerald-400 ring-offset-2 ring-offset-slate-950">
+                    <div class="arch-stack w-7"><span></span><span></span><span></span><span></span></div>
+                    <span class="arch-badge bg-pink-500 text-white">buffer</span>
+                  </div>
+                  <p class="arch-label">SQS Queue</p>
+                  <p class="arch-sub">durable waiting room</p>
+                </div>
+                <div class="arch-arrow arch-arrow--slow"></div>
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--lambda">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg>
+                    <span class="arch-badge bg-emerald-500 text-slate-950">OK</span>
+                  </div>
+                  <p class="arch-label">Lambda<br><span class="text-orange-300">(Server)</span></p>
+                  <p class="arch-sub">pulls at safe rate</p>
+                </div>
+                <div class="arch-arrow arch-arrow--slow"></div>
+                <div class="arch-node">
+                  <div class="arch-icon arch-icon--db">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>
+                  </div>
+                  <p class="arch-label">Ledger DB</p>
+                  <p class="arch-sub">steady load</p>
+                </div>
+              </div>
+              <div class="mt-5 flex flex-wrap justify-center gap-2 text-[11px]">
+                <span class="rounded-full border border-emerald-800 bg-emerald-950/60 px-2.5 py-1 text-emerald-300">Queue absorbs the burst</span>
+                <span class="rounded-full border border-emerald-800 bg-emerald-950/60 px-2.5 py-1 text-emerald-300">Server never overloaded</span>
+                <span class="rounded-full border border-emerald-800 bg-emerald-950/60 px-2.5 py-1 text-emerald-300">No request lost</span>
+              </div>
+            </div>
             <p class="mt-4 text-sm leading-6 text-slate-400">The API acknowledges durable acceptance quickly. Consumers process later according to concurrency and downstream capacity.</p>
           </article>
         </div>

@@ -1,0 +1,42 @@
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-mono,
+code,
+pre,
+textarea {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+textarea:disabled,
+button:disabled {
+  opacity: 0.6;
+}
+
+::selection {
+  background: rgb(16 185 129 / 35%);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(2 6 23);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid rgb(2 6 23);
+  border-radius: 999px;
+  background: rgb(51 65 85);
+}

@@ -1,6 +1,16 @@
 output "frontend_s3_website_url" {
-  description = "Public HTTP endpoint for the Core Banking Ledger training dashboard."
+  description = "Public landing page for the AWS Messaging Learning Lab."
   value       = "http://${aws_s3_bucket_website_configuration.frontend.website_endpoint}"
+}
+
+output "sqs_learning_url" {
+  description = "Amazon SQS reference guide and live labs."
+  value       = "http://${aws_s3_bucket_website_configuration.frontend.website_endpoint}/sqs/"
+}
+
+output "sns_learning_url" {
+  description = "Amazon SNS module route."
+  value       = "http://${aws_s3_bucket_website_configuration.frontend.website_endpoint}/sns/"
 }
 
 output "api_gateway_custom_domain_url" {

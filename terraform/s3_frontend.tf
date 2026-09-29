@@ -93,3 +93,14 @@ resource "aws_s3_object" "site_css" {
   content_type  = "text/css; charset=utf-8"
   cache_control = "public, max-age=300"
 }
+
+resource "aws_s3_object" "aws_icons" {
+  for_each = fileset("${path.module}/../frontend/assets/aws", "*.svg")
+
+  bucket        = aws_s3_bucket.frontend.id
+  key           = "assets/aws/${each.value}"
+  source        = "${path.module}/../frontend/assets/aws/${each.value}"
+  etag          = filemd5("${path.module}/../frontend/assets/aws/${each.value}")
+  content_type  = "image/svg+xml"
+  cache_control = "public, max-age=86400"
+}

@@ -20,17 +20,38 @@
       </div>
     </nav>
     <div class="mx-auto max-w-6xl px-6 py-8">
-      <div class="mb-4 flex flex-wrap items-center gap-2">
-        <span class="rounded-full border border-amber-700/70 bg-amber-950/80 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-amber-200">Enterprise</span>
-        <span class="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-300">Mission-critical ledger</span>
-      </div>
-      <h1 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Amazon SQS Reference &amp; Live Labs</h1>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-400">Amazon Simple Queue Service</p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">A durable queue between the caller and the worker</h1>
       <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400 sm:text-base">
-        Account <span class="font-mono text-slate-200">ACC-9941</span> submits one hundred transfers of
-        <span class="font-mono text-slate-200">250.00</span> in the same millisecond.
-        Architecture A writes the ledger on the request path with no durable buffer.
-        Architecture B accepts the transfer into SQS and commits after the caller has already received 200.
+        Amazon SQS is a fully managed message queue. A producer sends a message and gets an acknowledgement as soon as SQS has stored it. The message stays in the queue until a consumer processes it and deletes it, so a slow or unavailable worker does not lose the work.
       </p>
+      <div class="mt-6 max-w-xl rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-5">
+        <div class="arch-flow">
+          <div class="arch-node">
+            <div class="arch-icon arch-icon--users">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.9.4 5 2.8 5 5.8"/></svg>
+            </div>
+            <p class="arch-label">Producer</p>
+            <p class="arch-sub">sends work</p>
+          </div>
+          <div class="arch-arrow arch-arrow--hot arch-arrow--long"></div>
+          <div class="arch-node">
+            <div class="arch-icon arch-icon--sqs">
+              <div class="arch-stack w-5"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <p class="arch-label">SQS</p>
+            <p class="arch-sub">stores it</p>
+          </div>
+          <div class="arch-arrow arch-arrow--slow arch-arrow--long"></div>
+          <div class="arch-node">
+            <div class="arch-icon arch-icon--lambda">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg>
+            </div>
+            <p class="arch-label">Consumer</p>
+            <p class="arch-sub">processes later</p>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -41,7 +62,10 @@
         <a href="#live-labs" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Live labs</a>
         <a href="#controls-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Operations</a>
         <a href="#cost-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Cost</a>
+        <a href="#limits-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Limits</a>
+        <a href="#alternatives-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Alternatives</a>
         <a href="#waf-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Well-Architected</a>
+        <a href="#brokers-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Brokers</a>
       </div>
 
       <div id="core-concepts" class="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
@@ -50,6 +74,86 @@
         <p class="mt-4 max-w-4xl leading-7 text-slate-300">
           Amazon SQS stores messages until a consumer successfully processes and deletes them. Producers can keep accepting work while consumers scale independently, recover from failure, and control throughput. Standard queues optimize for scale; FIFO queues add ordered message groups and send deduplication.
         </p>
+
+        <div class="mt-8 rounded-xl border border-amber-800/60 bg-amber-950/20 p-5 sm:p-6">
+          <div class="flex items-start gap-4">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-2xl shadow-lg shadow-amber-950/40" aria-hidden="true">🏦</div>
+            <div>
+              <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-300">Why a queue is a must, not a nice-to-have</p>
+              <h3 class="mt-1 text-xl font-semibold text-white">Money must never vanish in the air</h3>
+              <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-300">
+                Ravi deposits ₹5,000. Priya withdraws ₹2,000. A company credits salaries. At that exact moment the bank's server crashes for 10 minutes. These are not optional requests like browsing a menu—every single one <span class="font-semibold text-white">must</span> be recorded and processed eventually.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap justify-center gap-2 text-xs">
+            <span class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-slate-200">💰 Ravi · deposit ₹5,000</span>
+            <span class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-slate-200">🏧 Priya · withdraw ₹2,000</span>
+            <span class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-slate-200">🧾 Acme Ltd · salary ₹40,000</span>
+          </div>
+
+          <div class="mt-5 grid gap-4 md:grid-cols-2">
+            <article class="rounded-lg border border-rose-900/70 bg-black/70 p-4">
+              <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-rose-950 text-xl" aria-hidden="true">💥</div>
+                <div>
+                  <p class="text-xs font-medium uppercase tracking-wider text-rose-400">No queue · server is down</p>
+                  <h4 class="mt-0.5 font-semibold text-white">Transactions are lost in the air</h4>
+                </div>
+              </div>
+              <div class="mt-4 flex items-center justify-center gap-2 text-center text-xs">
+                <div class="rounded-lg bg-slate-800 px-3 py-2 text-white">Transactions</div>
+                <span class="text-rose-400">→</span>
+                <div class="rounded-lg bg-orange-950 px-3 py-2 text-orange-200 line-through decoration-rose-500">Bank server</div>
+                <span class="text-rose-400">→</span>
+                <div class="rounded-lg bg-rose-950 px-3 py-2 text-rose-200">❌ Gone</div>
+              </div>
+              <ul class="mt-4 space-y-1.5 text-sm leading-6 text-slate-400">
+                <li>• Ravi's cash was handed over, but his balance never updates.</li>
+                <li>• Priya sees an error—did the money leave or not? She retries and may be charged twice.</li>
+                <li>• Salaries silently fail; nobody knows which ones to redo.</li>
+              </ul>
+            </article>
+
+            <article class="rounded-lg border border-emerald-900/70 bg-black/70 p-4">
+              <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-950 text-xl" aria-hidden="true">📥</div>
+                <div>
+                  <p class="text-xs font-medium uppercase tracking-wider text-emerald-400">With SQS · server is down</p>
+                  <h4 class="mt-0.5 font-semibold text-white">Transactions wait safely, then get processed</h4>
+                </div>
+              </div>
+              <div class="mt-4 flex items-center justify-center gap-2 text-center text-xs">
+                <div class="rounded-lg bg-slate-800 px-3 py-2 text-white">Transactions</div>
+                <span class="text-emerald-400">→</span>
+                <div class="rounded-lg bg-pink-950 px-3 py-2 text-pink-200">SQS holds them</div>
+                <span class="text-emerald-400">→</span>
+                <div class="rounded-lg bg-orange-950 px-3 py-2 text-orange-200">Server recovers ✓</div>
+              </div>
+              <ol class="mt-4 space-y-1.5 text-sm leading-6 text-slate-400">
+                <li><span class="font-semibold text-emerald-300">1.</span> Each transaction is stored durably the moment it arrives—customer gets "Accepted".</li>
+                <li><span class="font-semibold text-emerald-300">2.</span> Server down? Messages simply wait in the queue. Nothing is dropped.</li>
+                <li><span class="font-semibold text-emerald-300">3.</span> Server back? It works through the backlog. A failed attempt is automatically retried.</li>
+                <li><span class="font-semibold text-emerald-300">4.</span> Still failing after several tries? It moves to a dead-letter queue for a human to review.</li>
+              </ol>
+            </article>
+          </div>
+
+          <p class="mt-5 rounded-lg border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm leading-6 text-slate-300">
+            <span class="font-semibold text-white">Think of it like the bank's cheque drop box.</span> You drop your cheque in even when the counter is closed. It is not lost—staff process every cheque when they are back. SQS is that drop box for your transactions.
+          </p>
+
+          <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs">
+            <span class="rounded-full bg-slate-800 px-3 py-1.5 text-slate-200">Transaction = request</span>
+            <span class="text-slate-600">•</span>
+            <span class="rounded-full bg-pink-950 px-3 py-1.5 text-pink-200">Drop box = SQS queue</span>
+            <span class="text-slate-600">•</span>
+            <span class="rounded-full bg-orange-950 px-3 py-1.5 text-orange-200">Bank staff = Lambda (Server)</span>
+            <span class="text-slate-600">•</span>
+            <span class="rounded-full bg-violet-950 px-3 py-1.5 text-violet-200">Review desk = dead-letter queue</span>
+          </div>
+        </div>
 
         <div class="mt-8 grid gap-5 lg:grid-cols-2">
           <article class="rounded-xl border border-rose-900/70 bg-black px-3 py-5">
@@ -103,7 +207,7 @@
           </article>
           <article class="rounded-xl border border-emerald-900/70 bg-black px-3 py-5">
             <p class="text-xs font-medium uppercase tracking-wider text-emerald-400">With Amazon SQS</p>
-            <h3 class="mt-2 text-lg font-semibold text-white">Acceptance is separated from processing</h3>
+            <h3 class="mt-2 min-h-14 text-lg font-semibold leading-7 text-white">Acceptance is separated from processing</h3>
             <div class="mt-6 rounded-lg border border-slate-800 bg-slate-950/70 px-2 py-6">
               <div class="arch-flow">
                 <div class="arch-node">
@@ -164,13 +268,18 @@
 
     <h2 id="live-labs" class="mt-12 text-2xl font-semibold text-white">Live AWS labs</h2>
     <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
-      These controls invoke the deployed API Gateway routes and real AWS queues. A 200 confirms acceptance; use the consumer Lambda logs to verify commit order and deduplication.
+      Account <span class="font-mono text-slate-200">ACC-9941</span> submits one hundred transfers of <span class="font-mono text-slate-200">250.00</span> in the same millisecond. These controls call the deployed API. A 200 confirms acceptance. The info buttons on Architectures A and C open the Logs Insights queries for this session.
     </p>
 
     <div class="mt-6 grid gap-6 lg:grid-cols-2">
       <section class="rounded-xl border border-slate-800 border-t-2 border-t-amber-500 bg-slate-900 p-6" aria-labelledby="arch-a-title">
-        <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-amber-300">Synchronous path</p>
-        <h2 id="arch-a-title" class="mt-2 text-xl font-semibold text-white">Architecture A: Unbuffered Processing</h2>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-amber-300">Synchronous path</p>
+            <h2 id="arch-a-title" class="mt-2 text-xl font-semibold text-white">Architecture A: Unbuffered Processing</h2>
+          </div>
+          <button type="button" data-snippet="direct" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-amber-700 text-xs font-semibold text-amber-300 hover:bg-amber-950" aria-label="Show Architecture A Logs Insights query">i</button>
+        </div>
         <p class="mt-2 text-sm leading-6 text-slate-400">
           Targets <span id="target-direct" class="font-mono text-slate-200">https://demo.sisuraphotography.com</span>.
           API Gateway invokes Lambda directly. Accepted calls spend 1.5 seconds inside the simulated commit; calls above the function or account concurrency available at that instant fail before entering the handler.
@@ -244,7 +353,7 @@
           </ul>
           <div class="mt-5 rounded-lg bg-slate-950 p-4">
             <p class="text-[10px] font-medium uppercase tracking-wider text-sky-500">Real-life fit</p>
-            <p class="mt-2 text-sm leading-6 text-slate-300">Resize millions of uploaded photos. Every image must be processed, but image B may finish before image A without harming the business.</p>
+            <p class="mt-2 text-sm leading-6 text-slate-300">10,000 product reviews arrive together in a Black Friday sale. One review appearing a couple of seconds early, or twice, does not hurt the business.</p>
           </div>
         </article>
 
@@ -263,7 +372,7 @@
           </ul>
           <div class="mt-5 rounded-lg bg-slate-950 p-4">
             <p class="text-[10px] font-medium uppercase tracking-wider text-violet-500">Real-life fit</p>
-            <p class="mt-2 text-sm leading-6 text-slate-300">Post debit, reversal, and release events for one bank account in order while other account groups continue independently.</p>
+            <p class="mt-2 text-sm leading-6 text-slate-300">A customer places an order, then changes their address seconds later. Those two events must stay in that order, or the parcel ships to the old house.</p>
           </div>
         </article>
       </div>
@@ -279,7 +388,7 @@
           <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-sky-300">Standard queue</p>
           <h2 id="arch-c-title" class="mt-2 text-xl font-semibold text-white">Architecture C: MessageBody only</h2>
         </div>
-        <button type="button" data-snippet="standard" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sky-700 text-xs font-semibold text-sky-300 hover:bg-sky-950" aria-label="Show Standard queue integration code">i</button>
+        <button type="button" data-snippet="standard" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sky-700 text-xs font-semibold text-sky-300 hover:bg-sky-950" aria-label="Show Architecture C Logs Insights query">i</button>
       </div>
       <p class="mt-2 text-sm leading-6 text-slate-400">
         Each object is <span class="font-mono text-slate-200">MessageBody</span> only. It is sent to
@@ -483,36 +592,349 @@
     </section>
     </div>
 
-    <div id="code-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 p-6" role="dialog" aria-modal="true" aria-labelledby="code-modal-title">
-      <div class="w-full max-w-xl rounded-xl border border-slate-700 bg-slate-900 p-5 shadow-2xl">
-        <div class="flex items-start justify-between gap-4">
-          <h3 id="code-modal-title" class="text-base font-semibold text-white">Integration code</h3>
-          <button id="code-modal-close" type="button" class="rounded-md px-2 py-1 text-sm text-slate-400 hover:bg-slate-800 hover:text-white" aria-label="Close">Close</button>
+    <div id="code-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="code-modal-title">
+      <div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-700/80 bg-slate-900 shadow-2xl shadow-black/60">
+        <div class="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-4">
+          <div>
+            <p id="code-modal-eyebrow" class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">Integration code</p>
+            <h3 id="code-modal-title" class="mt-1 text-lg font-semibold text-white">Integration code</h3>
+          </div>
+          <button id="code-modal-close" type="button" class="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-800 hover:text-white" aria-label="Close">✕</button>
         </div>
-        <pre id="code-modal-body" class="mt-4 overflow-x-auto rounded-lg bg-black p-4 font-mono text-xs leading-6 text-emerald-300"></pre>
+        <div id="code-modal-body" class="px-6 py-5"></div>
+      </div>
+    </div>
+
+    <div hidden data-rich="standard-use">
+      <div class="flex items-center gap-5 rounded-xl border border-sky-900/60 bg-gradient-to-br from-sky-950/70 to-slate-950 p-5">
+        <p class="font-mono text-4xl font-semibold tabular-nums text-white">10,000</p>
+        <div>
+          <p class="text-sm font-semibold text-sky-200">product reviews in the same second</p>
+          <p class="mt-0.5 text-xs text-slate-400">Black Friday sale · e-commerce site</p>
+        </div>
+      </div>
+
+      <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Out of order</p>
+            <span class="rounded-full bg-emerald-950 px-2 py-0.5 text-[10px] font-medium text-emerald-300">Harmless</span>
+          </div>
+          <div class="mt-3 flex items-center gap-2 font-mono text-xs">
+            <span class="rounded-md bg-sky-950 px-2 py-1 text-sky-200">#500</span>
+            <span class="text-slate-600">then</span>
+            <span class="rounded-md bg-slate-800 px-2 py-1 text-slate-300">#499</span>
+          </div>
+          <p class="mt-3 text-xs leading-5 text-slate-400">Shown 2 seconds apart. Nobody notices.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Duplicate</p>
+            <span class="rounded-full bg-emerald-950 px-2 py-0.5 text-[10px] font-medium text-emerald-300">Harmless</span>
+          </div>
+          <div class="mt-3 flex items-center gap-2 font-mono text-xs">
+            <span class="rounded-md bg-sky-950 px-2 py-1 text-sky-200">Review #77</span>
+            <span class="text-slate-500">×2</span>
+          </div>
+          <p class="mt-3 text-xs leading-5 text-slate-400">A network glitch processes it twice. No real damage.</p>
+        </div>
+      </div>
+
+      <p class="mt-5 border-l-2 border-sky-500 pl-4 text-sm leading-6 text-slate-300">
+        <span class="font-semibold text-white">Choose Standard</span> when speed and massive scale matter more than exact order. It handles near-unlimited throughput at the lowest price.
+      </p>
+    </div>
+
+    <div hidden data-rich="fifo-use">
+      <p class="text-sm leading-6 text-slate-300">A customer places an order, then updates their address <span class="font-semibold text-white">within 10 seconds</span>.</p>
+
+      <div class="mt-4 flex items-stretch gap-2">
+        <div class="flex-1 rounded-xl border border-slate-800 bg-slate-950 p-3">
+          <p class="font-mono text-[10px] text-violet-300">EVENT A</p>
+          <p class="mt-1 text-sm font-semibold text-white">Order placed</p>
+          <p class="mt-0.5 text-xs text-slate-500">123 Past Lane</p>
+        </div>
+        <div class="flex items-center text-slate-600">→</div>
+        <div class="flex-1 rounded-xl border border-slate-800 bg-slate-950 p-3">
+          <p class="font-mono text-[10px] text-violet-300">EVENT B</p>
+          <p class="mt-1 text-sm font-semibold text-white">Address changed</p>
+          <p class="mt-0.5 text-xs text-slate-500">456 Future Drive</p>
+        </div>
+      </div>
+
+      <div class="mt-3 grid gap-3 sm:grid-cols-2">
+        <div class="rounded-xl border border-rose-900/70 bg-rose-950/30 p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-[11px] font-medium uppercase tracking-wider text-rose-300">Standard</p>
+            <span class="font-mono text-xs text-rose-300">B → A</span>
+          </div>
+          <p class="mt-2 text-xs leading-5 text-slate-400">Order lands last and overwrites the label with the old address.</p>
+          <p class="mt-3 text-sm font-semibold text-rose-300">✕ Ships to the wrong house</p>
+        </div>
+        <div class="rounded-xl border border-emerald-900/70 bg-emerald-950/30 p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">FIFO</p>
+            <span class="font-mono text-xs text-emerald-300">A → B</span>
+          </div>
+          <p class="mt-2 text-xs leading-5 text-slate-400">Label is printed only after the address change is applied.</p>
+          <p class="mt-3 text-sm font-semibold text-emerald-300">✓ Ships to the right house</p>
+        </div>
+      </div>
+
+      <p class="mt-6 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">The cost of getting it wrong</p>
+      <div class="mt-3 grid gap-3 sm:grid-cols-3">
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <svg class="h-5 w-5 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+          <p class="mt-3 text-sm font-semibold text-white">Return charges</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Carrier fails delivery and bills a penalty to ship it back.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <svg class="h-5 w-5 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+          <p class="mt-3 text-sm font-semibold text-white">Inventory lockdown</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Stock stuck in transit for weeks. It cannot be resold.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <svg class="h-5 w-5 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0116 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg>
+          <p class="mt-3 text-sm font-semibold text-white">Support overhead</p>
+          <p class="mt-1 text-xs leading-5 text-slate-400">Angry call, full refund, and a negative review.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex gap-4 rounded-xl border border-violet-800/60 bg-gradient-to-br from-violet-950/70 to-slate-950 p-5">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-violet-500/15 text-violet-300">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-300">Why we need deduplication</p>
+          <p class="mt-1 text-sm font-semibold text-white">The Network Shield</p>
+          <p class="mt-2 text-xs leading-5 text-slate-300">If a server automatically retries a request during a routine internet hiccup, the duplicate is killed at the gate before it can trigger double warehouse allocations or duplicate shipping labels.</p>
+        </div>
+      </div>
+    </div>
+
+    <div hidden data-rich="ctrl-visibility">
+      <div class="rounded-xl border border-amber-800/70 bg-amber-950/30 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">How to set it</p>
+        <p class="mt-2 text-lg font-semibold text-white">At least 6 × the Lambda function timeout</p>
+        <p class="mt-1 text-sm leading-6 text-slate-300">If you use a batch window, add <span class="font-mono text-slate-200">MaximumBatchingWindowInSeconds</span> as well. The function timeout itself must be less than or equal to the visibility timeout, or Lambda rejects the event source mapping.</p>
+      </div>
+      <p class="mt-4 text-sm leading-6 text-slate-300">The message stays hidden while a consumer works. Lambda may retry a throttled invocation several times. If the message becomes visible during those retries, a second worker processes it too.</p>
+      <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Example</p>
+        <p class="mt-2 font-mono text-sm text-white">function timeout 30s → visibility timeout ≥ 180s</p>
+        <p class="mt-2 text-xs leading-5 text-slate-400">With a 10-second batch window, use at least 190 seconds. The default of 30 seconds is too short for almost any Lambda consumer. Do not set it for hours either: a real failure then waits that long before it can be retried.</p>
+      </div>
+    </div>
+
+    <div hidden data-rich="ctrl-polling">
+      <div class="rounded-xl border border-amber-800/70 bg-amber-950/30 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">How to set it</p>
+        <p class="mt-2 text-lg font-semibold text-white">Use long polling. Set WaitTimeSeconds from 1 to 20.</p>
+        <p class="mt-1 text-sm leading-6 text-slate-300">Short polling is <span class="font-mono text-slate-200">WaitTimeSeconds = 0</span>. It returns immediately and may look at only a subset of SQS servers, so it can come back empty even when a message exists.</p>
+      </div>
+      <p class="mt-4 text-sm leading-6 text-slate-300">An empty receive is still a billable request. Long polling waits for a message and checks all servers, so you make fewer calls and miss fewer messages.</p>
+      <details class="group mt-4 rounded-xl border border-slate-800 bg-slate-950">
+        <summary class="flex cursor-pointer list-none items-center gap-3 px-4 py-3 text-sm font-semibold text-white">
+          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-sky-700 text-xs font-semibold text-sky-300" aria-hidden="true">i</span>
+          Where those servers are
+        </summary>
+        <div class="border-t border-slate-800 px-4 py-4">
+          <p class="text-xs leading-5 text-slate-400">Serverless means you do not run or patch a host. SQS still runs on AWS-owned machines in the Region. AWS does not publish the racks or the host count. It does publish this behavior: each message is stored redundantly on multiple servers. A short poll asks a weighted random subset of them. A long poll asks all of them and waits.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-3">
+            <div class="rounded-lg border border-slate-800 bg-black p-3 text-center">
+              <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-slate-800 text-xs font-semibold text-slate-300">A</div>
+              <p class="mt-2 text-xs font-semibold text-white">Storage server</p>
+              <p class="mt-1 text-[11px] leading-4 text-slate-500">Short poll may skip it</p>
+            </div>
+            <div class="rounded-lg border border-emerald-800 bg-emerald-950/30 p-3 text-center">
+              <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-700 text-xs font-semibold text-white">B</div>
+              <p class="mt-2 text-xs font-semibold text-white">Holds the message</p>
+              <p class="mt-1 text-[11px] leading-4 text-emerald-300">A copy lives here</p>
+            </div>
+            <div class="rounded-lg border border-slate-800 bg-black p-3 text-center">
+              <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-slate-800 text-xs font-semibold text-slate-300">C</div>
+              <p class="mt-2 text-xs font-semibold text-white">Storage server</p>
+              <p class="mt-1 text-[11px] leading-4 text-slate-500">Another redundant copy</p>
+            </div>
+          </div>
+          <div class="mt-3 grid gap-2 text-xs sm:grid-cols-2">
+            <p class="rounded-lg border border-rose-900/70 bg-rose-950/30 px-3 py-2 text-rose-200">Short poll asks A only → empty, even though B has the message.</p>
+            <p class="rounded-lg border border-emerald-900/70 bg-emerald-950/30 px-3 py-2 text-emerald-200">Long poll asks A, B, and C, then waits up to 20 seconds.</p>
+          </div>
+        </div>
+      </details>
+      <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Example</p>
+        <p class="mt-2 font-mono text-sm text-white">ReceiveMessage WaitTimeSeconds = 20</p>
+        <p class="mt-2 text-xs leading-5 text-slate-400">The call waits up to 20 seconds. If a transfer arrives at second 3, it returns then. If nothing arrives, it returns empty once, instead of hundreds of immediate empty polls.</p>
+      </div>
+    </div>
+
+    <div hidden data-rich="ctrl-delay">
+      <div class="rounded-xl border border-amber-800/70 bg-amber-950/30 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">How to set it</p>
+        <p class="mt-2 text-lg font-semibold text-white">0 to 15 minutes. Not longer.</p>
+        <p class="mt-1 text-sm leading-6 text-slate-300">A standard queue can delay one message with <span class="font-mono text-slate-200">DelaySeconds</span>, or every message with a queue delay. A FIFO queue uses only the queue delay. Do not sleep inside Lambda to wait: you pay for the wait, and the visibility timeout must cover it.</p>
+      </div>
+      <p class="mt-4 text-sm leading-6 text-slate-300">Use a delay when the work is valid now but should not run yet. The message is stored immediately and becomes visible later.</p>
+      <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Example</p>
+        <p class="mt-2 font-mono text-sm text-white">DelaySeconds = 600</p>
+        <p class="mt-2 text-xs leading-5 text-slate-400">A signup is accepted now, and the welcome email is sent 10 minutes later. The consumer never sees the message during those 10 minutes, so it does not need to hold a connection open.</p>
+      </div>
+    </div>
+
+    <div hidden data-rich="ctrl-dlq">
+      <div class="rounded-xl border border-amber-800/70 bg-amber-950/30 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">How to set it</p>
+        <p class="mt-2 text-lg font-semibold text-white">Set maxReceiveCount, then alarm on the DLQ</p>
+        <p class="mt-1 text-sm leading-6 text-slate-300">The source queue and the dead-letter queue must be the same type: standard with standard, or FIFO with FIFO. After <span class="font-mono text-slate-200">maxReceiveCount</span> receives, SQS moves the message aside instead of retrying it forever.</p>
+      </div>
+      <p class="mt-4 text-sm leading-6 text-slate-300">A poison message is one that fails every time, often because the body is bad. Left on the source queue, it is retried until retention ends and can block a FIFO message group.</p>
+      <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Example</p>
+        <p class="mt-2 font-mono text-sm text-white">maxReceiveCount = 5</p>
+        <p class="mt-2 text-xs leading-5 text-slate-400">A transfer with a missing account id fails five times, then lands in the DLQ. You alarm on the DLQ depth, fix the handler, and redrive the message. The other transfers keep moving.</p>
+      </div>
+    </div>
+
+    <div hidden data-rich="ctrl-retention">
+      <div class="rounded-xl border border-amber-800/70 bg-amber-950/30 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">How to set it</p>
+        <p class="mt-2 text-lg font-semibold text-white">1 minute to 14 days. Default is 4 days.</p>
+        <p class="mt-1 text-sm leading-6 text-slate-300">A message body can be 1 byte to 1 MiB. Above 1 MiB, store the body in S3 (up to 2 GB) and put a pointer on the queue. Lowering retention can delete messages already in the queue.</p>
+      </div>
+      <p class="mt-4 text-sm leading-6 text-slate-300">Retention is how long an unprocessed message survives. Payload size is also a cost control: SQS meters each 64 KB chunk as a request.</p>
+      <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Example</p>
+        <p class="mt-2 font-mono text-sm text-white">200 KB body → 4 request chunks</p>
+        <p class="mt-2 text-xs leading-5 text-slate-400">Keep the queue message to the transfer id and amount. Put a statement PDF in S3. Use 4 days when a consumer outage is measured in hours. Use 14 days only if the backlog can really sit that long and still be valid.</p>
+      </div>
+    </div>
+
+    <div hidden data-rich="ctrl-batch">
+      <div class="rounded-xl border border-amber-800/70 bg-amber-950/30 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">How to set it</p>
+        <p class="mt-2 text-lg font-semibold text-white">Up to 10 messages, and report the failures</p>
+        <p class="mt-1 text-sm leading-6 text-slate-300">Turn on <span class="font-mono text-slate-200">ReportBatchItemFailures</span> on the Lambda event source mapping. Return only the failed message ids in <span class="font-mono text-slate-200">batchItemFailures</span>. Lambda then deletes the ones that succeeded.</p>
+      </div>
+      <p class="mt-4 text-sm leading-6 text-slate-300">One API call can send, receive, or delete up to 10 messages, which cuts request cost. Without a partial-batch response, one bad message makes Lambda retry the whole batch.</p>
+      <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">Example</p>
+        <p class="mt-2 font-mono text-sm text-white">10 messages, number 7 fails</p>
+        <p class="mt-2 text-xs leading-5 text-slate-400">With a partial response, Lambda deletes the other 9 and retries only number 7. Without it, all 10 become visible again. The consumer still has to be idempotent, because a successful message can be delivered once more if the delete does not finish.</p>
       </div>
     </div>
 
     <section class="mt-12 rounded-2xl border border-amber-900/70 bg-slate-900 p-6 sm:p-8" aria-labelledby="idempotency-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Required for both queue types</p>
-      <h2 id="idempotency-title" class="mt-2 text-2xl font-semibold text-white">FIFO deduplication does not replace an idempotent consumer</h2>
-      <div class="mt-6 grid gap-6 lg:grid-cols-2">
-        <div class="text-sm leading-7 text-slate-300">
-          <p>SQS can redeliver when a worker times out, crashes after committing but before acknowledgement, or returns a failed batch. FIFO suppresses repeated <em>sends</em> with the same deduplication id for five minutes; it does not create a permanent business guarantee.</p>
-          <p class="mt-3">Store the transfer id with a unique constraint in the same database transaction as the ledger change. A retry then becomes a harmless lookup instead of a second debit.</p>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Deduplication and idempotency</p>
+      <h2 id="idempotency-title" class="mt-2 text-2xl font-semibold text-white">Two safety layers protect two different failure points</h2>
+      <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
+        <strong class="text-white">FIFO deduplication protects the producer side:</strong> a repeated send with the same deduplication id is accepted but not delivered again during the five-minute window.
+        <strong class="text-white">Consumer idempotency protects the business side:</strong> if the same stored message reaches Lambda again, the debit still happens only once.
+      </p>
+
+      <div class="mt-6 grid gap-4 lg:grid-cols-3">
+        <article class="rounded-xl border border-violet-900/70 bg-violet-950/20 p-5">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-violet-300">Beginner · remember this</p>
+          <p class="mt-2 text-lg font-semibold text-white">Duplicate message ≠ duplicate outcome</p>
+          <p class="mt-2 text-sm leading-6 text-slate-400">The queue may hand over the same work again. Design the consumer so repeating it produces the same final result.</p>
+        </article>
+        <article class="rounded-xl border border-sky-900/70 bg-sky-950/20 p-5">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-sky-300">Exam · know the boundary</p>
+          <p class="mt-2 text-lg font-semibold text-white">FIFO is not end-to-end exactly once</p>
+          <p class="mt-2 text-sm leading-6 text-slate-400">FIFO prevents duplicate sends inside five minutes and preserves order per message group. It cannot atomically join your database commit with SQS deletion.</p>
+        </article>
+        <article class="rounded-xl border border-amber-900/70 bg-amber-950/20 p-5">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Architect · use a durable key</p>
+          <p class="mt-2 text-lg font-semibold text-white">Claim and apply in one transaction</p>
+          <p class="mt-2 text-sm leading-6 text-slate-400">Store a stable business id with a unique constraint in the same database transaction as the debit or inventory change.</p>
+        </article>
+      </div>
+
+      <div class="mt-6 rounded-xl border border-slate-800 bg-slate-950 p-5">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Failure architecture · commit succeeds, delete fails</p>
+            <p class="mt-1 text-sm text-slate-300">Transfer <span class="font-mono text-slate-200">txn-netflix-002</span> · debit <span class="font-mono text-slate-200">250.00</span></p>
+          </div>
+          <span class="rounded-full border border-rose-900 bg-rose-950/50 px-3 py-1 text-xs text-rose-300">This is a normal distributed-systems failure</span>
         </div>
-        <pre class="overflow-x-auto rounded-xl bg-black p-5 text-xs leading-6 text-amber-300">BEGIN;
+
+        <div class="mt-5 grid gap-2 text-center sm:grid-cols-7">
+          <div class="rounded-lg border border-pink-900/70 bg-pink-950/20 p-3">
+            <p class="font-mono text-[10px] text-pink-300">1</p>
+            <p class="mt-1 text-sm font-semibold text-white">SQS</p>
+            <p class="mt-1 text-[11px] leading-4 text-slate-400">delivers message</p>
+          </div>
+          <div class="flex items-center justify-center text-slate-600">→</div>
+          <div class="rounded-lg border border-orange-900/70 bg-orange-950/20 p-3">
+            <p class="font-mono text-[10px] text-orange-300">2</p>
+            <p class="mt-1 text-sm font-semibold text-white">Lambda</p>
+            <p class="mt-1 text-[11px] leading-4 text-slate-400">processes transfer</p>
+          </div>
+          <div class="flex items-center justify-center text-slate-600">→</div>
+          <div class="rounded-lg border border-emerald-900/70 bg-emerald-950/20 p-3">
+            <p class="font-mono text-[10px] text-emerald-300">3</p>
+            <p class="mt-1 text-sm font-semibold text-white">DB commits</p>
+            <p class="mt-1 text-[11px] leading-4 text-slate-400">debit is permanent</p>
+          </div>
+          <div class="flex items-center justify-center text-rose-500">✕</div>
+          <div class="rounded-lg border border-rose-900/70 bg-rose-950/20 p-3">
+            <p class="font-mono text-[10px] text-rose-300">4</p>
+            <p class="mt-1 text-sm font-semibold text-white">Worker dies</p>
+            <p class="mt-1 text-[11px] leading-4 text-slate-400">before SQS delete</p>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-xl border border-amber-800/70 bg-amber-950/20 p-4">
+          <p class="text-xs font-semibold text-amber-200">Visibility timeout expires → SQS delivers the same message again</p>
+          <div class="mt-3 grid gap-3 sm:grid-cols-3">
+            <div class="rounded-lg bg-black/50 p-3">
+              <p class="text-xs font-semibold text-white">Look up business id</p>
+              <p class="mt-1 text-xs leading-5 text-slate-400"><span class="font-mono">txn-netflix-002</span> already exists.</p>
+            </div>
+            <div class="rounded-lg bg-black/50 p-3">
+              <p class="text-xs font-semibold text-white">Skip side effect</p>
+              <p class="mt-1 text-xs leading-5 text-slate-400">Do not debit 250.00 a second time.</p>
+            </div>
+            <div class="rounded-lg bg-black/50 p-3">
+              <p class="text-xs font-semibold text-white">Return success</p>
+              <p class="mt-1 text-xs leading-5 text-slate-400">Lambda deletes the message from SQS.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <details class="mt-4 rounded-xl border border-slate-800 bg-black">
+        <summary class="cursor-pointer px-5 py-4 text-sm font-semibold text-white">Optional implementation example: PostgreSQL transactional inbox</summary>
+        <div class="border-t border-slate-800 px-5 py-4">
+          <p class="text-sm leading-6 text-slate-400">
+            <span class="font-mono text-amber-300">ON CONFLICT DO NOTHING</span> is official <strong class="text-white">PostgreSQL</strong> syntax—not an AWS, SQS, or generic SQL command. It means “if this unique transfer id already exists, do not insert another row.” MySQL commonly uses <span class="font-mono">INSERT IGNORE</span>; DynamoDB commonly uses a conditional <span class="font-mono">PutItem</span>.
+          </p>
+          <pre class="mt-4 overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs leading-6 text-amber-300">BEGIN;
 
 INSERT INTO processed_messages (transfer_id)
 VALUES ('txn-netflix-002')
 ON CONFLICT DO NOTHING;
 
--- only apply when the insert succeeded
-UPDATE account_balance ...;
-INSERT INTO ledger_journal ...;
+-- Continue only if the insert created one row.
+UPDATE account_balance SET balance = balance - 250.00 ...;
+INSERT INTO ledger_journal (...) VALUES (...);
 
 COMMIT;</pre>
+          <p class="mt-3 text-xs leading-5 text-slate-500">Important: the id claim and the business update must commit together. A separate “check then update” has a race condition when two workers run concurrently.</p>
+        </div>
+      </details>
+
+      <div class="mt-4 rounded-xl border border-slate-800 bg-black/50 p-4 text-sm leading-6 text-slate-300">
+        <strong class="text-white">When the side effect is outside your database:</strong> pass the same idempotency key to the payment or shipping API if it supports one. For multi-service workflows, use an inbox/outbox pattern or orchestration. A local SQL transaction cannot make an external API call and an SQS delete atomic.
       </div>
+      <p class="mt-4 text-xs leading-5 text-slate-500">
+        Sources: <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues-exactly-once-processing.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">FIFO exactly-once processing</a>,
+        <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues-at-least-once-delivery.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">at-least-once delivery</a>,
+        <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Lambda with SQS</a>.
+      </p>
     </section>
 
     <section class="mt-12" aria-labelledby="controls-title">
@@ -520,35 +942,98 @@ COMMIT;</pre>
       <h2 id="controls-title" class="mt-2 text-2xl font-semibold text-white">Tune delivery behavior deliberately</h2>
       <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="font-semibold text-white">Visibility timeout</h3>
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold text-white">Visibility timeout</h3>
+            <button type="button" data-snippet="ctrl-visibility" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show visibility timeout guidance">i</button>
+          </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Hides a received message while processing. Set it longer than the expected job duration and extend it for variable work. If it expires, another consumer can receive the same message.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="font-semibold text-white">Long vs. short polling</h3>
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold text-white">Long vs. short polling</h3>
+            <button type="button" data-snippet="ctrl-polling" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show polling guidance">i</button>
+          </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Long polling waits up to 20 seconds and checks all servers, reducing empty receives and cost. Short polling returns immediately and can produce empty responses.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="font-semibold text-white">Delay queue and timers</h3>
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold text-white">Delay queue and timers</h3>
+            <button type="button" data-snippet="ctrl-delay" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show delay guidance">i</button>
+          </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">DelaySeconds postpones initial visibility for up to 15 minutes. Standard queues also support per-message timers; FIFO queues use the queue-level delay.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="font-semibold text-white">Dead-letter queue</h3>
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold text-white">Dead-letter queue</h3>
+            <button type="button" data-snippet="ctrl-dlq" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show dead-letter queue guidance">i</button>
+          </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Move poison messages after maxReceiveCount is exceeded. Alarm on DLQ depth, retain enough context, fix the cause, then redrive safely.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="font-semibold text-white">Retention and payload size</h3>
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold text-white">Retention and payload size</h3>
+            <button type="button" data-snippet="ctrl-retention" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show retention and payload guidance">i</button>
+          </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Retention ranges from one minute to 14 days. Keep messages compact; larger payloads are metered in 64 KB chunks and very large bodies belong in S3.</p>
         </article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <h3 class="font-semibold text-white">Batching and partial failures</h3>
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold text-white">Batching and partial failures</h3>
+            <button type="button" data-snippet="ctrl-batch" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-600 text-xs font-semibold text-slate-300 hover:border-emerald-500 hover:text-emerald-300" aria-label="Show batching guidance">i</button>
+          </div>
           <p class="mt-2 text-sm leading-6 text-slate-400">Send, receive, and delete up to 10 messages per batch. With Lambda, report partial batch failures so successful records are not retried with the failed record.</p>
         </article>
       </div>
-      <div class="mt-5 rounded-xl border border-slate-800 bg-black p-5">
-        <pre class="overflow-x-auto text-xs leading-6 text-emerald-300">Sent ─▶ delayed/available ─▶ received (in flight) ─┬─▶ success ─▶ deleted
-                                                   ├─▶ timeout ─▶ available again
-                                                   ├─▶ retention expires
-                                                   └─▶ max receives ─▶ DLQ</pre>
+      <div class="mt-5 rounded-xl border border-slate-800 bg-black p-5 sm:p-6">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500">One message, from acceptance to an ending</p>
+        <p class="mt-1 max-w-3xl text-sm leading-6 text-slate-400">The cards above set the timers and the retry limit. This is the path those settings control. A message is stored, hidden while a worker has it, and then it ends in one of three places.</p>
+        <div class="arch-flow mt-6">
+          <div class="arch-node">
+            <div class="arch-icon arch-icon--sqs">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+            </div>
+            <p class="arch-label">Sent</p>
+            <p class="arch-sub">stored at once</p>
+          </div>
+          <div class="arch-arrow arch-arrow--slow"></div>
+          <div class="arch-node">
+            <div class="arch-icon arch-icon--wait">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>
+            </div>
+            <p class="arch-label">Waiting</p>
+            <p class="arch-sub">delay, or ready</p>
+          </div>
+          <div class="arch-arrow arch-arrow--slow"></div>
+          <div class="arch-node">
+            <div class="arch-icon arch-icon--lambda">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20l6-10M8 4h3l8 16"/></svg>
+            </div>
+            <p class="arch-label">In flight</p>
+            <p class="arch-sub">hidden from others</p>
+          </div>
+          <div class="arch-arrow arch-arrow--ok"></div>
+          <div class="arch-node">
+            <div class="arch-icon arch-icon--ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+            </div>
+            <p class="arch-label">Deleted</p>
+            <p class="arch-sub">work finished</p>
+          </div>
+        </div>
+        <div class="mt-6 grid gap-3 sm:grid-cols-3">
+          <div class="rounded-xl border border-amber-900/70 bg-amber-950/20 p-4">
+            <p class="text-xs font-semibold text-amber-200">Timeout sends it back</p>
+            <p class="mt-1 text-xs leading-5 text-slate-400">The worker still has it when the visibility timeout ends. It returns to Waiting, and another worker can take it.</p>
+          </div>
+          <div class="rounded-xl border border-slate-700 bg-slate-950 p-4">
+            <p class="text-xs font-semibold text-slate-200">Retention drops it</p>
+            <p class="mt-1 text-xs leading-5 text-slate-400">Nobody finishes it before the retention period. SQS deletes it. There is no copy left to replay.</p>
+          </div>
+          <div class="rounded-xl border border-rose-900/70 bg-rose-950/20 p-4">
+            <p class="text-xs font-semibold text-rose-200">Too many receives</p>
+            <p class="mt-1 text-xs leading-5 text-slate-400">It fails until <span class="font-mono">maxReceiveCount</span>. SQS moves it to the dead-letter queue for a person to inspect.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -576,6 +1061,62 @@ COMMIT;</pre>
       </div>
     </section>
 
+    <section class="mt-12" aria-labelledby="limits-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">Official quotas and behaviors</p>
+      <h2 id="limits-title" class="mt-2 text-2xl font-semibold text-white">What Amazon SQS will not do for you</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Figures below are from the Amazon SQS Developer Guide. Quotas can change, and some can be raised through Service Quotas or AWS Support.</p>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[720px] text-left text-sm">
+          <thead class="bg-slate-900 text-slate-300">
+            <tr>
+              <th class="px-4 py-3 font-semibold">Limit</th>
+              <th class="px-4 py-3 font-semibold">Official value</th>
+              <th class="px-4 py-3 font-semibold">What it means</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 bg-slate-950 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">Message size</td><td class="px-4 py-3">1 byte to 1 MiB</td><td class="px-4 py-3">Larger bodies use the SQS extended client, which stores up to 2 GB in S3 and puts a pointer on the queue.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Retention</td><td class="px-4 py-3">1 minute to 14 days. Default 4 days.</td><td class="px-4 py-3">An unprocessed message is deleted when retention ends. It is not kept forever.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Visibility timeout</td><td class="px-4 py-3">0 seconds to 12 hours. Default 30 seconds.</td><td class="px-4 py-3">After a receive, the message is hidden only for this long. Then another consumer can take it.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Delay</td><td class="px-4 py-3">0 to 15 minutes</td><td class="px-4 py-3">A message or a delay queue can postpone the first delivery. Not longer than 15 minutes.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Batch size</td><td class="px-4 py-3">10 messages</td><td class="px-4 py-3">One Send, Receive, or Delete batch holds at most 10 messages.</td></tr>
+            <tr><td class="px-4 py-3 text-white">In-flight messages</td><td class="px-4 py-3">120,000 per queue</td><td class="px-4 py-3">Received but not yet deleted. Past this, a standard queue can return OverLimit on short polling.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Stored backlog</td><td class="px-4 py-3">Unlimited</td><td class="px-4 py-3">The queue can hold an unlimited number of messages that nobody has received yet.</td></tr>
+            <tr><td class="px-4 py-3 text-white">FIFO throughput</td><td class="px-4 py-3">300 API calls/sec per action</td><td class="px-4 py-3">Without high-throughput mode. Batching of 10 raises that to 3,000 messages/sec. In N. Virginia, high-throughput mode is up to 70,000 calls/sec, or 700,000 messages/sec batched.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Delivery</td><td class="px-4 py-3">At least once</td><td class="px-4 py-3">Standard may deliver a message more than once and not in send order. FIFO order holds inside one message group, and send deduplication lasts 5 minutes.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Replay</td><td class="px-4 py-3">None after delete</td><td class="px-4 py-3">Once a consumer deletes a message, SQS does not keep a copy to read again.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-quotas.html" target="_blank" rel="noreferrer" class="mt-4 inline-flex text-sm font-medium text-emerald-400 hover:text-emerald-300">Amazon SQS quotas in the Developer Guide ↗</a>
+    </section>
+
+    <section class="mt-12" aria-labelledby="alternatives-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">Choose the integration service</p>
+      <h2 id="alternatives-title" class="mt-2 text-2xl font-semibold text-white">Use SQS for a buffer. Use something else for a different job.</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">AWS groups these as application integration services. SQS is the pull-based queue. The others solve fan-out, routing, streams, protocols, or workflow.</p>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[720px] text-left text-sm">
+          <thead class="bg-slate-900 text-slate-300">
+            <tr>
+              <th class="px-4 py-3 font-semibold">You need</th>
+              <th class="px-4 py-3 font-semibold">Use</th>
+              <th class="px-4 py-3 font-semibold">Why it is not SQS</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 bg-slate-950 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">One worker to pull work, and a buffer for bursts</td><td class="px-4 py-3 text-emerald-300">Amazon SQS</td><td class="px-4 py-3">This is the fit. The consumer polls, then deletes the message.</td></tr>
+            <tr><td class="px-4 py-3 text-white">One event delivered to many subscribers</td><td class="px-4 py-3 text-white">Amazon SNS</td><td class="px-4 py-3">SNS pushes. The usual pattern is SNS to a separate SQS queue per subscriber.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Route by event content, or take events from SaaS apps</td><td class="px-4 py-3 text-white">Amazon EventBridge</td><td class="px-4 py-3">Rules match fields in the event. SQS does not filter or route.</td></tr>
+            <tr><td class="px-4 py-3 text-white">An ordered stream several consumers can reread</td><td class="px-4 py-3 text-white">Kinesis Data Streams</td><td class="px-4 py-3">Records stay for the retention window. SQS has no replay after delete.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Apps that already speak JMS, AMQP, STOMP, or MQTT</td><td class="px-4 py-3 text-white">Amazon MQ</td><td class="px-4 py-3">Managed ActiveMQ or RabbitMQ. SQS is an AWS API, not those protocols.</td></tr>
+            <tr><td class="px-4 py-3 text-white">A multi-step workflow with waits and branches</td><td class="px-4 py-3 text-white">AWS Step Functions</td><td class="px-4 py-3">It orchestrates steps. A queue only holds messages.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a href="https://docs.aws.amazon.com/decision-guides/latest/decision-guides/application-integration-on-aws-how-to-choose.html" target="_blank" rel="noreferrer" class="mt-4 inline-flex text-sm font-medium text-emerald-400 hover:text-emerald-300">AWS decision guide: application integration ↗</a>
+    </section>
+
     <section class="mt-12" aria-labelledby="waf-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">AWS Well-Architected review</p>
       <h2 id="waf-title" class="mt-2 text-2xl font-semibold text-white">Queue design through all six pillars</h2>
@@ -600,17 +1141,74 @@ COMMIT;</pre>
       </div>
     </section>
 
+    <section class="mt-12" aria-labelledby="brokers-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">Under the service</p>
+      <h2 id="brokers-title" class="mt-2 text-2xl font-semibold text-white">A queue is a broker. SQS hides the broker from you.</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">On premises, a team runs the broker process on its own machines. In AWS, SQS is that broker, operated by AWS. You call an HTTPS API. You do not install, patch, or cluster it.</p>
+      <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Classic broker you operate</p>
+          <p class="mt-2 text-sm font-semibold text-white">RabbitMQ, ActiveMQ, IBM MQ</p>
+          <ol class="mt-3 space-y-2 text-sm leading-6 text-slate-400">
+            <li>1. The producer connects to the broker.</li>
+            <li>2. The broker writes the message to a durable queue and acknowledges.</li>
+            <li>3. A consumer pulls it, or the broker pushes it.</li>
+            <li>4. The consumer acknowledges. The broker then deletes it or advances the offset.</li>
+          </ol>
+        </article>
+        <article class="rounded-xl border border-emerald-900/60 bg-slate-900 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-emerald-400">Amazon SQS</p>
+          <p class="mt-2 text-sm font-semibold text-white">Same job, no broker in your account</p>
+          <ol class="mt-3 space-y-2 text-sm leading-6 text-slate-400">
+            <li>1. The producer calls <span class="font-mono text-slate-300">SendMessage</span> over HTTPS.</li>
+            <li>2. SQS stores redundant copies on its own servers and returns 200.</li>
+            <li>3. The consumer calls <span class="font-mono text-slate-300">ReceiveMessage</span>. The message is hidden.</li>
+            <li>4. After success, the consumer calls <span class="font-mono text-slate-300">DeleteMessage</span>.</li>
+          </ol>
+        </article>
+      </div>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[720px] text-left text-sm">
+          <thead class="bg-slate-900 text-slate-300">
+            <tr>
+              <th class="px-4 py-3 font-semibold">If you need</th>
+              <th class="px-4 py-3 font-semibold">Cloud</th>
+              <th class="px-4 py-3 font-semibold">On premises</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 bg-slate-950 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">A managed queue, no hosts to run</td><td class="px-4 py-3">Amazon SQS, Azure Service Bus, Google Pub/Sub</td><td class="px-4 py-3">You still run a broker, or you call the cloud API</td></tr>
+            <tr><td class="px-4 py-3 text-white">AMQP, JMS, or MQTT</td><td class="px-4 py-3">Amazon MQ (ActiveMQ or RabbitMQ)</td><td class="px-4 py-3">RabbitMQ, ActiveMQ, IBM MQ</td></tr>
+            <tr><td class="px-4 py-3 text-white">A replayable log, many readers</td><td class="px-4 py-3">Kinesis Data Streams, Amazon MSK</td><td class="px-4 py-3">Apache Kafka</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-400">Kafka is the one that is not a classic queue. Consumers keep an offset and can reread. SQS and a RabbitMQ queue remove the message after a successful acknowledgement, so a second consumer does not get the same copy.</p>
+    </section>
+
     <section class="mt-12 rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-6 sm:p-8" aria-labelledby="questions-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Questions that should create a buzz</p>
       <h2 id="questions-title" class="mt-2 text-2xl font-semibold text-white">Can your design answer these before production does?</h2>
-      <ol class="mt-6 grid gap-4 text-sm leading-6 text-slate-300 md:grid-cols-2">
-        <li class="rounded-lg border border-slate-800 bg-black/40 p-4"><span class="font-mono text-amber-400">01</span> What happens if the consumer commits, crashes, and never deletes the message?</li>
-        <li class="rounded-lg border border-slate-800 bg-black/40 p-4"><span class="font-mono text-amber-400">02</span> Which business key makes a retry safe after FIFO's five-minute deduplication window?</li>
-        <li class="rounded-lg border border-slate-800 bg-black/40 p-4"><span class="font-mono text-amber-400">03</span> Can one hot FIFO message group block the throughput your SLA requires?</li>
-        <li class="rounded-lg border border-slate-800 bg-black/40 p-4"><span class="font-mono text-amber-400">04</span> Is visibility timeout longer than worst-case processing, but short enough for recovery?</li>
-        <li class="rounded-lg border border-slate-800 bg-black/40 p-4"><span class="font-mono text-amber-400">05</span> Who owns a poison message after it reaches the DLQ, and how is it replayed safely?</li>
-        <li class="rounded-lg border border-slate-800 bg-black/40 p-4"><span class="font-mono text-amber-400">06</span> Are you measuring API acceptance, queue delivery, or the final business commit?</li>
-      </ol>
+      <p class="mt-2 text-sm text-slate-400">Fifteen questions a developer, an admin, or an operations owner should be able to answer. Click one. The list scrolls inside this panel.</p>
+      <div class="mt-6 max-h-80 overflow-y-auto pr-1">
+        <div class="grid gap-3 md:grid-cols-2">
+          <button type="button" data-snippet="q01" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">01</span> What happens if the consumer commits, crashes, and never deletes the message?</button>
+          <button type="button" data-snippet="q02" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">02</span> Which business key makes a retry safe after FIFO's five-minute deduplication window?</button>
+          <button type="button" data-snippet="q03" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">03</span> Can one hot FIFO message group block the throughput your SLA requires?</button>
+          <button type="button" data-snippet="q04" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">04</span> How long should the visibility timeout be for a Lambda consumer?</button>
+          <button type="button" data-snippet="q05" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">05</span> Who owns a poison message after it reaches the DLQ, and how is it replayed?</button>
+          <button type="button" data-snippet="q06" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">06</span> Are you measuring API acceptance, queue delivery, or the final business commit?</button>
+          <button type="button" data-snippet="q07" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">07</span> When do you choose Standard, and when do you choose FIFO?</button>
+          <button type="button" data-snippet="q08" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">08</span> Why does a short poll return empty when messages are in the queue?</button>
+          <button type="button" data-snippet="q09" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">09</span> Which permissions does a Lambda consumer need, including a KMS key?</button>
+          <button type="button" data-snippet="q10" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">10</span> How do you deliver one event to billing, email, and analytics?</button>
+          <button type="button" data-snippet="q11" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">11</span> What breaks when too many messages are in flight?</button>
+          <button type="button" data-snippet="q12" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">12</span> Where does a payload larger than 1 MiB go?</button>
+          <button type="button" data-snippet="q13" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">13</span> What changes when you turn on SSE-KMS instead of SSE-SQS?</button>
+          <button type="button" data-snippet="q14" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">14</span> One message in a batch of ten fails. What should Lambda retry?</button>
+          <button type="button" data-snippet="q15" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-amber-700"><span class="font-mono text-amber-400">15</span> What caps FIFO throughput, and what does high-throughput mode change?</button>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -620,20 +1218,50 @@ COMMIT;</pre>
     const BURST_SIZE = 100;
     const TRANSFER = { accountId: "ACC-9941", amount: 250.00 };
     const codeModal = document.getElementById("code-modal");
+    const codeModalEyebrow = document.getElementById("code-modal-eyebrow");
     const codeModalTitle = document.getElementById("code-modal-title");
     const codeModalBody = document.getElementById("code-modal-body");
     const snippets = {
       "standard-use": {
-        title: "When to use a Standard queue",
-        code: "Example: image-processing pipeline\n\nUpload API -> Standard SQS -> resize workers\n\nWhy it fits:\n- very high throughput\n- jobs can complete out of order\n- duplicate work is harmless when output keys are idempotent",
+        eyebrow: "Standard queue · real-life fit",
+        title: "E-commerce product reviews",
+        rich: true,
       },
       "fifo-use": {
-        title: "When to use a FIFO queue",
-        code: "Example: bank-account posting pipeline\n\nPosting API -> FIFO SQS -> ledger worker\nMessageGroupId = accountId\nMessageDeduplicationId = transferId\n\nWhy it fits:\n- debit/reversal order matters per account\n- repeated sends are suppressed\n- different accounts still run in parallel",
+        eyebrow: "FIFO queue · real-life fit",
+        title: "The shipping-address disaster",
+        rich: true,
+      },
+      "ctrl-visibility": { eyebrow: "Operational control", title: "Visibility timeout", rich: true },
+      "ctrl-polling": { eyebrow: "Operational control", title: "Long vs. short polling", rich: true },
+      "ctrl-delay": { eyebrow: "Operational control", title: "Delay queue and timers", rich: true },
+      "ctrl-dlq": { eyebrow: "Operational control", title: "Dead-letter queue", rich: true },
+      "ctrl-retention": { eyebrow: "Operational control", title: "Retention and payload size", rich: true },
+      "ctrl-batch": { eyebrow: "Operational control", title: "Batching and partial failures", rich: true },
+      q01: { eyebrow: "Developer", title: "Commit succeeded, delete never happened", answer: "The visibility timeout expires and SQS delivers the message again. The ledger change is already saved, so a second run must notice the transfer id and skip the debit. Delete the message only after that commit succeeds." },
+      q02: { eyebrow: "Developer", title: "The key that survives the five-minute window", answer: "FIFO suppresses the same MessageDeduplicationId for five minutes, including after the message is deleted. After that window, the same id is a new message. The durable key is the business id, such as the transfer id, stored with a unique constraint in the same database transaction as the ledger write." },
+      q03: { eyebrow: "Architect", title: "A hot message group", answer: "Yes. SQS processes one message group in order, so a single busy group cannot run in parallel with itself. Other groups on the same queue still proceed. Choose a group id with many values, such as an account id, not one group for the whole system." },
+      q04: { eyebrow: "Ops", title: "Visibility timeout for Lambda", answer: "Set it to at least six times the function timeout. If you use a batch window, add MaximumBatchingWindowInSeconds. A 30-second function needs at least 180 seconds. Shorter, and a throttled retry can overlap a second delivery. Much longer, and a real failure waits too long to be tried again. The function timeout must not exceed the visibility timeout." },
+      q05: { eyebrow: "Ops", title: "A poison message in the DLQ", answer: "After maxReceiveCount, SQS moves the message to the dead-letter queue. The service team owns it: alarm on DLQ depth, read the body, fix the consumer, then redrive it to the source queue. The DLQ must be the same type as the source, standard or FIFO. Do not delete the message until you know the work should be dropped." },
+      q06: { eyebrow: "Ops", title: "Which number you are watching", answer: "An API Gateway 200 means SQS accepted the message. It does not mean the ledger committed. The commit appears later in the consumer log. For the backlog, watch ApproximateAgeOfOldestMessage and the DLQ depth, not only the API success count." },
+      q07: { eyebrow: "Architect", title: "Standard or FIFO", answer: "Use Standard when order does not matter and a duplicate is harmless or handled by the consumer. It scales higher and costs less. Use FIFO when order inside a group matters, or you need send deduplication for five minutes. FIFO does not replace an idempotent consumer." },
+      q08: { eyebrow: "Developer", title: "An empty short poll", answer: "WaitTimeSeconds of 0 returns immediately and may check only a subset of SQS servers, so it can be empty while messages exist. Each empty receive is still billed. Set WaitTimeSeconds between 1 and 20 so the call waits and checks all servers." },
+      q09: { eyebrow: "Admin", title: "Consumer permissions", answer: "The execution role needs sqs:ReceiveMessage, sqs:DeleteMessage, sqs:GetQueueAttributes, and sqs:ChangeMessageVisibility if it extends the timeout. Scope the policy to the queue ARN. If the queue uses a KMS key, the same role also needs kms:Decrypt and kms:GenerateDataKey on that key, or receives fail." },
+      q10: { eyebrow: "Architect", title: "One event, three consumers", answer: "SQS is point to point: the consumer that deletes the message is the only one that got it. Publish to SNS or EventBridge, and give billing, email, and analytics each their own SQS queue. SQS does not fan out by itself." },
+      q11: { eyebrow: "Ops", title: "The in-flight limit", answer: "A queue allows about 120,000 messages that have been received and not yet deleted. Past that, a standard queue can return OverLimit on a short poll. Delete messages after success. Messages that nobody has received yet are not capped." },
+      q12: { eyebrow: "Developer", title: "A body over 1 MiB", answer: "SQS rejects a message larger than 1,048,576 bytes. Store the object in S3, up to 2 GB with the SQS extended client, and send the pointer. Also remember that each 64 KB chunk of a message is metered as a request." },
+      q13: { eyebrow: "Admin", title: "SSE-KMS instead of SSE-SQS", answer: "SSE-SQS uses a key that SQS manages, with no extra key policy. SSE-KMS calls your key on send and receive, so you pay for those calls and the key can throttle. Every producer and consumer must be allowed to use that key. Message attributes are not a hiding place: anyone who can receive the message can read them." },
+      q14: { eyebrow: "Developer", title: "A partial batch failure", answer: "Without ReportBatchItemFailures, one bad record makes Lambda retry all ten. Return only the failed message ids in batchItemFailures so the other nine are deleted. The function still has to be idempotent, because a successful message can be delivered again if the delete does not finish." },
+      q15: { eyebrow: "Architect", title: "FIFO throughput", answer: "Without high-throughput mode, FIFO allows 300 API calls per second per action, or 3,000 messages per second when each call batches 10. High-throughput mode raises the cap by region. In N. Virginia that is up to 70,000 calls per second, or 700,000 messages per second batched, and deduplication is scoped per message group. One group is still processed in order, so it cannot use that full rate by itself." },
+      direct: {
+        eyebrow: "Architecture A · CloudWatch Logs Insights",
+        title: "API Gateway access log",
+        code: "# Log group: /aws/apigateway/training-ledger-http-api\n\nfields @timestamp, @message\n| parse @message /\"routeKey\":\"(?<route>[^\"]*)\"/\n| parse @message /\"status\":\"(?<status>[^\"]*)\"/\n| parse @message /\"integrationErrorMessage\":\"(?<integrationError>[^\"]*)\"/\n| parse @message /\"errorMessage\":\"(?<apiError>[^\"]*)\"/\n| stats count(*) as requests by route, status, integrationError, apiError\n| sort requests desc",
       },
       standard: {
-        title: "Architecture C — Standard SendMessage",
-        code: "sqs.send_message(\n    QueueUrl=standard_queue_url,\n    MessageBody=json.dumps(transaction)\n)",
+        eyebrow: "Architecture C · CloudWatch Logs Insights",
+        title: "Ledger commit log",
+        code: "# Log group: /aws/lambda/training-queue-lambda\n\nfields @timestamp, @message\n| filter @message like /COMMIT ledger transaction/\n| parse @message /queue=(?<queue>\\S+) seq=(?<seq>\\S+) transfer_id=(?<transferId>\\S+) message_id=(?<messageId>\\S+)/\n| stats count(*) as commits by queue, seq, transferId\n| sort queue asc, seq asc",
       },
       fifo: {
         title: "Architecture D — FIFO SendMessage",
@@ -902,8 +1530,21 @@ COMMIT;</pre>
 
     function openSnippet(name) {
       const snippet = snippets[name];
+      codeModalEyebrow.textContent = snippet.eyebrow || "Integration code";
       codeModalTitle.textContent = snippet.title;
-      codeModalBody.textContent = snippet.code;
+      if (snippet.answer) {
+        const body = document.createElement("p");
+        body.className = "text-sm leading-7 text-slate-300";
+        body.textContent = snippet.answer;
+        codeModalBody.replaceChildren(body);
+      } else if (snippet.rich) {
+        codeModalBody.innerHTML = document.querySelector('[data-rich="' + name + '"]').innerHTML;
+      } else {
+        const pre = document.createElement("pre");
+        pre.className = "overflow-x-auto rounded-lg bg-black p-4 font-mono text-xs leading-6 text-emerald-300";
+        pre.textContent = snippet.code;
+        codeModalBody.replaceChildren(pre);
+      }
       codeModal.classList.remove("hidden");
       codeModal.classList.add("flex");
     }

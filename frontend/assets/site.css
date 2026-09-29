@@ -65,6 +65,9 @@ button:disabled {
 .arch-icon--sqs { background: linear-gradient(135deg, #ff4f8b, #b0084d); }
 .arch-icon--lambda { background: linear-gradient(135deg, #f78e04, #c8511b); }
 .arch-icon--db { background: linear-gradient(135deg, #4d72f3, #2e27ad); }
+.arch-icon--wait { background: linear-gradient(135deg, #f59e0b, #b45309); }
+.arch-icon--ok { background: linear-gradient(135deg, #10b981, #047857); }
+.arch-icon--dlq { background: linear-gradient(135deg, #f43f5e, #9f1239); }
 
 .arch-label {
   max-width: 100%;
@@ -114,6 +117,8 @@ button:disabled {
   border-left: 7px solid currentColor;
   content: "";
 }
+
+.arch-arrow--long { width: 2.75rem; }
 
 .arch-arrow--ok { color: rgb(52 211 153); }
 .arch-arrow--hot { color: rgb(251 113 133); animation-duration: 0.35s; }

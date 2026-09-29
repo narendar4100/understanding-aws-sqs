@@ -61,8 +61,8 @@ resource "aws_s3_bucket_policy" "frontend" {
 resource "aws_s3_object" "index" {
   bucket        = aws_s3_bucket.frontend.id
   key           = "index.html"
-  source        = "${path.module}/../frontend/home.html"
-  etag          = filemd5("${path.module}/../frontend/home.html")
+  source        = "${path.module}/../frontend/index.html"
+  etag          = filemd5("${path.module}/../frontend/index.html")
   content_type  = "text/html; charset=utf-8"
   cache_control = "no-cache"
 }
@@ -70,8 +70,8 @@ resource "aws_s3_object" "index" {
 resource "aws_s3_object" "sqs_index" {
   bucket        = aws_s3_bucket.frontend.id
   key           = "sqs/index.html"
-  source        = "${path.module}/../frontend/index.html"
-  etag          = filemd5("${path.module}/../frontend/index.html")
+  source        = "${path.module}/../frontend/sqs/index.html"
+  etag          = filemd5("${path.module}/../frontend/sqs/index.html")
   content_type  = "text/html; charset=utf-8"
   cache_control = "no-cache"
 }

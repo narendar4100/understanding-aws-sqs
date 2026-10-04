@@ -85,6 +85,34 @@ resource "aws_s3_object" "sns_index" {
   cache_control = "no-cache"
 }
 
+resource "aws_s3_object" "learning_pages" {
+  for_each = {
+    "iam/index.html"                 = "iam/index.html"
+    "vpc/index.html"                 = "vpc/index.html"
+    "s3/index.html"                  = "s3/index.html"
+    "lambda/index.html"              = "lambda/index.html"
+    "eventbridge/index.html"         = "eventbridge/index.html"
+    "projects/northline/index.html"  = "projects/northline/index.html"
+    "projects/clearfile/index.html"  = "projects/clearfile/index.html"
+  }
+
+  bucket        = aws_s3_bucket.frontend.id
+  key           = each.key
+  source        = "${path.module}/../frontend/${each.value}"
+  etag          = filemd5("${path.module}/../frontend/${each.value}")
+  content_type  = "text/html; charset=utf-8"
+  cache_control = "no-cache"
+}
+
+resource "aws_s3_object" "lab_js" {
+  bucket        = aws_s3_bucket.frontend.id
+  key           = "assets/lab.js"
+  source        = "${path.module}/../frontend/assets/lab.js"
+  etag          = filemd5("${path.module}/../frontend/assets/lab.js")
+  content_type  = "text/javascript; charset=utf-8"
+  cache_control = "public, max-age=300"
+}
+
 resource "aws_s3_object" "site_css" {
   bucket        = aws_s3_bucket.frontend.id
   key           = "assets/site.css"

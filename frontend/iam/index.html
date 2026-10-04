@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="IAM evaluation order, roles, policies, limits, cost, alternatives, and exam drills." />
+  <title>AWS IAM Reference &amp; Live Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <header class="border-b border-slate-800">
+    <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-5" aria-label="Primary navigation">
+      <a href="../" class="font-semibold text-white">AWS Architecture Lab</a>
+      <div class="flex flex-wrap gap-1 text-xs">
+        <a href="../" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">Home</a>
+        <a href="./" aria-current="page" class="rounded-lg bg-amber-950 px-2.5 py-1.5 text-amber-300">IAM</a>
+        <a href="../vpc/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">VPC</a>
+        <a href="../s3/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">S3</a>
+        <a href="../lambda/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">Lambda</a>
+        <a href="../sqs/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">SQS</a>
+        <a href="../sns/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">SNS</a>
+        <a href="../eventbridge/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">EventBridge</a>
+        <a href="../projects/northline/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">Northline</a>
+        <a href="../projects/clearfile/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">Clearfile</a>
+      </div>
+    </nav>
+    <div class="mx-auto max-w-6xl px-6 py-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">AWS Identity and Access Management</p>
+      <h1 class="mt-2 max-w-4xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">Every call is allowed only after every guard says yes</h1>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400 sm:text-base">IAM answers one question: may this principal call this action on this resource? A policy has to allow the call, and no applicable policy may deny it.</p>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-5">
+        <div class="arch-flow min-w-[40rem]">
+          <div class="arch-node"><div class="arch-icon arch-icon--users"><span class="font-mono text-[10px] font-semibold">USR</span></div><p class="arch-label">Principal</p><p class="arch-sub">user or role</p></div>
+          <div class="arch-arrow arch-arrow--ok arch-arrow--long"></div>
+          <div class="arch-node"><div class="arch-icon arch-icon--iam"><span class="font-mono text-[10px] font-semibold">IAM</span></div><p class="arch-label">IAM</p><p class="arch-sub">evaluates</p></div>
+          <div class="arch-arrow arch-arrow--ok arch-arrow--long"></div>
+          <div class="arch-node"><div class="arch-icon arch-icon--s3"><span class="font-mono text-[10px] font-semibold">S3</span></div><p class="arch-label">Resource</p><p class="arch-sub">allows or denies</p></div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="mx-auto max-w-6xl px-6 py-8">
+    <div class="flex flex-wrap gap-2 text-xs">
+      <a href="#core" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Core</a>
+      <a href="#best-lab" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Best lab</a>
+      <a href="#live-lab" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Live lab</a>
+      <a href="#limits" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Limits</a>
+      <a href="#cost" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Cost</a>
+      <a href="#alternatives" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Alternatives</a>
+      <a href="#waf" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Well-Architected</a>
+      <a href="#drills" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Exam drills</a>
+    </div>
+
+    <section id="core" class="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Core model</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Learn the evaluation order before memorizing service names</h2>
+      <p class="mt-4 max-w-4xl text-sm leading-7 text-slate-300">An explicit deny wins everywhere. Permission boundaries, service control policies, and session policies never grant access; they only limit it. In the same account, an identity policy or a resource policy can allow a call. Across accounts, both sides normally must allow it. A role also needs a trust policy before anyone can assume it.</p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <article class="rounded-xl border border-rose-900/70 bg-black/40 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-rose-300">Fragile design</p>
+          <h3 class="mt-2 text-lg font-semibold text-white">One admin key shared by every Lambda</h3>
+          <ul class="mt-4 space-y-2 text-sm leading-6 text-slate-400">
+            <li>• A long-lived access key is baked into the deployment package.</li>
+            <li>• Billing and shipping can delete each other's data because they share AdministratorAccess.</li>
+            <li>• A leaked key remains valid until a person remembers to disable it.</li>
+          </ul>
+        </article>
+        <article class="rounded-xl border border-emerald-900/70 bg-black/40 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-emerald-300">Exam-ready design</p>
+          <h3 class="mt-2 text-lg font-semibold text-white">One role per workload, scoped to its ARNs</h3>
+          <ul class="mt-4 space-y-2 text-sm leading-6 text-slate-400">
+            <li>• Lambda assumes a role and receives temporary credentials from STS.</li>
+            <li>• The accept role can write one S3 prefix and put one EventBridge event.</li>
+            <li>• The billing role can read receipts and consume one queue. It cannot assume the shipping role.</li>
+          </ul>
+        </article>
+      </div>
+      <h3 class="mt-8 text-lg font-semibold text-white">Which control grants access, and which control only limits it?</h3>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <thead class="bg-slate-950 text-slate-300"><tr><th class="px-4 py-3">Control</th><th class="px-4 py-3">Can it grant?</th><th class="px-4 py-3">Exam decision</th></tr></thead>
+          <tbody class="divide-y divide-slate-800 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">Identity-based policy</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">Attach it to a user, group, or role. This is the normal workload permission.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Resource-based policy</td><td class="px-4 py-3">Yes</td><td class="px-4 py-3">Required with the identity policy for most cross-account access. In the same account it can allow a principal on its own.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Trust policy</td><td class="px-4 py-3">Assume only</td><td class="px-4 py-3">Controls who can call sts:AssumeRole. It does not allow S3 or SQS actions.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Permission boundary</td><td class="px-4 py-3">No</td><td class="px-4 py-3">Sets the maximum an identity can receive. The identity still needs an Allow.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Service control policy</td><td class="px-4 py-3">No</td><td class="px-4 py-3">Sets the maximum for an Organizations account. It does not give a user a permission.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Session policy</td><td class="px-4 py-3">No</td><td class="px-4 py-3">Shrinks one role session. Useful when a broker assumes a broad role for a narrower job.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Operations</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Use roles for compute and short-lived credentials for people</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <article class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold">Workforce</h3><p class="mt-2 text-sm leading-6 text-slate-400">Federation or IAM Identity Center gives temporary console access. Do not create an IAM user per employee when a central identity provider exists.</p></article>
+        <article class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold">Compute</h3><p class="mt-2 text-sm leading-6 text-slate-400">EC2, Lambda, and ECS use roles. An instance profile is how an EC2 instance receives its role.</p></article>
+        <article class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold">Partners</h3><p class="mt-2 text-sm leading-6 text-slate-400">Give a partner a role to assume. Require an external ID so the partner cannot be tricked into acting on the wrong account.</p></article>
+        <article class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold">Evidence</h3><p class="mt-2 text-sm leading-6 text-slate-400">CloudTrail records the IAM calls. Access Analyzer finds policies that grant broader access than intended.</p></article>
+      </div>
+    </section>
+
+    <section id="best-lab" class="mt-12 rounded-2xl border border-amber-900/60 bg-amber-950/20 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-300">Best lab to assign</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Five authorization decisions, predicted before the explanation</h2>
+      <p class="mt-3 max-w-4xl text-sm leading-7 text-slate-300">Give students the live cases and no notes. A pass is a correct Allow or Deny plus one sentence naming the winning control: implicit deny, explicit deny, same-account resource policy, cross-account missing allow, or SCP. This lab covers the IAM questions that recur on Cloud Practitioner, Solutions Architect, Developer, and SysOps exams.</p>
+    </section>
+
+    <section id="live-lab" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8" aria-labelledby="lab-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-300">Live decision lab</p>
+      <h2 id="lab-title" class="mt-2 text-2xl font-semibold text-white">Will this API call be allowed?</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Read the caller, action, and policies. Choose Allow or Deny. The evaluator then names the rule that decided it.</p>
+      <div class="mt-6 grid gap-4 lg:grid-cols-[1.3fr_.7fr]">
+        <div class="rounded-xl bg-slate-950 p-5">
+          <p id="lab-kicker" class="font-mono text-xs text-slate-500"></p>
+          <p id="lab-prompt" class="mt-2 text-lg font-semibold leading-7 text-white"></p>
+          <p id="lab-detail" class="mt-3 whitespace-pre-wrap font-mono text-xs leading-5 text-slate-400"></p>
+          <div id="lab-choices" class="mt-5 flex flex-wrap gap-2"></div>
+          <button id="lab-next" type="button" class="mt-5 rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:border-slate-400">Next case</button>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-black p-5">
+          <p class="text-xs uppercase tracking-wider text-slate-500">Result</p>
+          <p id="lab-feedback" class="mt-3 text-sm leading-6 text-slate-300" aria-live="polite">Choose an answer. The explanation appears here.</p>
+          <p id="lab-score" class="mt-4 font-mono text-xs text-slate-500">0 answered</p>
+          <p class="hidden text-emerald-300 text-rose-300"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="limits" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Limits and exam traps</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">What IAM will not do for you</h2>
+      <ul class="mt-4 space-y-2 text-sm leading-6 text-slate-300">
+        <li>• IAM does not sign in the customers of your application. That is Amazon Cognito or your own identity provider.</li>
+        <li>• A permission boundary or SCP with Allow does not give that permission to a user.</li>
+        <li>• Groups cannot contain other groups or roles. A Lambda function cannot be placed in an IAM group.</li>
+        <li>• IAM does not encrypt the object. KMS and the service encryption setting do that.</li>
+        <li>• Deleting a user does not delete the resources that user created.</li>
+      </ul>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <thead class="bg-slate-950 text-slate-300"><tr><th class="px-4 py-3">Behavior</th><th class="px-4 py-3">Remember</th><th class="px-4 py-3">How the exam uses it</th></tr></thead>
+          <tbody class="divide-y divide-slate-800 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">Policy evaluation</td><td class="px-4 py-3">Explicit deny beats every allow</td><td class="px-4 py-3">Find the deny first.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Role credentials</td><td class="px-4 py-3">Temporary STS credentials</td><td class="px-4 py-3">Choose a role for EC2 or Lambda, not a stored key.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Groups</td><td class="px-4 py-3">Users can be in multiple groups; groups do not nest</td><td class="px-4 py-3">A design that puts a role in a group is invalid.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Session length</td><td class="px-4 py-3">Role sessions can last up to 12 hours</td><td class="px-4 py-3">A long-lived key is the wrong fix for a long batch job.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Scope</td><td class="px-4 py-3">IAM is global; most resource ARNs are regional</td><td class="px-4 py-3">A policy can name a region. A role does not live in one region.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="cost" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Cost</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Users, groups, roles, and policies have no IAM charge</h2>
+      <ul class="mt-4 space-y-2 text-sm leading-6 text-slate-300">
+        <li>• Standard IAM identities and policies are not a separate bill line.</li>
+        <li>• You still pay for the services the principal calls, for KMS requests, and for CloudTrail data events you retain.</li>
+        <li>• Identity Center and external identity products can have their own pricing.</li>
+      </ul>
+      <p class="mt-4 rounded-xl bg-black p-5 text-sm leading-7 text-slate-300"><strong class="text-white">Example:</strong> five Lambda roles and twenty scoped policies add no IAM identity charge. The bill appears when those roles call S3, SQS, KMS, or CloudWatch. Confirm the current IAM pricing page before treating any related identity product as free.</p>
+    </section>
+
+    <section id="alternatives" class="mt-12">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Alternatives</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Pick the identity tool that matches the caller</h2>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <thead class="bg-slate-950 text-slate-300"><tr><th class="px-4 py-3">Need</th><th class="px-4 py-3">Choose</th><th class="px-4 py-3">Why</th></tr></thead>
+          <tbody class="divide-y divide-slate-800 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">Employee console access</td><td class="px-4 py-3">IAM Identity Center</td><td class="px-4 py-3">Central workforce identities and temporary permission sets.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Application customers</td><td class="px-4 py-3">Amazon Cognito or an external IdP</td><td class="px-4 py-3">IAM users are a poor directory for millions of customers.</td></tr>
+            <tr><td class="px-4 py-3 text-white">EC2, Lambda, ECS calls</td><td class="px-4 py-3">IAM role</td><td class="px-4 py-3">Temporary credentials rotate without a secret in the image.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Another AWS account</td><td class="px-4 py-3">Cross-account role plus resource policy</td><td class="px-4 py-3">Do not share the root user or a long-lived key.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="waf" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Well-Architected</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Check the design against all six pillars</h2>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <thead class="bg-slate-950 text-slate-300"><tr><th class="px-4 py-3">Pillar</th><th class="px-4 py-3">What good looks like</th><th class="px-4 py-3">Evidence</th></tr></thead>
+          <tbody class="divide-y divide-slate-800 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">Operational Excellence</td><td class="px-4 py-3">Policies live in code and are reviewed like application changes.</td><td class="px-4 py-3">Infrastructure diff</td></tr>
+            <tr><td class="px-4 py-3 text-white">Security</td><td class="px-4 py-3">Least privilege, no long-lived keys on compute, MFA for humans, external IDs for partners.</td><td class="px-4 py-3">IAM Access Analyzer</td></tr>
+            <tr><td class="px-4 py-3 text-white">Reliability</td><td class="px-4 py-3">Workloads use roles, so a person leaving does not break the service.</td><td class="px-4 py-3">No embedded keys</td></tr>
+            <tr><td class="px-4 py-3 text-white">Performance Efficiency</td><td class="px-4 py-3">Authorization does not require a server you operate.</td><td class="px-4 py-3">STS temporary credentials</td></tr>
+            <tr><td class="px-4 py-3 text-white">Cost Optimization</td><td class="px-4 py-3">Scoped roles avoid broad emergency audits.</td><td class="px-4 py-3">One role per function</td></tr>
+            <tr><td class="px-4 py-3 text-white">Sustainability</td><td class="px-4 py-3">A small blast radius avoids repeated retries after a leaked key.</td><td class="px-4 py-3">CloudTrail alerts</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="drills" class="mt-12">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Exam drills</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Decide before you reveal the answer</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Original study decisions for Cloud Practitioner, Solutions Architect Associate, Developer Associate, and SysOps. They are not official exam items.</p>
+      <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">A role has s3:GetObject Allow and s3:* Deny. Can it read an object?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-1" aria-expanded="false">Show the decision</button><p id="exam-1" hidden class="mt-3 text-sm leading-6 text-slate-300">Deny. An explicit deny overrides the allow.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">An SCP allows s3:PutObject. The user has no identity policy. Can the user write?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-2" aria-expanded="false">Show the decision</button><p id="exam-2" hidden class="mt-3 text-sm leading-6 text-slate-300">Deny. An SCP does not grant. The user still needs an allowing identity or resource policy.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">Lambda should read one bucket. The team wants an access key in an environment variable. What do you choose?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-3" aria-expanded="false">Show the decision</button><p id="exam-3" hidden class="mt-3 text-sm leading-6 text-slate-300">An execution role with s3:GetObject on that bucket ARN. The function receives temporary credentials.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">Account B must read a bucket in account A. The bucket policy allows the role, but the role has no S3 allow. What happens?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-4" aria-expanded="false">Show the decision</button><p id="exam-4" hidden class="mt-3 text-sm leading-6 text-slate-300">Deny. Cross-account access needs an allow on both the identity policy and the resource policy, and no explicit deny.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">A permission boundary includes only S3. An administrator attaches EC2 full access. Can the role start an instance?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-5" aria-expanded="false">Show the decision</button><p id="exam-5" hidden class="mt-3 text-sm leading-6 text-slate-300">No. The boundary is the maximum. EC2 actions are outside it, so they are denied.</p></article>
+      </div>
+    </section>
+
+    <footer class="mt-12 border-t border-slate-800 py-8 text-sm leading-6 text-slate-500">Quotas and prices change. Official references: <a class="text-emerald-400 hover:text-emerald-300" href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html" target="_blank" rel="noreferrer">IAM User Guide</a>, <a class="text-emerald-400 hover:text-emerald-300" href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html" target="_blank" rel="noreferrer">policy evaluation</a>, and <a class="text-emerald-400 hover:text-emerald-300" href="https://aws.amazon.com/iam/pricing/" target="_blank" rel="noreferrer">IAM pricing</a>.</footer>
+  </main>
+  <script id="lab-data" type="application/json">[{"prompt":"The billing role has Allow s3:GetObject on arn:aws:s3:::northline-receipts/*. It calls GetObject on orders/1042.pdf. No deny exists.","detail":"Same account. Identity policy matches the object ARN.","options":["Allow","Deny"],"answer":0,"why":"An identity Allow with no explicit deny permits the call. A same-account bucket policy is not also required."},{"prompt":"The same role calls s3:DeleteBucket. Its policy lists only s3:GetObject.","detail":"There is no Deny statement and no DeleteBucket Allow.","options":["Allow","Deny"],"answer":1,"why":"IAM starts from implicit deny. No matching Allow means Deny."},{"prompt":"A managed policy allows s3:*. An inline policy on the same role denies s3:DeleteObject. The role deletes a receipt.","detail":"Both policies are attached to the caller.","options":["Allow","Deny"],"answer":1,"why":"Explicit deny wins over the broad allow."},{"prompt":"A bucket policy in this account allows the shipping role s3:GetObject. The role identity policies do not mention S3. It reads an object.","detail":"Same account. There is no SCP, boundary, or explicit deny.","options":["Allow","Deny"],"answer":0,"why":"In the same account, a resource policy can allow a principal without a matching identity Allow."},{"prompt":"Account B's role is allowed by account A's bucket policy. The role in B has no S3 permission. It tries to read.","detail":"Cross-account request. No explicit deny.","options":["Allow","Deny"],"answer":1,"why":"Cross-account access needs Allow on both sides. The resource policy alone is not enough."},{"prompt":"The identity policy allows s3:PutObject. The account SCP denies s3:PutObject. A user uploads a file.","detail":"Organizations SCP is attached to the account.","options":["Allow","Deny"],"answer":1,"why":"An SCP deny cannot be overridden by an identity policy."}]</script>
+  <script src="../assets/lab.js"></script>
+</body>
+</html>

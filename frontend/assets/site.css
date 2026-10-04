@@ -68,6 +68,10 @@ button:disabled {
 .arch-icon--wait { background: linear-gradient(135deg, #f59e0b, #b45309); }
 .arch-icon--ok { background: linear-gradient(135deg, #10b981, #047857); }
 .arch-icon--dlq { background: linear-gradient(135deg, #f43f5e, #9f1239); }
+.arch-icon--iam { background: linear-gradient(135deg, #f59e0b, #b45309); }
+.arch-icon--vpc { background: linear-gradient(135deg, #38bdf8, #0369a1); }
+.arch-icon--s3 { background: linear-gradient(135deg, #34d399, #047857); }
+.arch-icon--events { background: linear-gradient(135deg, #e879f9, #a21caf); }
 
 .arch-label {
   max-width: 100%;

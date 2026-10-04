@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AWS Messaging Learning Lab</title>
+  <meta name="description" content="AWS architecture labs for IAM, VPC, S3, Lambda, SQS, SNS, and EventBridge, plus Northline and Clearfile." />
+  <title>AWS Architecture Lab</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet" />
@@ -12,49 +13,76 @@
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
   <header class="border-b border-slate-800">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5" aria-label="Primary navigation">
-      <a href="./" class="font-semibold text-white">AWS Messaging Lab</a>
-      <div class="flex gap-2 text-sm">
-        <a href="sqs/" class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900 hover:text-white">SQS</a>
-        <a href="sns/" class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900 hover:text-white">SNS</a>
+    <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-5" aria-label="Primary navigation">
+      <a href="./" class="font-semibold text-white">AWS Architecture Lab</a>
+      <div class="flex flex-wrap gap-1 text-xs">
+        <a href="./" aria-current="page" class="rounded-lg bg-slate-800 px-2.5 py-1.5 text-white">Home</a>
+        <a href="iam/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">IAM</a>
+        <a href="vpc/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">VPC</a>
+        <a href="s3/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">S3</a>
+        <a href="lambda/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">Lambda</a>
+        <a href="sqs/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">SQS</a>
+        <a href="sns/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">SNS</a>
+        <a href="eventbridge/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">EventBridge</a>
+        <a href="projects/northline/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">Northline</a>
+        <a href="projects/clearfile/" class="rounded-lg px-2.5 py-1.5 text-slate-300 hover:bg-slate-900 hover:text-white">Clearfile</a>
       </div>
     </nav>
   </header>
-
-  <main class="mx-auto max-w-6xl px-6 py-16">
-    <p class="text-xs font-medium uppercase tracking-[0.2em] text-emerald-400">Reference guide + live AWS labs</p>
-    <h1 class="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-      Learn messaging by seeing the architecture execute.
-    </h1>
-    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-400">
-      Explore production concepts, inspect integration code, edit real payloads, invoke AWS services, and verify the result through CloudWatch.
-    </p>
-
-    <div class="mt-12 grid gap-6 md:grid-cols-2">
-      <a href="sqs/" class="group rounded-2xl border border-emerald-900 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-emerald-500">
-        <div class="flex items-center justify-between">
-          <span class="rounded-full bg-emerald-950 px-3 py-1 text-xs font-medium uppercase tracking-wider text-emerald-300">Available now</span>
-          <span class="text-2xl text-emerald-400 transition group-hover:translate-x-1" aria-hidden="true">→</span>
-        </div>
-        <h2 class="mt-8 text-2xl font-semibold text-white">Amazon SQS</h2>
-        <p class="mt-3 leading-7 text-slate-400">
-          Standard and FIFO queues, buffering, ordering, deduplication, polling, visibility timeout, DLQs, message lifecycle, and live API Gateway integrations.
-        </p>
-        <p class="mt-6 font-mono text-xs text-emerald-400">Open /sqs/</p>
-      </a>
-
-      <a href="sns/" class="group rounded-2xl border border-violet-950 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-violet-500">
-        <div class="flex items-center justify-between">
-          <span class="rounded-full bg-violet-950 px-3 py-1 text-xs font-medium uppercase tracking-wider text-violet-300">Next module</span>
-          <span class="text-2xl text-violet-400 transition group-hover:translate-x-1" aria-hidden="true">→</span>
-        </div>
-        <h2 class="mt-8 text-2xl font-semibold text-white">Amazon SNS</h2>
-        <p class="mt-3 leading-7 text-slate-400">
-          Topics, subscriptions, filter policies, fan-out, delivery retries, and SNS-to-SQS patterns.
-        </p>
-        <p class="mt-6 font-mono text-xs text-violet-400">Open /sns/</p>
-      </a>
+  <main class="mx-auto max-w-6xl px-6 py-14">
+    <p class="text-xs font-medium uppercase tracking-[0.2em] text-emerald-400">Service pages and two capstone systems</p>
+    <h1 class="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-6xl">Learn the decision the exam is asking for.</h1>
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-400">Each page has an architecture, a fragile design beside a sound one, a live decision lab, limits, cost, alternatives, and original exam drills. The SQS page still calls the deployed API. The new labs train the same kind of decision without creating NAT gateways or public buckets.</p>
+    <ol class="mt-8 grid gap-3 text-sm leading-6 text-slate-300 md:grid-cols-3">
+      <li class="rounded-xl border border-slate-800 bg-slate-900 p-4"><span class="font-mono text-xs text-emerald-300">01</span><p class="mt-2">IAM and VPC. Learn who can call, and which network path exists.</p></li>
+      <li class="rounded-xl border border-slate-800 bg-slate-900 p-4"><span class="font-mono text-xs text-emerald-300">02</span><p class="mt-2">S3 and Lambda. Store the object, then decide how the code is invoked.</p></li>
+      <li class="rounded-xl border border-slate-800 bg-slate-900 p-4"><span class="font-mono text-xs text-emerald-300">03</span><p class="mt-2">SQS, SNS, and EventBridge. Buffer, fan out, or route. Then build both capstones.</p></li>
+    </ol>
+    <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <a href="iam/" class="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-amber-500"><p class="text-xs font-medium uppercase tracking-wider text-amber-300">IAM</p><p class="mt-3 text-sm leading-6 text-slate-400">Evaluation order, roles, SCPs, and permission boundaries.</p></a>
+      <a href="vpc/" class="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-sky-500"><p class="text-xs font-medium uppercase tracking-wider text-sky-300">VPC</p><p class="mt-3 text-sm leading-6 text-slate-400">Routes, security groups, NACLs, NAT, and endpoints.</p></a>
+      <a href="s3/" class="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-green-500"><p class="text-xs font-medium uppercase tracking-wider text-green-300">S3</p><p class="mt-3 text-sm leading-6 text-slate-400">Storage classes, consistency, public access, and Object Lock.</p></a>
+      <a href="lambda/" class="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-orange-500"><p class="text-xs font-medium uppercase tracking-wider text-orange-300">Lambda</p><p class="mt-3 text-sm leading-6 text-slate-400">Sync, async, pollers, concurrency, and VPC access.</p></a>
+      <a href="sqs/" class="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-emerald-500"><p class="text-xs font-medium uppercase tracking-wider text-emerald-300">SQS</p><p class="mt-3 text-sm leading-6 text-slate-400">The existing live AWS queue lab: Standard, FIFO, and DLQs.</p></a>
+      <a href="sns/" class="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-violet-500"><p class="text-xs font-medium uppercase tracking-wider text-violet-300">SNS</p><p class="mt-3 text-sm leading-6 text-slate-400">Fan-out, filter policies, delivery retries, and subscriber DLQs.</p></a>
+      <a href="eventbridge/" class="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-fuchsia-500"><p class="text-xs font-medium uppercase tracking-wider text-fuchsia-300">EventBridge</p><p class="mt-3 text-sm leading-6 text-slate-400">Rules, archive and replay, Scheduler, and Pipes.</p></a>
     </div>
+    <section class="mt-12 grid gap-4 lg:grid-cols-2">
+      <a href="projects/northline/" class="rounded-2xl border border-cyan-900 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-cyan-500">
+        <p class="text-xs font-medium uppercase tracking-wider text-cyan-300">Capstone A</p>
+        <h2 class="mt-3 text-2xl font-semibold text-white">Northline</h2>
+        <p class="mt-2 text-sm font-medium text-slate-300">Secure Order Pipeline</p>
+        <p class="mt-3 text-sm leading-6 text-slate-400">Accept an order, store a private receipt, route it with EventBridge, fan it out with SNS, and buffer fraud, billing, and shipping on separate queues.</p>
+      </a>
+      <a href="projects/clearfile/" class="rounded-2xl border border-indigo-900 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-indigo-500">
+        <p class="text-xs font-medium uppercase tracking-wider text-indigo-300">Capstone B</p>
+        <h2 class="mt-3 text-2xl font-semibold text-white">Clearfile</h2>
+        <p class="mt-2 text-sm font-medium text-slate-300">Document Processing Pipeline</p>
+        <p class="mt-3 text-sm leading-6 text-slate-400">Upload with a presigned URL, route PDF and image objects, retry through SQS, and publish DocumentReady only after the result is stored.</p>
+      </a>
+    </section>
+    <section id="live-lab" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-300">Live decision lab</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Which service owns this requirement?</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Name the contract first: buffer, fan-out, route, object, identity, or network. Then choose the service.</p>
+      <div class="mt-6 grid gap-4 lg:grid-cols-[1.3fr_.7fr]">
+        <div class="rounded-xl bg-slate-950 p-5">
+          <p id="lab-kicker" class="font-mono text-xs text-slate-500"></p>
+          <p id="lab-prompt" class="mt-2 text-lg font-semibold leading-7 text-white"></p>
+          <p id="lab-detail" class="mt-3 font-mono text-xs leading-5 text-slate-400"></p>
+          <div id="lab-choices" class="mt-5 flex flex-wrap gap-2"></div>
+          <button id="lab-next" type="button" class="mt-5 rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:border-slate-400">Next case</button>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-black p-5">
+          <p id="lab-feedback" class="text-sm leading-6 text-slate-300" aria-live="polite">Choose an answer. The explanation appears here.</p>
+          <p id="lab-score" class="mt-4 font-mono text-xs text-slate-500">0 answered</p>
+          <p class="hidden text-emerald-300 text-rose-300"></p>
+        </div>
+      </div>
+    </section>
+    <footer class="mt-12 border-t border-slate-800 py-8 text-sm leading-6 text-slate-500">The drills are original teaching questions for Cloud Practitioner, Solutions Architect Associate, Developer Associate, and SysOps study. They are not official exam items. Confirm current AWS quotas and prices before relying on a number.</footer>
   </main>
+  <script id="lab-data" type="application/json">[{"prompt":"One team must buffer orders and retry them with its own DLQ.","detail":"A second team must not consume the same message.","options":["SQS","SNS","EventBridge","S3"],"answer":0,"why":"SQS is the point-to-point buffer. Fan-out needs a separate copy per consumer."},{"prompt":"One event must reach email and two independent workers.","detail":"The workers can be offline.","options":["SNS to email and two SQS queues","One SQS queue polled by all three","A public S3 bucket"],"answer":0,"why":"SNS provides email and a separate queue subscription for each worker."},{"prompt":"Orders must be routed by amount, archived, and replayed after a bad deploy.","detail":"The producer publishes once.","options":["EventBridge","SQS FIFO only","IAM"],"answer":0,"why":"Content rules plus archive and replay are EventBridge. Put SQS in front of the consumer."},{"prompt":"A private instance must read S3, and the design forbids a NAT gateway.","detail":"The instance has no public IP.","options":["Gateway VPC endpoint","A second internet gateway","SNS"],"answer":0,"why":"S3 and DynamoDB gateway endpoints stay on the AWS network and have no NAT hourly charge."},{"prompt":"A 2 GB statement must be stored privately and read by its key.","detail":"It is an object, not a small queue message.","options":["S3","A Lambda /tmp file","An SQS message body"],"answer":0,"why":"S3 holds the object. Queue and event payloads are far smaller."},{"prompt":"Each API request needs about 200 ms of validation and must scale to zero.","detail":"There is no server to patch.","options":["Lambda","A NAT gateway","S3 Standard-IA"],"answer":0,"why":"Lambda fits short stateless validation. The API integration still has its own timeout."},{"prompt":"A worker function must never use more than 10 concurrent executions.","detail":"The account still has unused concurrency.","options":["Reserved concurrency of 10","A larger memory setting","A public subnet"],"answer":0,"why":"Reserved concurrency is the cap. It also removes those slots from the shared pool."},{"prompt":"A partner account needs temporary access to one bucket.","detail":"The partner already has an AWS account.","options":["Cross-account role and bucket policy","Email the root access key","Make the bucket public"],"answer":0,"why":"Both sides allow the role, and the credentials are temporary."}]</script>
+  <script src="assets/lab.js"></script>
 </body>
 </html>

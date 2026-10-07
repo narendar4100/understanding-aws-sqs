@@ -31,7 +31,7 @@
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-400">Amazon Simple Queue Service</p>
       <h1 class="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">A durable queue between the caller and the worker</h1>
       <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400 sm:text-base">
-        Amazon SQS is a fully managed message queue. A producer sends a message and gets an acknowledgement as soon as SQS has stored it. The message stays in the queue until a consumer processes it and deletes it, so a slow or unavailable worker does not lose the work.
+        Amazon SQS is a fully managed<button type="button" data-snippet="managed" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-emerald-700 align-middle text-[11px] font-semibold text-emerald-300 hover:bg-emerald-950" aria-label="Show what fully managed means for a queue">i</button>message queue. A producer sends a message and gets an acknowledgement as soon as SQS has stored it. The message stays in the queue until a consumer processes it and deletes it, so a slow or unavailable worker does not lose the work.
       </p>
       <div class="mt-6 max-w-xl rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-5">
         <div class="arch-flow">
@@ -602,7 +602,7 @@
     </div>
 
     <div id="code-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="code-modal-title">
-      <div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-700/80 bg-slate-900 shadow-2xl shadow-black/60">
+      <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-700/80 bg-slate-900 shadow-2xl shadow-black/60">
         <div class="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-4">
           <div>
             <p id="code-modal-eyebrow" class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">Integration code</p>
@@ -718,6 +718,323 @@
           <p class="mt-1 text-sm font-semibold text-white">The Network Shield</p>
           <p class="mt-2 text-xs leading-5 text-slate-300">If a server automatically retries a request during a routine internet hiccup, the duplicate is killed at the gate before it can trigger double warehouse allocations or duplicate shipping labels.</p>
         </div>
+      </div>
+    </div>
+
+
+
+    <div hidden data-rich="managed">
+      <p class="text-sm leading-6 text-slate-300">Fully managed means AWS runs the queue infrastructure. It does not design your messages, your consumer, or your alarms.</p>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        <article class="rounded-xl border border-rose-900/70 bg-rose-950/20 p-4">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[11px] font-medium uppercase tracking-wider text-rose-300">If you ran the queue</p>
+            <button type="button" data-arch="selfrun" aria-expanded="false" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-rose-700 text-[11px] font-semibold text-rose-300 hover:bg-rose-900/40" aria-label="Show the self-managed broker architecture">i</button>
+          </div>
+          <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-300">
+            <li>• Install the broker and keep a cluster of nodes across failure domains.</li>
+            <li>• Size disks for the peak backlog, then replace a full disk at night.</li>
+            <li>• Replicate data, elect a leader, and rehearse failover.</li>
+            <li>• Patch the operating system and the broker, and plan version upgrades.</li>
+            <li>• Issue certificates and broker user accounts.</li>
+            <li>• Watch memory, disk, and connections, and take backups.</li>
+          </ul>
+        </article>
+        <article class="rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">What AWS runs for SQS</p>
+            <button type="button" data-arch="awsrun" aria-expanded="false" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-emerald-700 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-900/40" aria-label="Show the Amazon SQS managed architecture">i</button>
+          </div>
+          <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-300">
+            <li>• Stores each accepted message redundantly across Availability Zones before it acknowledges the send.</li>
+            <li>• Runs, patches, and scales the service fleet. There is no node to SSH into.</li>
+            <li>• Hides a received message for the visibility timeout, then shows it again if it was not deleted.</li>
+            <li>• Moves a message to the dead-letter queue after the receive count you set.</li>
+            <li>• Encrypts the message at rest when you choose SSE-SQS or SSE-KMS.</li>
+            <li>• Authenticates every API call with IAM and Signature Version 4.</li>
+          </ul>
+        </article>
+      </div>
+
+      <figure data-arch-panel="selfrun" hidden class="mt-4 rounded-xl border border-rose-900/70 bg-slate-950 p-4">
+        <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-rose-300">Self-managed broker on Amazon EC2 · what you build and operate</figcaption>
+        <div class="overflow-x-auto">
+          <svg class="arch-svg min-w-[640px]" viewBox="0 0 760 400" role="img" aria-label="Producers and consumers connect through a Network Load Balancer to a three-node RabbitMQ cluster on EC2, one node per Availability Zone, each with its own EBS volume, plus the patching, TLS, monitoring, backup, and capacity work you run.">
+            <defs>
+              <marker id="arw-self" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#fb7185"/></marker>
+            </defs>
+            <rect class="box" x="10" y="60" width="105" height="60" rx="8" stroke="#64748b"/>
+            <text class="t" x="62.5" y="82">Producers</text>
+            <text class="s" x="62.5" y="97">order service</text>
+            <text class="s" x="62.5" y="110">AMQP over TLS</text>
+            <rect class="box" x="10" y="190" width="105" height="60" rx="8" stroke="#64748b"/>
+            <text class="t" x="62.5" y="212">Consumers</text>
+            <text class="s" x="62.5" y="227">worker fleet</text>
+            <text class="s" x="62.5" y="240">ack after commit</text>
+
+            <rect class="zone" x="130" y="10" width="620" height="285" rx="10" stroke="#475569"/>
+            <text class="s l" x="142" y="26">AWS Region · your account</text>
+            <rect class="zone" x="142" y="34" width="598" height="252" rx="8" stroke="#0ea5e9"/>
+            <text class="s l" x="152" y="49" style="fill:#7dd3fc">VPC · private subnets</text>
+
+            <rect class="box" x="152" y="125" width="95" height="70" rx="8" stroke="#a78bfa"/>
+            <text class="t" x="199.5" y="148">Network</text>
+            <text class="t" x="199.5" y="161">Load Balancer</text>
+            <text class="s" x="199.5" y="177">TLS :5671</text>
+
+            <path class="flow" d="M115,90 H135 V150 H150" stroke="#fb7185" marker-end="url(#arw-self)"/>
+            <path class="flow" d="M115,220 H135 V170 H150" stroke="#fb7185" marker-end="url(#arw-self)"/>
+            <path class="flow" d="M199.5,125 V56 H655" stroke="#fb7185"/>
+            <path class="flow" d="M337,56 V82" stroke="#fb7185" marker-end="url(#arw-self)"/>
+            <path class="flow" d="M496,56 V82" stroke="#fb7185" marker-end="url(#arw-self)"/>
+            <path class="flow" d="M655,56 V82" stroke="#fb7185" marker-end="url(#arw-self)"/>
+
+            <rect class="zone" x="262" y="62" width="150" height="216" rx="8" stroke="#334155"/>
+            <text class="s l" x="270" y="76">AZ a</text>
+            <rect class="box" x="274" y="84" width="126" height="62" rx="8" stroke="#fb7185"/>
+            <text class="t" x="337" y="104">EC2 broker node</text>
+            <text class="s" x="337" y="119">RabbitMQ cluster</text>
+            <text class="s" x="337" y="133">quorum leader</text>
+            <path class="flow" d="M337,146 V160" stroke="#64748b"/>
+            <rect class="box" x="274" y="160" width="126" height="44" rx="8" stroke="#f59e0b"/>
+            <text class="t" x="337" y="178">EBS gp3 volume</text>
+            <text class="s" x="337" y="193">sized for peak backlog</text>
+            <text class="s" x="337" y="226">SSM + CloudWatch agent</text>
+            <text class="s" x="337" y="241">OS patch, broker upgrade</text>
+            <text class="s" x="337" y="260">SG: 5671 clients</text>
+
+            <rect class="zone" x="421" y="62" width="150" height="216" rx="8" stroke="#334155"/>
+            <text class="s l" x="429" y="76">AZ b</text>
+            <rect class="box" x="433" y="84" width="126" height="62" rx="8" stroke="#fb7185"/>
+            <text class="t" x="496" y="104">EC2 broker node</text>
+            <text class="s" x="496" y="119">RabbitMQ cluster</text>
+            <text class="s" x="496" y="133">replica</text>
+            <path class="flow" d="M496,146 V160" stroke="#64748b"/>
+            <rect class="box" x="433" y="160" width="126" height="44" rx="8" stroke="#f59e0b"/>
+            <text class="t" x="496" y="178">EBS gp3 volume</text>
+            <text class="s" x="496" y="193">disk alarm at 80%</text>
+            <text class="s" x="496" y="226">SSM + CloudWatch agent</text>
+            <text class="s" x="496" y="241">OS patch, broker upgrade</text>
+            <text class="s" x="496" y="260">SG: 25672 cluster traffic</text>
+
+            <rect class="zone" x="580" y="62" width="150" height="216" rx="8" stroke="#334155"/>
+            <text class="s l" x="588" y="76">AZ c</text>
+            <rect class="box" x="592" y="84" width="126" height="62" rx="8" stroke="#fb7185"/>
+            <text class="t" x="655" y="104">EC2 broker node</text>
+            <text class="s" x="655" y="119">RabbitMQ cluster</text>
+            <text class="s" x="655" y="133">replica</text>
+            <path class="flow" d="M655,146 V160" stroke="#64748b"/>
+            <rect class="box" x="592" y="160" width="126" height="44" rx="8" stroke="#f59e0b"/>
+            <text class="t" x="655" y="178">EBS gp3 volume</text>
+            <text class="s" x="655" y="193">grow before it fills</text>
+            <text class="s" x="655" y="226">SSM + CloudWatch agent</text>
+            <text class="s" x="655" y="241">OS patch, broker upgrade</text>
+            <text class="s" x="655" y="260">AMI you maintain</text>
+
+            <path class="flow" d="M402,115 H431" stroke="#fb7185" stroke-dasharray="4 3" marker-start="url(#arw-self)" marker-end="url(#arw-self)"/>
+            <path class="flow" d="M561,115 H590" stroke="#fb7185" stroke-dasharray="4 3" marker-start="url(#arw-self)" marker-end="url(#arw-self)"/>
+
+            <text class="t l" x="10" y="312" style="fill:#fda4af">Operations you run around the clock</text>
+            <rect class="box" x="10" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+            <text class="t" x="80" y="338">Patching</text>
+            <text class="s" x="80" y="354">SSM Patch Manager</text>
+            <text class="s" x="80" y="368">rolling broker restarts</text>
+            <text class="s" x="80" y="382">version upgrades</text>
+            <rect class="box" x="160" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+            <text class="t" x="230" y="338">Identity and TLS</text>
+            <text class="s" x="230" y="354">private CA, cert rotation</text>
+            <text class="s" x="230" y="368">broker users and vhosts</text>
+            <text class="s" x="230" y="382">secrets in Secrets Manager</text>
+            <rect class="box" x="310" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+            <text class="t" x="380" y="338">Monitoring</text>
+            <text class="s" x="380" y="354">memory, disk, connections</text>
+            <text class="s" x="380" y="368">Prometheus or CloudWatch</text>
+            <text class="s" x="380" y="382">pager and on-call rota</text>
+            <rect class="box" x="460" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+            <text class="t" x="530" y="338">Backup and DR</text>
+            <text class="s" x="530" y="354">EBS snapshots (DLM)</text>
+            <text class="s" x="530" y="368">definitions export to S3</text>
+            <text class="s" x="530" y="382">restore drills</text>
+            <rect class="box" x="610" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+            <text class="t" x="680" y="338">Capacity</text>
+            <text class="s" x="680" y="354">grow EBS before full</text>
+            <text class="s" x="680" y="368">add nodes, rebalance</text>
+            <text class="s" x="680" y="382">load-test peak backlog</text>
+          </svg>
+        </div>
+        <p class="mt-3 text-xs leading-5 text-slate-400">Each node lives in its own Availability Zone, and the dashed arrows are quorum replication you configure. When a node or a disk fails, your runbook moves the leader and replaces the volume. Every box in this picture is billed to your account and patched by your team.</p>
+      </figure>
+
+      <figure data-arch-panel="awsrun" hidden class="mt-4 rounded-xl border border-emerald-900/70 bg-slate-950 p-4">
+        <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-emerald-300">Amazon SQS · what AWS operates behind the API</figcaption>
+        <div class="overflow-x-auto">
+          <svg class="arch-svg min-w-[640px]" viewBox="0 0 760 400" role="img" aria-label="API Gateway sends to the SQS regional endpoint with an IAM role. SQS checks SigV4, stores copies across three Availability Zones, then returns 200. A Lambda event source mapping polls the queue, failed messages move to a dead-letter queue, KMS encrypts at rest, and CloudWatch receives queue metrics.">
+            <defs>
+              <marker id="arw-aws" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#34d399"/></marker>
+            </defs>
+            <rect class="zone" x="10" y="10" width="230" height="290" rx="10" stroke="#475569"/>
+            <text class="s l" x="22" y="26">Your account</text>
+            <rect class="box" x="24" y="38" width="202" height="60" rx="8" stroke="#a78bfa"/>
+            <text class="t" x="125" y="58">API Gateway HTTP API</text>
+            <text class="s" x="125" y="74">SQS-SendMessage integration</text>
+            <text class="s" x="125" y="88">or any app using the AWS SDK</text>
+            <rect class="box" x="24" y="106" width="202" height="34" rx="8" stroke="#f59e0b"/>
+            <text class="s" x="125" y="127" style="fill:#fcd34d">IAM role: sqs:SendMessage</text>
+            <rect class="box" x="24" y="170" width="202" height="72" rx="8" stroke="#f97316"/>
+            <text class="t" x="125" y="190">Lambda consumer</text>
+            <text class="s" x="125" y="205">event source mapping polls</text>
+            <text class="s" x="125" y="219">ReceiveMessage, then process</text>
+            <text class="s" x="125" y="233">DeleteMessage on success</text>
+            <rect class="box" x="24" y="250" width="202" height="40" rx="8" stroke="#f59e0b"/>
+            <text class="s" x="125" y="266" style="fill:#fcd34d">IAM role: ReceiveMessage,</text>
+            <text class="s" x="125" y="280" style="fill:#fcd34d">DeleteMessage, GetQueueAttributes</text>
+
+            <rect class="zone" x="262" y="10" width="340" height="290" rx="10" stroke="#34d399"/>
+            <text class="s l" x="274" y="26" style="fill:#6ee7b7">Amazon SQS · AWS-managed, Regional</text>
+            <rect class="box" x="276" y="36" width="312" height="42" rx="8" stroke="#34d399"/>
+            <text class="t" x="432" y="54">Regional endpoint · sqs.us-east-1.amazonaws.com</text>
+            <text class="s" x="432" y="70">HTTPS · SigV4 checked against IAM and the queue policy</text>
+            <text class="s l" x="276" y="97">Copies stored before SendMessage returns 200</text>
+            <path class="flow" d="M326,78 V102" stroke="#34d399" marker-end="url(#arw-aws)"/>
+            <path class="flow" d="M432,78 V102" stroke="#34d399" marker-end="url(#arw-aws)"/>
+            <path class="flow" d="M538,78 V102" stroke="#34d399" marker-end="url(#arw-aws)"/>
+            <rect class="zone" x="276" y="104" width="100" height="70" rx="8" stroke="#334155"/>
+            <text class="t" x="326" y="124">AZ a</text>
+            <text class="s" x="326" y="142">message copy</text>
+            <text class="s" x="326" y="157">encrypted at rest</text>
+            <rect class="zone" x="382" y="104" width="100" height="70" rx="8" stroke="#334155"/>
+            <text class="t" x="432" y="124">AZ b</text>
+            <text class="s" x="432" y="142">message copy</text>
+            <text class="s" x="432" y="157">encrypted at rest</text>
+            <rect class="zone" x="488" y="104" width="100" height="70" rx="8" stroke="#334155"/>
+            <text class="t" x="538" y="124">AZ c</text>
+            <text class="s" x="538" y="142">message copy</text>
+            <text class="s" x="538" y="157">encrypted at rest</text>
+            <rect class="box" x="276" y="186" width="312" height="46" rx="8" stroke="#ff4f8b"/>
+            <text class="t" x="432" y="205">Queue · orders</text>
+            <text class="s" x="432" y="221">visibility timeout 30 s · retention 4 days · long poll 20 s</text>
+            <path class="flow" d="M432,232 V244" stroke="#f43f5e" marker-end="url(#arw-aws)"/>
+            <rect class="box" x="276" y="246" width="312" height="44" rx="8" stroke="#f43f5e"/>
+            <text class="t" x="432" y="264">Dead-letter queue · orders-dlq</text>
+            <text class="s" x="432" y="279">SQS moves a message after maxReceiveCount = 5</text>
+
+            <path class="flow" d="M226,66 H274" stroke="#34d399" marker-end="url(#arw-aws)"/>
+            <text class="s" x="250" y="60" style="font-size:8px">SendMessage</text>
+            <path class="flow" d="M276,209 H228" stroke="#34d399" marker-end="url(#arw-aws)"/>
+            <text class="s" x="252" y="203" style="font-size:8px">poll</text>
+
+            <rect class="box" x="620" y="36" width="130" height="64" rx="8" stroke="#f59e0b"/>
+            <text class="t" x="685" y="56">AWS KMS</text>
+            <text class="s" x="685" y="72">SSE-KMS key you pick</text>
+            <text class="s" x="685" y="86">or SSE-SQS owned key</text>
+            <path class="flow" d="M685,100 V139 H590" stroke="#f59e0b" marker-end="url(#arw-aws)"/>
+            <rect class="box" x="620" y="150" width="130" height="80" rx="8" stroke="#e879f9"/>
+            <text class="t" x="685" y="170">CloudWatch</text>
+            <text class="s" x="685" y="186">AgeOfOldestMessage</text>
+            <text class="s" x="685" y="200">MessagesVisible</text>
+            <text class="s" x="685" y="214">DLQ depth</text>
+            <path class="flow" d="M588,209 H618" stroke="#e879f9" marker-end="url(#arw-aws)"/>
+            <rect class="zone" x="620" y="242" width="130" height="58" rx="8" stroke="#334155"/>
+            <text class="t" x="685" y="261">Hidden from you</text>
+            <text class="s" x="685" y="276">hosts, disks, patching,</text>
+            <text class="s" x="685" y="290">scaling, failover</text>
+
+            <rect class="box" x="10" y="318" width="365" height="78" rx="8" stroke="#34d399"/>
+            <text class="t l" x="24" y="338" style="fill:#6ee7b7">AWS runs</text>
+            <text class="s l" x="24" y="355">Fleet capacity, patching, and failover across AZs</text>
+            <text class="s l" x="24" y="370">Copies each message before acknowledging SendMessage</text>
+            <text class="s l" x="24" y="385">Visibility timeout, redrive move, encryption, SigV4 auth</text>
+            <rect class="box" x="385" y="318" width="365" height="78" rx="8" stroke="#fbbf24"/>
+            <text class="t l" x="399" y="338" style="fill:#fcd34d">You configure</text>
+            <text class="s l" x="399" y="355">Queue type, timeouts, retention, redrive policy</text>
+            <text class="s l" x="399" y="370">IAM roles, queue policy, KMS key choice</text>
+            <text class="s l" x="399" y="385">Consumer code, DeleteMessage, alarms on age and DLQ</text>
+          </svg>
+        </div>
+        <p class="mt-3 text-xs leading-5 text-slate-400">Your account holds only the producer, the consumer, and their roles. Everything inside the green boundary is AWS's fleet: you call one HTTPS endpoint, and SQS handles storage across Availability Zones, the visibility timer, and the move to the dead-letter queue.</p>
+      </figure>
+
+      <div class="mt-4 rounded-xl border border-amber-900/70 bg-amber-950/20 p-4">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">What you still own</p>
+          <button type="button" data-arch="youown" aria-expanded="false" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-amber-700 text-[11px] font-semibold text-amber-300 hover:bg-amber-900/40" aria-label="Show the parts of the architecture you still own">i</button>
+        </div>
+        <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-300">
+          <li>• Choose Standard or FIFO, then set retention, visibility timeout, and the redrive policy.</li>
+          <li>• Grant the producer and consumer only the queue actions they need.</li>
+          <li>• Send the message, and delete it only after the work is durable.</li>
+          <li>• Make the consumer idempotent. SQS can deliver the same message more than once.</li>
+          <li>• Alarm on queue age and dead-letter depth. AWS does not decide that a backlog is an incident.</li>
+        </ul>
+        <figure data-arch-panel="youown" hidden class="mt-4 rounded-xl border border-amber-900/70 bg-slate-950 p-4">
+          <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-amber-300">Order pipeline on SQS · amber boxes are yours</figcaption>
+          <div class="overflow-x-auto">
+            <svg class="arch-svg min-w-[640px]" viewBox="0 0 760 236" role="img" aria-label="Client calls API Gateway, which sends to an SQS queue you configured. A Lambda consumer checks a DynamoDB idempotency table, commits to the ledger, then deletes the message. Failed messages go to a dead-letter queue, a CloudWatch alarm pages on-call through SNS, and your runbook redrives.">
+              <defs>
+                <marker id="arw-own" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#fbbf24"/></marker>
+              </defs>
+              <path class="flow" d="M464,40 V20 H320 V38" stroke="#fbbf24" stroke-dasharray="4 3" marker-end="url(#arw-own)"/>
+              <text class="s" x="392" y="15" style="fill:#fcd34d">DeleteMessage after the ledger commit</text>
+
+              <rect class="box" x="10" y="40" width="92" height="64" rx="8" stroke="#64748b"/>
+              <text class="t" x="56" y="66">Client</text>
+              <text class="s" x="56" y="82">POST /buy-queue</text>
+              <rect class="box" x="120" y="40" width="112" height="64" rx="8" stroke="#a78bfa"/>
+              <text class="t" x="176" y="66">API Gateway</text>
+              <text class="s" x="176" y="82">SendMessage</text>
+              <rect class="box" x="250" y="40" width="140" height="64" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="320" y="60">SQS queue</text>
+              <text class="s" x="320" y="75">Standard or FIFO</text>
+              <text class="s" x="320" y="90">visibility 30 s · redrive 5</text>
+              <rect class="box" x="408" y="40" width="112" height="64" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="464" y="60">Lambda consumer</text>
+              <text class="s" x="464" y="75">idempotent code</text>
+              <text class="s" x="464" y="90">batch item failures</text>
+              <rect class="box" x="538" y="40" width="100" height="64" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="588" y="60">DynamoDB</text>
+              <text class="s" x="588" y="75">processed ids</text>
+              <text class="s" x="588" y="90">conditional put</text>
+              <rect class="box" x="656" y="40" width="94" height="64" rx="8" stroke="#64748b"/>
+              <text class="t" x="703" y="60">Ledger</text>
+              <text class="s" x="703" y="75">commit once</text>
+              <text class="s" x="703" y="90">RDS or DynamoDB</text>
+              <path class="flow" d="M102,72 H118" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+              <path class="flow" d="M232,72 H248" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+              <path class="flow" d="M390,72 H406" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+              <path class="flow" d="M520,72 H536" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+              <path class="flow" d="M638,72 H654" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+
+              <rect class="box" x="104" y="140" width="130" height="62" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="169" y="162">IAM roles</text>
+              <text class="s" x="169" y="177">producer: Send</text>
+              <text class="s" x="169" y="191">worker: Receive, Delete</text>
+              <path class="flow" d="M320,104 V138" stroke="#f43f5e" marker-end="url(#arw-own)"/>
+              <rect class="box" x="250" y="140" width="140" height="62" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="320" y="162">Dead-letter queue</text>
+              <text class="s" x="320" y="177">you inspect it</text>
+              <text class="s" x="320" y="191">and start the redrive</text>
+              <rect class="box" x="408" y="140" width="112" height="62" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="464" y="162">CloudWatch alarm</text>
+              <text class="s" x="464" y="177">age over 5 min</text>
+              <text class="s" x="464" y="191">DLQ depth over 0</text>
+              <rect class="box" x="538" y="140" width="100" height="62" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="588" y="162">SNS topic</text>
+              <text class="s" x="588" y="177">pages on-call</text>
+              <rect class="box" x="656" y="140" width="94" height="62" rx="8" stroke="#fbbf24"/>
+              <text class="t" x="703" y="162">Your runbook</text>
+              <text class="s" x="703" y="177">fix, then redrive</text>
+              <path class="flow" d="M390,171 H406" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+              <path class="flow" d="M520,171 H536" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+              <path class="flow" d="M638,171 H654" stroke="#94a3b8" marker-end="url(#arw-own)"/>
+
+              <rect x="10" y="218" width="10" height="10" rx="2" fill="none" stroke="#fbbf24"/>
+              <text class="s l" x="26" y="227">You configure or write it</text>
+              <rect x="160" y="218" width="10" height="10" rx="2" fill="none" stroke="#64748b"/>
+              <text class="s l" x="176" y="227">Your app or another service</text>
+            </svg>
+          </div>
+          <p class="mt-3 text-xs leading-5 text-slate-400">SQS keeps the message safe. Whether a payment is charged once, whether a stuck backlog wakes someone up, and whether a failed message is ever replayed are all decided by the amber boxes.</p>
+        </figure>
       </div>
     </div>
 
@@ -1225,7 +1542,7 @@ COMMIT;</pre>
               <text x="367" y="126" text-anchor="middle">Poll and deliver batch</text>
 
               <path d="M560 166 H192" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#dlq-head-retry)"/>
-              <text x="367" y="194" text-anchor="middle" fill="#fcd34d">Error · message visible again after the timeout</text>
+              <text x="367" y="194" text-anchor="middle" style="fill:#fcd34d">Error · message visible again after the timeout</text>
 
               <path d="M142 238 V370" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#dlq-head-dlq)"/>
               <text x="162" y="298" fill="#fda4af">receiveCount &gt; maxReceiveCount</text>
@@ -1239,7 +1556,7 @@ COMMIT;</pre>
               <text x="702" y="400" text-anchor="middle" fill="#7dd3fc">Invoke</text>
 
               <path d="M812 372 V88 H142 V110" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#dlq-head-redrive)"/>
-              <text x="477" y="78" text-anchor="middle" fill="#6ee7b7">DLQ redrive after the fix · message returns to the primary queue</text>
+              <text x="477" y="78" text-anchor="middle" style="fill:#6ee7b7">DLQ redrive after the fix · message returns to the primary queue</text>
             </g>
 
             <g font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle">
@@ -1550,6 +1867,7 @@ COMMIT;</pre>
       "ctrl-dlq": { eyebrow: "Operational control", title: "Dead-letter queue", rich: true },
       "ctrl-retention": { eyebrow: "Operational control", title: "Retention and payload size", rich: true },
       "ctrl-batch": { eyebrow: "Operational control", title: "Batching and partial failures", rich: true },
+      "managed": { eyebrow: "Fully managed", title: "What you stop running, and what you still own", rich: true },
       "broker-classic": { eyebrow: "Classic broker", title: "When you are forced to run a broker", rich: true },
       "broker-sqs": { eyebrow: "Amazon SQS", title: "When SQS is the better choice", rich: true },
       "alt-sqs": { eyebrow: "Sample architecture", title: "One worker, one buffer", rich: true },
@@ -1878,6 +2196,14 @@ COMMIT;</pre>
       button.addEventListener("click", function () {
         openSnippet(button.getAttribute("data-snippet"));
       });
+    });
+    codeModalBody.addEventListener("click", function (event) {
+      const button = event.target.closest("[data-arch]");
+      if (!button) return;
+      const panel = codeModalBody.querySelector('[data-arch-panel="' + button.getAttribute("data-arch") + '"]');
+      const opening = panel.hasAttribute("hidden");
+      panel.toggleAttribute("hidden", !opening);
+      button.setAttribute("aria-expanded", String(opening));
     });
     document.getElementById("code-modal-close").addEventListener("click", closeSnippet);
     codeModal.addEventListener("click", function (event) {

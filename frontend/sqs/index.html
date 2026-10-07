@@ -291,7 +291,7 @@
         </div>
         <p class="mt-2 text-sm leading-6 text-slate-400">
           Targets <span id="target-direct" class="font-mono text-slate-200">https://demo.sisuraphotography.com</span>.
-          API Gateway invokes Lambda directly. Accepted calls spend 1.5 seconds inside the simulated commit; calls above the function or account concurrency available at that instant fail before entering the handler.
+          API Gateway invokes Lambda directly. The function has reserved concurrency of 1, and each accepted call spends 1.5 seconds inside the simulated commit. A second call that arrives while that execution is still running is throttled before it enters the handler.
         </p>
         <button id="btn-direct" type="button" class="mt-5 w-full rounded-lg bg-amber-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50">
           Execute 100 High-Load Transfers

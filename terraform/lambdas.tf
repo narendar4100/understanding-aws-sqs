@@ -48,14 +48,13 @@ resource "aws_lambda_function" "direct_lambda" {
   runtime       = "python3.12"
   filename      = data.archive_file.lambda_codes.output_path
   source_code_hash = data.archive_file.lambda_codes.output_base64sha256
-  timeout     = 20
-  memory_size = 256
+  timeout                        = 20
+  memory_size                    = 256
+  reserved_concurrent_executions = 1
 
-  # A new account's Lambda concurrency quota is 10, and AWS requires at least 10
-  # of those executions to remain unreserved. Setting reserved_concurrent_executions
-  # to 2 drops the unreserved pool below that minimum, so PutFunctionConcurrency
-  # returns InvalidParameterValueException. Leave the cap unset until the account
-  # quota is raised above 12, then set reserved_concurrent_executions = 2.
+  # Reserved concurrency of 1 is the lab cap: a second overlapping call is throttled.
+  # AWS also requires at least 10 unreserved executions in this account, so the
+  # account concurrency quota must be 11 or higher or PutFunctionConcurrency fails.
 
   environment {
     variables = {

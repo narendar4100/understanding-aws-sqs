@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Amazon SNS reference, examples, cost model, alternatives, and a shareable student fan-out lab." />
-  <title>Amazon SNS Reference &amp; Student Lab</title>
+  <meta name="description" content="Amazon SNS reference: fan-out, filtering, delivery, cost, and alternatives." />
+  <title>Amazon SNS Reference</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet" />
@@ -33,12 +33,11 @@
   <main class="mx-auto max-w-6xl px-6 py-14">
     <section class="grid items-center gap-10 lg:grid-cols-[1.1fr_.9fr]">
       <div>
-        <p class="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">Reference guide + shareable student lab</p>
+        <p class="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">Reference guide</p>
         <h1 class="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-6xl">One event. Many independent subscribers.</h1>
-        <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-400">Amazon SNS is a managed publish/subscribe service. Publishers send once to a topic; SNS evaluates every subscription and pushes a copy to each matching endpoint.</p>
+        <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-400">Amazon SNS is a managed<button type="button" data-snippet="managed" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-violet-700 align-middle text-[11px] font-semibold text-violet-300 hover:bg-violet-950" aria-label="Show what managed means for a topic">i</button>publish/subscribe service. Publishers send once to a topic; SNS evaluates every subscription and pushes a copy to each matching endpoint.</p>
         <div class="mt-7 flex flex-wrap gap-3">
-          <a href="#student-lab" class="rounded-lg bg-violet-500 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-400">Open the recommended lab</a>
-          <a href="#sessions" class="rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-200 hover:border-violet-500">View eight sessions</a>
+          <a href="#sessions" class="rounded-lg bg-violet-500 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-400">View eight sessions</a>
         </div>
       </div>
       <div class="rounded-2xl border border-violet-900/70 bg-slate-900 p-6">
@@ -63,22 +62,20 @@
       <a href="#security" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Security</a>
       <a href="#cost" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Cost</a>
       <a href="#alternatives" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Alternatives</a>
-      <a href="#student-lab" class="rounded-full border border-violet-700 px-3 py-1.5 text-violet-300">Student lab</a>
     </nav>
 
     <section id="sessions" class="mt-12" aria-labelledby="sessions-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Learning path</p>
       <h2 id="sessions-title" class="mt-2 text-2xl font-semibold">Eight sessions from first publish to production design</h2>
-      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Teach sessions 1–4 as a 90-minute workshop. Use sessions 5–8 as an architecture clinic or self-paced reference.</p>
       <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">01 · 10 min</span><h3 class="mt-2 font-semibold">Pub/sub foundations</h3><p class="mt-2 text-sm leading-6 text-slate-400">Topics, publishers, subscriptions, push delivery, and loose coupling.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">02 · 15 min</span><h3 class="mt-2 font-semibold">Protocols and payloads</h3><p class="mt-2 text-sm leading-6 text-slate-400">SQS, Lambda, HTTP/S, email, SMS, mobile push, and Firehose.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">03 · 20 min</span><h3 class="mt-2 font-semibold">Fan-out patterns</h3><p class="mt-2 text-sm leading-6 text-slate-400">Independent queues, consumer isolation, and cross-account subscriptions.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">04 · 20 min</span><h3 class="mt-2 font-semibold">Message filtering</h3><p class="mt-2 text-sm leading-6 text-slate-400">Attribute and body filters, operators, scope, and event contracts.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">05 · 15 min</span><h3 class="mt-2 font-semibold">Reliability</h3><p class="mt-2 text-sm leading-6 text-slate-400">Retries, DLQs, idempotency, raw delivery, and observability.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">06 · 15 min</span><h3 class="mt-2 font-semibold">Security</h3><p class="mt-2 text-sm leading-6 text-slate-400">IAM, topic policies, KMS, private publishing, and data protection.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">07 · 15 min</span><h3 class="mt-2 font-semibold">Cost and scale</h3><p class="mt-2 text-sm leading-6 text-slate-400">Request units, payload size, endpoint delivery, quotas, and batching.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">08 · 20 min</span><h3 class="mt-2 font-semibold">Service selection</h3><p class="mt-2 text-sm leading-6 text-slate-400">SNS versus SQS, EventBridge, Kinesis, MQ, and direct invocation.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">01</span><h3 class="mt-2 font-semibold">Pub/sub foundations</h3><p class="mt-2 text-sm leading-6 text-slate-400">Topics, publishers, subscriptions, push delivery, and loose coupling.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">02</span><h3 class="mt-2 font-semibold">Protocols and payloads</h3><p class="mt-2 text-sm leading-6 text-slate-400">SQS, Lambda, HTTP/S, email, SMS, mobile push, and Firehose.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">03</span><h3 class="mt-2 font-semibold">Fan-out patterns</h3><p class="mt-2 text-sm leading-6 text-slate-400">Independent queues, consumer isolation, and cross-account subscriptions.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">04</span><h3 class="mt-2 font-semibold">Message filtering</h3><p class="mt-2 text-sm leading-6 text-slate-400">Attribute and body filters, operators, scope, and event contracts.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">05</span><h3 class="mt-2 font-semibold">Reliability</h3><p class="mt-2 text-sm leading-6 text-slate-400">Retries, DLQs, idempotency, raw delivery, and observability.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">06</span><h3 class="mt-2 font-semibold">Security</h3><p class="mt-2 text-sm leading-6 text-slate-400">IAM, topic policies, KMS, private publishing, and data protection.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">07</span><h3 class="mt-2 font-semibold">Cost and scale</h3><p class="mt-2 text-sm leading-6 text-slate-400">Request units, payload size, endpoint delivery, quotas, and batching.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">08</span><h3 class="mt-2 font-semibold">Service selection</h3><p class="mt-2 text-sm leading-6 text-slate-400">SNS versus SQS, EventBridge, Kinesis, MQ, and direct invocation.</p></article>
       </div>
     </section>
 
@@ -223,26 +220,6 @@ print(response["MessageId"])</code></pre></details>
       </div>
     </section>
 
-    <section id="student-lab" class="mt-12 rounded-2xl border-2 border-violet-700 bg-gradient-to-br from-violet-950/60 to-slate-900 p-6 sm:p-8" aria-labelledby="student-lab-title">
-      <div class="flex flex-wrap items-start justify-between gap-4"><div><p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-300">Recommended shareable lab · 75 minutes</p><h2 id="student-lab-title" class="mt-2 text-2xl font-semibold">Filtered order fan-out with two durable subscribers</h2></div><span class="rounded-full bg-emerald-950 px-3 py-1 text-xs font-semibold text-emerald-300">Best default for students</span></div>
-      <p class="mt-4 max-w-4xl text-sm leading-6 text-slate-300">Use an instructor-provisioned, short-lived AWS sandbox. Students publish three order events to one Standard topic, observe two SQS queues, add a filter, inspect a delivery DLQ, read metrics, and clean up. Avoid email and SMS in the core lab: confirmations, personal data, regional restrictions, and variable charges distract from SNS architecture.</p>
-      <div class="mt-6 grid gap-4 md:grid-cols-3">
-        <div class="rounded-xl bg-slate-950 p-5"><p class="text-xs font-medium uppercase tracking-wider text-violet-300">Learning evidence</p><p class="mt-2 text-sm leading-6 text-slate-400">Prove fan-out, explain filtering, separate SNS and SQS responsibilities, and locate failed deliveries.</p></div>
-        <div class="rounded-xl bg-slate-950 p-5"><p class="text-xs font-medium uppercase tracking-wider text-violet-300">Guardrails</p><p class="mt-2 text-sm leading-6 text-slate-400">One region, least-privilege role, tagged stack, budget alert, no public endpoint or phone numbers, automatic expiry.</p></div>
-        <div class="rounded-xl bg-slate-950 p-5"><p class="text-xs font-medium uppercase tracking-wider text-violet-300">Delivery format</p><p class="mt-2 text-sm leading-6 text-slate-400">One IaC stack per student or pair, browser runbook, expected outputs, troubleshooting cards, and cleanup command.</p></div>
-      </div>
-      <ol class="mt-6 grid gap-4 lg:grid-cols-2">
-        <li class="rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-mono text-xs text-violet-400">01 · 10 min · Predict</p><h3 class="mt-2 font-semibold">Draw the delivery graph</h3><p class="mt-2 text-sm leading-6 text-slate-400">Topic → all-orders queue and physical-orders queue. Predict which receives each event.</p></li>
-        <li class="rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-mono text-xs text-violet-400">02 · 15 min · Observe</p><h3 class="mt-2 font-semibold">Publish without filters</h3><p class="mt-2 text-sm leading-6 text-slate-400">Publish physical and digital orders. Inspect the SNS envelope, message id, body, and attributes.</p></li>
-        <li class="rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-mono text-xs text-violet-400">03 · 15 min · Route</p><h3 class="mt-2 font-semibold">Add a subscription filter</h3><p class="mt-2 text-sm leading-6 text-slate-400">Apply <span class="font-mono">{"itemType":["physical"]}</span>, publish both types, and compare queues.</p></li>
-        <li class="rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-mono text-xs text-violet-400">04 · 15 min · Recover</p><h3 class="mt-2 font-semibold">Observe a delivery failure</h3><p class="mt-2 text-sm leading-6 text-slate-400">Inspect a preconfigured failing subscription and DLQ. Explain delivery versus processing failures.</p></li>
-        <li class="rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-mono text-xs text-violet-400">05 · 10 min · Operate</p><h3 class="mt-2 font-semibold">Read metrics and estimate cost</h3><p class="mt-2 text-sm leading-6 text-slate-400">Compare published, delivered, filtered, and failed counts. Scale from 3 events to 10 million.</p></li>
-        <li class="rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-mono text-xs text-violet-400">06 · 10 min · Explain</p><h3 class="mt-2 font-semibold">Cleanup and exit ticket</h3><p class="mt-2 text-sm leading-6 text-slate-400">Delete the stack. Explain why every consumer has a queue and where idempotency belongs.</p></li>
-      </ol>
-      <details class="mt-6 rounded-xl border border-violet-800 bg-slate-950 p-5"><summary class="cursor-pointer font-semibold text-violet-300">Assessment rubric</summary><div class="mt-4 grid gap-3 text-sm leading-6 text-slate-400 sm:grid-cols-2"><p><strong class="text-white">25%:</strong> Both queues receive an unfiltered event.</p><p><strong class="text-white">25%:</strong> Only the matching queue receives after filtering.</p><p><strong class="text-white">25%:</strong> Distinguishes delivery from processing failure.</p><p><strong class="text-white">25%:</strong> Justifies SNS + SQS and removes resources.</p></div></details>
-      <div class="mt-6 rounded-xl border border-amber-800 bg-amber-950/20 p-5 text-sm leading-6 text-slate-300"><strong class="text-amber-300">Instructor note:</strong> pre-provision queue policies and DLQ permissions. They suit an advanced IAM exercise, but nested policies in the first lab consume time without improving the core mental model.</div>
-    </section>
-
     <section class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8" aria-labelledby="questions-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Architecture review</p>
       <h2 id="questions-title" class="mt-2 text-2xl font-semibold">Questions every SNS design should answer</h2>
@@ -257,6 +234,315 @@ print(response["MessageId"])</code></pre></details>
       <a class="text-violet-400" href="https://aws.amazon.com/sns/pricing/" target="_blank" rel="noreferrer">pricing</a>.
     </footer>
   </main>
+
+  <div id="code-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="code-modal-title">
+    <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-700/80 bg-slate-900 shadow-2xl shadow-black/60">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-4">
+        <div>
+          <p id="code-modal-eyebrow" class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">Fully managed</p>
+          <h3 id="code-modal-title" class="mt-1 text-lg font-semibold text-white">What you stop running, and what you still own</h3>
+        </div>
+        <button id="code-modal-close" type="button" class="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-800 hover:text-white" aria-label="Close">✕</button>
+      </div>
+      <div id="code-modal-body" class="px-6 py-5"></div>
+    </div>
+  </div>
+
+  <div hidden data-rich="managed">
+    <p class="text-sm leading-6 text-slate-300">Managed means AWS runs the topic infrastructure. It does not design your event, your subscriptions, or your alarms. SNS pushes a copy to each match. It does not keep a backlog for a consumer to poll later.</p>
+    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+      <article class="rounded-xl border border-rose-900/70 bg-rose-950/20 p-4">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-rose-300">If you ran the topic</p>
+          <button type="button" data-arch="selfrun" aria-expanded="false" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-rose-700 text-[11px] font-semibold text-rose-300 hover:bg-rose-900/40" aria-label="Show the self-managed topic architecture">i</button>
+        </div>
+        <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-300">
+          <li>• Install the broker and keep a cluster of nodes across failure domains.</li>
+          <li>• Run a topic exchange and a separate queue binding for every subscriber.</li>
+          <li>• Size disks for the slowest subscriber, then replace a full disk at night.</li>
+          <li>• Replicate data, elect a leader, and rehearse failover.</li>
+          <li>• Patch the operating system and the broker, and plan version upgrades.</li>
+          <li>• Issue certificates and broker user accounts, and retry failed HTTP deliveries yourself.</li>
+        </ul>
+      </article>
+      <article class="rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">What AWS runs for SNS</p>
+          <button type="button" data-arch="awsrun" aria-expanded="false" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-emerald-700 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-900/40" aria-label="Show the Amazon SNS managed architecture">i</button>
+        </div>
+        <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-300">
+          <li>• Stores each accepted publish redundantly across Availability Zones before it returns a message ID.</li>
+          <li>• Runs, patches, and scales the service fleet. There is no node to SSH into.</li>
+          <li>• Evaluates each subscription filter and pushes a copy only to the matches.</li>
+          <li>• Retries a failed delivery, then can move it to that subscription's SQS dead-letter queue.</li>
+          <li>• Encrypts the message at rest when you choose an AWS owned key or a KMS key.</li>
+          <li>• Authenticates every API call with IAM and Signature Version 4.</li>
+        </ul>
+      </article>
+    </div>
+
+    <figure data-arch-panel="selfrun" hidden class="mt-4 rounded-xl border border-rose-900/70 bg-slate-950 p-4">
+      <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-rose-300">Self-managed topic on Amazon EC2 · what you build and operate</figcaption>
+      <div class="overflow-x-auto">
+        <svg class="arch-svg min-w-[640px]" viewBox="0 0 760 400" role="img" aria-label="Publishers connect through a Network Load Balancer to a three-node RabbitMQ cluster. The leader holds a topic exchange and a queue binding for each subscriber. Each node has its own EBS volume. You also patch, issue certificates, monitor, back up, and retry failed HTTP deliveries.">
+          <defs>
+            <marker id="arw-sns-self" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#fb7185"/></marker>
+          </defs>
+          <rect class="box" x="10" y="60" width="105" height="60" rx="8" stroke="#64748b"/>
+          <text class="t" x="62.5" y="82">Publishers</text>
+          <text class="s" x="62.5" y="97">order service</text>
+          <text class="s" x="62.5" y="110">AMQP publish</text>
+          <rect class="box" x="10" y="190" width="105" height="60" rx="8" stroke="#64748b"/>
+          <text class="t" x="62.5" y="212">Subscribers</text>
+          <text class="s" x="62.5" y="227">one queue each</text>
+          <text class="s" x="62.5" y="240">you bind them</text>
+
+          <rect class="zone" x="130" y="10" width="620" height="285" rx="10" stroke="#475569"/>
+          <text class="s l" x="142" y="26">AWS Region · your account</text>
+          <rect class="zone" x="142" y="34" width="598" height="252" rx="8" stroke="#0ea5e9"/>
+          <text class="s l" x="152" y="49" style="fill:#7dd3fc">VPC · private subnets</text>
+
+          <rect class="box" x="152" y="125" width="95" height="70" rx="8" stroke="#a78bfa"/>
+          <text class="t" x="199.5" y="148">Network</text>
+          <text class="t" x="199.5" y="161">Load Balancer</text>
+          <text class="s" x="199.5" y="177">TLS :5671</text>
+
+          <path class="flow" d="M115,90 H135 V150 H150" stroke="#fb7185" marker-end="url(#arw-sns-self)"/>
+          <path class="flow" d="M115,220 H135 V170 H150" stroke="#fb7185" marker-end="url(#arw-sns-self)"/>
+          <path class="flow" d="M199.5,125 V56 H655" stroke="#fb7185"/>
+          <path class="flow" d="M337,56 V82" stroke="#fb7185" marker-end="url(#arw-sns-self)"/>
+          <path class="flow" d="M496,56 V82" stroke="#fb7185" marker-end="url(#arw-sns-self)"/>
+          <path class="flow" d="M655,56 V82" stroke="#fb7185" marker-end="url(#arw-sns-self)"/>
+
+          <rect class="zone" x="262" y="62" width="150" height="216" rx="8" stroke="#334155"/>
+          <text class="s l" x="270" y="76">AZ a</text>
+          <rect class="box" x="274" y="84" width="126" height="62" rx="8" stroke="#fb7185"/>
+          <text class="t" x="337" y="104">EC2 broker node</text>
+          <text class="s" x="337" y="119">topic exchange</text>
+          <text class="s" x="337" y="133">quorum leader</text>
+          <path class="flow" d="M337,146 V160" stroke="#64748b"/>
+          <rect class="box" x="274" y="160" width="126" height="44" rx="8" stroke="#f59e0b"/>
+          <text class="t" x="337" y="178">EBS gp3 volume</text>
+          <text class="s" x="337" y="193">subscriber queues</text>
+          <text class="s" x="337" y="226">SSM + CloudWatch agent</text>
+          <text class="s" x="337" y="241">OS patch, broker upgrade</text>
+          <text class="s" x="337" y="260">bindings you maintain</text>
+
+          <rect class="zone" x="421" y="62" width="150" height="216" rx="8" stroke="#334155"/>
+          <text class="s l" x="429" y="76">AZ b</text>
+          <rect class="box" x="433" y="84" width="126" height="62" rx="8" stroke="#fb7185"/>
+          <text class="t" x="496" y="104">EC2 broker node</text>
+          <text class="s" x="496" y="119">topic exchange</text>
+          <text class="s" x="496" y="133">replica</text>
+          <path class="flow" d="M496,146 V160" stroke="#64748b"/>
+          <rect class="box" x="433" y="160" width="126" height="44" rx="8" stroke="#f59e0b"/>
+          <text class="t" x="496" y="178">EBS gp3 volume</text>
+          <text class="s" x="496" y="193">disk alarm at 80%</text>
+          <text class="s" x="496" y="226">SSM + CloudWatch agent</text>
+          <text class="s" x="496" y="241">OS patch, broker upgrade</text>
+          <text class="s" x="496" y="260">SG: 25672 cluster</text>
+
+          <rect class="zone" x="580" y="62" width="150" height="216" rx="8" stroke="#334155"/>
+          <text class="s l" x="588" y="76">AZ c</text>
+          <rect class="box" x="592" y="84" width="126" height="62" rx="8" stroke="#fb7185"/>
+          <text class="t" x="655" y="104">EC2 broker node</text>
+          <text class="s" x="655" y="119">topic exchange</text>
+          <text class="s" x="655" y="133">replica</text>
+          <path class="flow" d="M655,146 V160" stroke="#64748b"/>
+          <rect class="box" x="592" y="160" width="126" height="44" rx="8" stroke="#f59e0b"/>
+          <text class="t" x="655" y="178">EBS gp3 volume</text>
+          <text class="s" x="655" y="193">slowest subscriber</text>
+          <text class="s" x="655" y="226">SSM + CloudWatch agent</text>
+          <text class="s" x="655" y="241">OS patch, broker upgrade</text>
+          <text class="s" x="655" y="260">AMI you maintain</text>
+
+          <path class="flow" d="M402,115 H431" stroke="#fb7185" stroke-dasharray="4 3" marker-start="url(#arw-sns-self)" marker-end="url(#arw-sns-self)"/>
+          <path class="flow" d="M561,115 H590" stroke="#fb7185" stroke-dasharray="4 3" marker-start="url(#arw-sns-self)" marker-end="url(#arw-sns-self)"/>
+
+          <text class="t l" x="10" y="312" style="fill:#fda4af">Operations you run around the clock</text>
+          <rect class="box" x="10" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+          <text class="t" x="80" y="338">Patching</text>
+          <text class="s" x="80" y="354">SSM Patch Manager</text>
+          <text class="s" x="80" y="368">rolling broker restarts</text>
+          <text class="s" x="80" y="382">version upgrades</text>
+          <rect class="box" x="160" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+          <text class="t" x="230" y="338">Identity and TLS</text>
+          <text class="s" x="230" y="354">private CA, cert rotation</text>
+          <text class="s" x="230" y="368">broker users and vhosts</text>
+          <text class="s" x="230" y="382">secrets in Secrets Manager</text>
+          <rect class="box" x="310" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+          <text class="t" x="380" y="338">Monitoring</text>
+          <text class="s" x="380" y="354">memory, disk, connections</text>
+          <text class="s" x="380" y="368">Prometheus or CloudWatch</text>
+          <text class="s" x="380" y="382">pager and on-call rota</text>
+          <rect class="box" x="460" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+          <text class="t" x="530" y="338">Backup and DR</text>
+          <text class="s" x="530" y="354">EBS snapshots (DLM)</text>
+          <text class="s" x="530" y="368">definitions export to S3</text>
+          <text class="s" x="530" y="382">restore drills</text>
+          <rect class="box" x="610" y="320" width="140" height="74" rx="8" stroke="#475569"/>
+          <text class="t" x="680" y="338">Fan-out</text>
+          <text class="s" x="680" y="354">bindings per subscriber</text>
+          <text class="s" x="680" y="368">retry failed HTTP</text>
+          <text class="s" x="680" y="382">isolate a slow consumer</text>
+        </svg>
+      </div>
+      <p class="mt-3 text-xs leading-5 text-slate-400">The dashed arrows are quorum replication you configure. Each subscriber needs its own queue binding, or one slow consumer stalls the others. Every box in this picture is billed to your account and patched by your team.</p>
+    </figure>
+
+    <figure data-arch-panel="awsrun" hidden class="mt-4 rounded-xl border border-emerald-900/70 bg-slate-950 p-4">
+      <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-emerald-300">Amazon SNS · what AWS operates behind the API</figcaption>
+      <div class="overflow-x-auto">
+        <svg class="arch-svg min-w-[640px]" viewBox="0 0 760 400" role="img" aria-label="The order service publishes once to the SNS regional endpoint. SNS checks SigV4, stores copies across three Availability Zones, evaluates each subscription filter, and pushes a copy to the matching SQS, Lambda, and HTTPS endpoints. Failed deliveries retry and can land in a subscription dead-letter queue.">
+          <defs>
+            <marker id="arw-sns-aws" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#34d399"/></marker>
+          </defs>
+          <rect class="zone" x="10" y="10" width="230" height="290" rx="10" stroke="#475569"/>
+          <text class="s l" x="22" y="26">Your account</text>
+          <rect class="box" x="24" y="38" width="202" height="60" rx="8" stroke="#a78bfa"/>
+          <text class="t" x="125" y="58">Order service</text>
+          <text class="s" x="125" y="74">Publish once</text>
+          <text class="s" x="125" y="88">SDK or API Gateway</text>
+          <rect class="box" x="24" y="106" width="202" height="34" rx="8" stroke="#f59e0b"/>
+          <text class="s" x="125" y="127" style="fill:#fcd34d">IAM role: sns:Publish</text>
+          <rect class="box" x="24" y="156" width="202" height="72" rx="8" stroke="#c084fc"/>
+          <text class="t" x="125" y="176">Your endpoints</text>
+          <text class="s" x="125" y="192">SQS queues and Lambda</text>
+          <text class="s" x="125" y="206">HTTPS subscriber</text>
+          <text class="s" x="125" y="220">you own the consumers</text>
+          <rect class="box" x="24" y="236" width="202" height="52" rx="8" stroke="#f59e0b"/>
+          <text class="s" x="125" y="256" style="fill:#fcd34d">Topic policy allows SNS</text>
+          <text class="s" x="125" y="272" style="fill:#fcd34d">to send to each queue</text>
+
+          <rect class="zone" x="262" y="10" width="340" height="290" rx="10" stroke="#34d399"/>
+          <text class="s l" x="274" y="26" style="fill:#6ee7b7">Amazon SNS · AWS-managed, Regional</text>
+          <rect class="box" x="276" y="36" width="312" height="42" rx="8" stroke="#34d399"/>
+          <text class="t" x="432" y="54">Regional endpoint · sns.region.amazonaws.com</text>
+          <text class="s" x="432" y="70">HTTPS · SigV4 checked against IAM and the topic policy</text>
+          <text class="s l" x="276" y="97">Copies stored before Publish returns a message ID</text>
+          <path class="flow" d="M326,78 V102" stroke="#34d399" marker-end="url(#arw-sns-aws)"/>
+          <path class="flow" d="M432,78 V102" stroke="#34d399" marker-end="url(#arw-sns-aws)"/>
+          <path class="flow" d="M538,78 V102" stroke="#34d399" marker-end="url(#arw-sns-aws)"/>
+          <rect class="zone" x="276" y="104" width="100" height="56" rx="8" stroke="#334155"/>
+          <text class="t" x="326" y="124">AZ a</text>
+          <text class="s" x="326" y="140">message copy</text>
+          <text class="s" x="326" y="152">encrypted at rest</text>
+          <rect class="zone" x="382" y="104" width="100" height="56" rx="8" stroke="#334155"/>
+          <text class="t" x="432" y="124">AZ b</text>
+          <text class="s" x="432" y="140">message copy</text>
+          <text class="s" x="432" y="152">encrypted at rest</text>
+          <rect class="zone" x="488" y="104" width="100" height="56" rx="8" stroke="#334155"/>
+          <text class="t" x="538" y="124">AZ c</text>
+          <text class="s" x="538" y="140">message copy</text>
+          <text class="s" x="538" y="152">encrypted at rest</text>
+          <rect class="box" x="276" y="172" width="312" height="52" rx="8" stroke="#c084fc"/>
+          <text class="t" x="432" y="192">Topic · orders-events</text>
+          <text class="s" x="432" y="208">filter policy checked on every subscription</text>
+          <path class="flow" d="M432,224 V236" stroke="#34d399" marker-end="url(#arw-sns-aws)"/>
+          <rect class="box" x="276" y="238" width="312" height="52" rx="8" stroke="#f43f5e"/>
+          <text class="t" x="432" y="256">Retries, then subscription DLQ</text>
+          <text class="s" x="432" y="272">the DLQ is an SQS queue you create</text>
+          <text class="s" x="432" y="284">HTTP, Lambda, and SQS deliveries</text>
+
+          <path class="flow" d="M226,68 H274" stroke="#34d399" marker-end="url(#arw-sns-aws)"/>
+          <text class="s" x="250" y="62" style="font-size:8px">Publish</text>
+          <path class="flow" d="M276,192 H228" stroke="#c084fc" marker-end="url(#arw-sns-aws)"/>
+          <text class="s" x="250" y="186" style="font-size:8px">push</text>
+
+          <rect class="box" x="620" y="36" width="130" height="64" rx="8" stroke="#f59e0b"/>
+          <text class="t" x="685" y="56">AWS KMS</text>
+          <text class="s" x="685" y="72">KMS key you pick</text>
+          <text class="s" x="685" y="86">or AWS owned key</text>
+          <path class="flow" d="M685,100 V128 H590" stroke="#f59e0b" marker-end="url(#arw-sns-aws)"/>
+          <rect class="box" x="620" y="150" width="130" height="80" rx="8" stroke="#e879f9"/>
+          <text class="t" x="685" y="170">CloudWatch</text>
+          <text class="s" x="685" y="186">NotificationsFailed</text>
+          <text class="s" x="685" y="200">NotificationsDelivered</text>
+            <text class="s" x="685" y="214">MessagesPublished</text>
+          <path class="flow" d="M588,198 H618" stroke="#e879f9" marker-end="url(#arw-sns-aws)"/>
+          <rect class="zone" x="620" y="242" width="130" height="58" rx="8" stroke="#334155"/>
+          <text class="t" x="685" y="261">Hidden from you</text>
+          <text class="s" x="685" y="276">hosts, disks, patching,</text>
+          <text class="s" x="685" y="290">scaling, fan-out</text>
+
+          <rect class="box" x="10" y="318" width="365" height="78" rx="8" stroke="#34d399"/>
+          <text class="t l" x="24" y="338" style="fill:#6ee7b7">AWS runs</text>
+          <text class="s l" x="24" y="355">Fleet capacity, patching, and failover across AZs</text>
+          <text class="s l" x="24" y="370">Copies each publish before returning the message ID</text>
+          <text class="s l" x="24" y="385">Filter check, fan-out, retries, encryption, SigV4</text>
+          <rect class="box" x="385" y="318" width="365" height="78" rx="8" stroke="#fbbf24"/>
+          <text class="t l" x="399" y="338" style="fill:#fcd34d">You configure</text>
+          <text class="s l" x="399" y="355">Topic, subscriptions, protocols, filter policies</text>
+          <text class="s l" x="399" y="370">IAM, topic policy, KMS key, raw message delivery</text>
+          <text class="s l" x="399" y="385">SQS backlog, idempotent subscribers, failed-delivery alarms</text>
+        </svg>
+      </div>
+      <p class="mt-3 text-xs leading-5 text-slate-400">Your account holds the publisher and the endpoints. Everything inside the green boundary is AWS's fleet: one HTTPS publish, then a push to each matching subscription. The backlog a worker polls lives in the SQS subscription, not in the topic.</p>
+    </figure>
+
+    <div class="mt-4 rounded-xl border border-amber-900/70 bg-amber-950/20 p-4">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">What you still own</p>
+        <button type="button" data-arch="youown" aria-expanded="false" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-amber-700 text-[11px] font-semibold text-amber-300 hover:bg-amber-900/40" aria-label="Show the parts of the topic architecture you still own">i</button>
+      </div>
+      <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-300">
+        <li>• Create the topic, each subscription, and the filter policy on that subscription.</li>
+        <li>• Grant sns:Publish to the publisher, and allow the topic to send to each SQS queue.</li>
+        <li>• Put SQS in front of any worker that needs a backlog. SNS does not store one to poll.</li>
+        <li>• Make every subscriber idempotent. SNS can deliver the same message more than once.</li>
+        <li>• Alarm on failed notifications. AWS does not decide that a missed subscriber is an incident.</li>
+      </ul>
+      <figure data-arch-panel="youown" hidden class="mt-4 rounded-xl border border-amber-900/70 bg-slate-950 p-4">
+        <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-amber-300">Order fan-out · amber boxes are yours</figcaption>
+        <div class="overflow-x-auto">
+          <svg class="arch-svg min-w-[640px]" viewBox="0 0 760 248" role="img" aria-label="The order service publishes once to an SNS topic. Billing SQS receives every order. Shipping SQS receives only physical items. An HTTPS audit endpoint receives a copy. Failures go to a subscription dead-letter queue, a CloudWatch alarm pages on-call, and a runbook redrives.">
+            <defs>
+              <marker id="arw-sns-own" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#fbbf24"/></marker>
+            </defs>
+            <rect class="box" x="16" y="12" width="120" height="56" rx="8" stroke="#64748b"/>
+            <text class="t" x="76" y="34">Order service</text>
+            <text class="s" x="76" y="50">Publish once</text>
+            <rect class="box" x="168" y="12" width="150" height="56" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="243" y="34">SNS topic</text>
+            <text class="s" x="243" y="50">orders-events</text>
+            <path class="flow" d="M136,40 H166" stroke="#94a3b8" marker-end="url(#arw-sns-own)"/>
+            <path class="flow" d="M243,68 V86 H96 V108" stroke="#fbbf24" marker-end="url(#arw-sns-own)"/>
+            <path class="flow" d="M243,68 V86 H300 V108" stroke="#fbbf24" marker-end="url(#arw-sns-own)"/>
+            <path class="flow" d="M243,68 V86 H504 V108" stroke="#fbbf24" marker-end="url(#arw-sns-own)"/>
+
+            <rect class="box" x="16" y="110" width="160" height="58" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="96" y="130">Billing SQS</text>
+            <text class="s" x="96" y="146">no filter · every order</text>
+            <text class="s" x="96" y="158">this queue holds the backlog</text>
+            <rect class="box" x="210" y="110" width="180" height="58" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="300" y="130">Shipping SQS</text>
+            <text class="s" x="300" y="146">filter: itemType = physical</text>
+            <text class="s" x="300" y="158">digital orders get no copy</text>
+            <rect class="box" x="424" y="110" width="160" height="58" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="504" y="130">HTTPS audit</text>
+            <text class="s" x="504" y="146">your endpoint</text>
+            <text class="s" x="504" y="158">SNS retries the push</text>
+            <rect class="box" x="16" y="186" width="160" height="52" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="96" y="206">IAM and topic policy</text>
+            <text class="s" x="96" y="222">Publish, and SQS send</text>
+            <rect class="box" x="192" y="186" width="176" height="52" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="280" y="206">Subscription DLQ</text>
+            <text class="s" x="280" y="222">after delivery retries</text>
+            <rect class="box" x="384" y="186" width="176" height="52" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="472" y="206">CloudWatch alarm</text>
+            <text class="s" x="472" y="222">NotificationsFailed</text>
+            <rect class="box" x="576" y="186" width="168" height="52" rx="8" stroke="#fbbf24"/>
+            <text class="t" x="660" y="206">Your runbook</text>
+            <text class="s" x="660" y="222">fix, then redrive</text>
+            <path class="flow" d="M280,168 V184" stroke="#f43f5e" marker-end="url(#arw-sns-own)"/>
+            <path class="flow" d="M368,212 H382" stroke="#94a3b8" marker-end="url(#arw-sns-own)"/>
+            <path class="flow" d="M560,212 H574" stroke="#94a3b8" marker-end="url(#arw-sns-own)"/>
+          </svg>
+        </div>
+        <p class="mt-3 text-xs leading-5 text-slate-400">SNS delivers the matching copies. Whether shipping ignores a digital order, whether a duplicate publish charges a customer once, and whether a failed HTTPS call wakes someone up are decided by the amber boxes.</p>
+      </figure>
+    </div>
+  </div>
 
   <script>
     const events = {
@@ -287,6 +573,39 @@ print(response["MessageId"])</code></pre></details>
     }
     document.querySelectorAll(".event-button").forEach(button => button.addEventListener("click", () => renderEvent(button.dataset.event)));
     renderEvent("physical-us");
+
+    const codeModal = document.getElementById("code-modal");
+    const codeModalBody = document.getElementById("code-modal-body");
+    function openSnippet(name) {
+      codeModalBody.innerHTML = document.querySelector('[data-rich="' + name + '"]').innerHTML;
+      codeModal.classList.remove("hidden");
+      codeModal.classList.add("flex");
+    }
+    function closeSnippet() {
+      codeModal.classList.add("hidden");
+      codeModal.classList.remove("flex");
+    }
+    document.querySelectorAll("[data-snippet]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        openSnippet(button.getAttribute("data-snippet"));
+      });
+    });
+    codeModalBody.addEventListener("click", function (event) {
+      const button = event.target.closest("[data-arch]");
+      if (!button) return;
+      const panel = codeModalBody.querySelector('[data-arch-panel="' + button.getAttribute("data-arch") + '"]');
+      if (!panel) return;
+      const opening = panel.hasAttribute("hidden");
+      panel.toggleAttribute("hidden", !opening);
+      button.setAttribute("aria-expanded", String(opening));
+    });
+    document.getElementById("code-modal-close").addEventListener("click", closeSnippet);
+    codeModal.addEventListener("click", function (event) {
+      if (event.target === codeModal) closeSnippet();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeSnippet();
+    });
   </script>
 </body>
 </html>

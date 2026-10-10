@@ -39,7 +39,7 @@
           Amazon Simple Notification Service (Amazon SNS) is a fully managed<button type="button" data-snippet="managed" data-eyebrow="Fully managed" data-title="What AWS operates—and what you still own" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-violet-700 align-middle text-[11px] font-semibold text-violet-300 hover:bg-violet-950" aria-label="Show what fully managed means for an SNS topic">i</button>web service for building distributed, event-driven applications. A publisher sends once to a topic, and SNS pushes real-time notifications to interested subscribers<button type="button" data-snippet="subscribers" data-eyebrow="Two messaging families" data-title="Application-to-application and application-to-person" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-sky-700 align-middle text-[11px] font-semibold text-sky-300 hover:bg-sky-950" aria-label="Show application-to-application and application-to-person subscribers">i</button>over multiple delivery protocols<button type="button" data-snippet="protocols" data-eyebrow="Delivery protocols" data-title="Where an SNS topic can deliver" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-emerald-700 align-middle text-[11px] font-semibold text-emerald-300 hover:bg-emerald-950" aria-label="Show SNS delivery protocols and integrations">i</button>.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
-          <a href="#sessions" class="rounded-lg bg-violet-500 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-400">View eight sessions</a>
+          <a href="#how-it-works" class="rounded-lg bg-violet-500 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-400">See how SNS works</a>
         </div>
       </div>
       <div class="rounded-2xl border border-violet-900/70 bg-slate-900 p-6">
@@ -55,9 +55,7 @@
     </section>
 
     <nav class="mt-12 flex flex-wrap gap-2 border-y border-slate-800 py-5 text-xs" aria-label="On this page">
-      <a href="#sessions" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Sessions</a>
       <a href="#how-it-works" class="rounded-full border border-violet-700 px-3 py-1.5 text-violet-300 hover:bg-violet-950">How it works</a>
-      <a href="#concepts" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Concepts</a>
       <a href="#fanout" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Fan-out</a>
       <a href="#filter-lab" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Filter simulator</a>
       <a href="#delivery" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Delivery</a>
@@ -67,62 +65,56 @@
       <a href="#alternatives" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Alternatives</a>
     </nav>
 
-    <section id="sessions" class="mt-12" aria-labelledby="sessions-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Learning path</p>
-      <h2 id="sessions-title" class="mt-2 text-2xl font-semibold">Eight sessions from first publish to production design</h2>
-      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">01</span><h3 class="mt-2 font-semibold">Pub/sub foundations</h3><p class="mt-2 text-sm leading-6 text-slate-400">Topics, publishers, subscriptions, push delivery, and loose coupling.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">02</span><h3 class="mt-2 font-semibold">Protocols and payloads</h3><p class="mt-2 text-sm leading-6 text-slate-400">SQS, Lambda, HTTP/S, email, SMS, mobile push, and Firehose.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">03</span><h3 class="mt-2 font-semibold">Fan-out patterns</h3><p class="mt-2 text-sm leading-6 text-slate-400">Independent queues, consumer isolation, and cross-account subscriptions.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">04</span><h3 class="mt-2 font-semibold">Message filtering</h3><p class="mt-2 text-sm leading-6 text-slate-400">Attribute and body filters, operators, scope, and event contracts.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">05</span><h3 class="mt-2 font-semibold">Reliability</h3><p class="mt-2 text-sm leading-6 text-slate-400">Retries, DLQs, idempotency, raw delivery, and observability.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">06</span><h3 class="mt-2 font-semibold">Security</h3><p class="mt-2 text-sm leading-6 text-slate-400">IAM, topic policies, KMS, private publishing, and data protection.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">07</span><h3 class="mt-2 font-semibold">Cost and scale</h3><p class="mt-2 text-sm leading-6 text-slate-400">Request units, payload size, endpoint delivery, quotas, and batching.</p></article>
-        <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">08</span><h3 class="mt-2 font-semibold">Service selection</h3><p class="mt-2 text-sm leading-6 text-slate-400">SNS versus SQS, EventBridge, Kinesis, MQ, and direct invocation.</p></article>
-      </div>
-    </section>
-
     <section id="how-it-works" class="mt-12 rounded-2xl border border-violet-900/70 bg-gradient-to-br from-violet-950/30 to-slate-900 p-6 sm:p-8" aria-labelledby="how-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">How Amazon SNS works</p>
       <h2 id="how-title" class="mt-2 text-2xl font-semibold">Publish once; SNS copies the message to every matching subscription</h2>
       <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-300">A topic is a logical access point and communication channel. Publishers and subscribers do not need to know about each other. Each subscription chooses a protocol, an endpoint, an optional filter policy, retry behavior, and an optional SQS dead-letter queue.</p>
 
       <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950 p-5">
-        <div class="min-w-[760px]">
-          <div class="grid grid-cols-[150px_70px_150px_70px_1fr] items-center gap-2 text-center">
-            <div class="rounded-xl border border-slate-700 bg-slate-900 p-4">
+        <div class="min-w-[820px]">
+          <div class="flex items-center">
+            <div class="relative w-[140px] shrink-0 rounded-xl border border-slate-700 bg-slate-900 p-4 text-center">
+              <button type="button" data-snippet="publishers" data-eyebrow="Who can publish" data-title="Possible publishers" class="absolute right-2 top-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-violet-700 text-[11px] font-semibold text-violet-300 hover:bg-violet-950" aria-label="Show possible SNS publishers">i</button>
               <p class="text-2xl" aria-hidden="true">📦</p>
               <p class="mt-2 text-sm font-semibold">Publishers</p>
               <p class="mt-1 text-[11px] text-slate-400">apps and AWS services</p>
             </div>
-            <div><p class="font-mono text-xs text-violet-300">Publish</p><p class="mt-1 text-2xl text-violet-400">→</p></div>
-            <div class="rounded-xl border border-violet-600 bg-violet-950/70 p-4 shadow-lg shadow-violet-950/50">
-              <img src="../assets/aws/sns.svg" alt="" class="mx-auto h-11 w-11" />
-              <p class="mt-2 text-sm font-semibold">SNS topic</p>
-              <p class="mt-1 text-[11px] text-violet-200">filter + fan-out</p>
+            <div class="relative w-20 shrink-0">
+              <p class="absolute inset-x-0 -top-6 text-center font-mono text-[11px] text-violet-300">Publish</p>
+              <div class="h-0.5 bg-violet-500"></div>
+              <span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[5px] border-l-[8px] border-y-transparent border-l-violet-400"></span>
             </div>
-            <div><p class="font-mono text-xs text-violet-300">Push copies</p><p class="mt-1 text-2xl text-violet-400">→</p></div>
-            <div class="grid grid-cols-2 gap-3 text-left">
-              <div class="rounded-xl border border-sky-900 bg-sky-950/20 p-4">
-                <div class="flex items-center justify-between gap-2"><p class="text-xs font-semibold uppercase tracking-wider text-sky-300">A2A · applications</p><button type="button" data-snippet="subscribers" data-eyebrow="A2A and A2P" data-title="Two subscriber families" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-sky-700 text-[11px] font-semibold text-sky-300" aria-label="Explain A2A and A2P">i</button></div>
-                <ul class="mt-3 space-y-2 text-xs text-slate-300">
-                  <li class="flex items-center gap-2"><img src="../assets/aws/sqs.svg" alt="" class="h-6 w-6" />Amazon SQS</li>
-                  <li class="flex items-center gap-2"><img src="../assets/aws/lambda.svg" alt="" class="h-6 w-6" />AWS Lambda</li>
-                  <li>🌐 HTTP/S webhook</li>
-                  <li>🔥 Amazon Data Firehose</li>
-                </ul>
+            <div class="w-[170px] shrink-0 rounded-xl border-2 border-violet-500 bg-violet-950/70 p-4 text-center shadow-lg shadow-violet-950/50">
+              <img src="../assets/aws/sns.svg" alt="" class="mx-auto h-12 w-12" />
+              <p class="mt-2 text-sm font-semibold">SNS topic</p>
+              <p class="mt-2 rounded-full bg-violet-500/20 px-2 py-1 font-mono text-[11px] text-violet-100">push + filter + fan-out</p>
+            </div>
+            <div class="h-0.5 w-8 shrink-0 bg-violet-500"></div>
+
+            <div class="relative flex-1 space-y-4 pl-10">
+              <div class="absolute bottom-[31px] left-0 top-[59px] w-0.5 bg-violet-500" aria-hidden="true"></div>
+
+              <div class="rounded-xl border border-dashed border-sky-700 bg-sky-950/10 p-3">
+                <div class="mb-2 flex h-5 items-center justify-between gap-2"><p class="text-[11px] font-semibold uppercase tracking-wider text-sky-300">A2A · application-to-application</p><button type="button" data-snippet="subscribers" data-eyebrow="A2A and A2P" data-title="Two subscriber families" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-sky-700 text-[11px] font-semibold text-sky-300" aria-label="Explain A2A and A2P">i</button></div>
+                <div class="space-y-2 text-xs text-slate-200">
+                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><img src="../assets/aws/sqs.svg" alt="" class="h-6 w-6" />Amazon SQS queue</div>
+                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><img src="../assets/aws/lambda.svg" alt="" class="h-6 w-6" />AWS Lambda function</div>
+                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">🌐</span>HTTP/S webhook endpoint</div>
+                  <div class="relative flex min-h-9 flex-wrap items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">🔥</span>Amazon Data Firehose<span class="text-violet-400">→</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">S3</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">Redshift</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">OpenSearch</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">service providers</span></div>
+                </div>
               </div>
-              <div class="rounded-xl border border-fuchsia-900 bg-fuchsia-950/20 p-4">
-                <p class="text-xs font-semibold uppercase tracking-wider text-fuchsia-300">A2P · people</p>
-                <ul class="mt-3 space-y-2 text-xs text-slate-300">
-                  <li>✉️ Email and email-JSON</li>
-                  <li>💬 Mobile text message (SMS)</li>
-                  <li>📱 Mobile push notification</li>
-                </ul>
-                <p class="mt-3 text-[11px] leading-4 text-slate-500">Country, origination identity, sandbox, opt-out, and pricing rules apply to SMS.</p>
+
+              <div class="rounded-xl border border-dashed border-fuchsia-700 bg-fuchsia-950/10 p-3">
+                <div class="mb-2 flex h-5 items-center"><p class="text-[11px] font-semibold uppercase tracking-wider text-fuchsia-300">A2P · application-to-person</p></div>
+                <div class="space-y-2 text-xs text-slate-200">
+                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">✉️</span>Email and email-JSON</div>
+                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">💬</span>Mobile text message (SMS)</div>
+                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">📱</span>Mobile push notification</div>
+                </div>
               </div>
             </div>
           </div>
+          <p class="mt-3 text-right text-[11px] text-slate-500">SMS follows country, origination identity, sandbox, opt-out, and pricing rules.</p>
           <div class="mt-4 grid grid-cols-3 gap-3 text-xs">
             <p class="rounded-lg border border-slate-800 bg-slate-900 p-3 text-slate-400"><strong class="text-white">1 · Accept:</strong> SNS returns a message ID after durable acceptance.</p>
             <p class="rounded-lg border border-slate-800 bg-slate-900 p-3 text-slate-400"><strong class="text-white">2 · Match:</strong> every subscription evaluates its own filter.</p>
@@ -188,34 +180,8 @@
       <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-common-scenarios.html" target="_blank" rel="noreferrer" class="mt-4 inline-flex text-sm font-medium text-violet-300 hover:text-violet-200">Official common scenarios ↗</a>
     </section>
 
-    <section id="concepts" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8" aria-labelledby="concepts-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Session 1–2 · Foundations</p>
-      <h2 id="concepts-title" class="mt-2 text-2xl font-semibold">Know what SNS guarantees—and what it does not</h2>
-      <div class="mt-6 grid gap-5 md:grid-cols-3">
-        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold">Topic</h3><p class="mt-2 text-sm leading-6 text-slate-400">A named publish endpoint. Standard topics maximize throughput; FIFO topics add ordering and deduplication for compatible FIFO subscribers.</p></div>
-        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold">Subscription</h3><p class="mt-2 text-sm leading-6 text-slate-400">A topic-to-endpoint relationship with its own protocol, filter, retry behavior, raw-delivery setting, and optional SQS DLQ.</p></div>
-        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold">Publication</h3><p class="mt-2 text-sm leading-6 text-slate-400">A message plus optional attributes. Successful publish means SNS accepted it—not that every subscriber completed business processing.</p></div>
-      </div>
-      <div class="mt-6 grid gap-4 md:grid-cols-2">
-        <div class="rounded-xl border border-emerald-900 bg-emerald-950/20 p-5"><h3 class="font-semibold text-emerald-300">SNS is good at</h3><ul class="mt-3 space-y-2 text-sm text-slate-300"><li>✓ Sending one event to many endpoints</li><li>✓ Routing with subscription filters</li><li>✓ Pushing notifications without broker management</li><li>✓ Integrating AWS services and external webhooks</li></ul></div>
-        <div class="rounded-xl border border-amber-900 bg-amber-950/20 p-5"><h3 class="font-semibold text-amber-300">Do not assume</h3><ul class="mt-3 space-y-2 text-sm text-slate-300"><li>× A Standard topic preserves global order</li><li>× A subscriber can poll old topic messages</li><li>× Delivery means business processing succeeded</li><li>× Exactly-once end-to-end processing happens automatically</li></ul></div>
-      </div>
-      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
-        <table class="w-full min-w-[760px] text-left text-sm">
-          <thead class="bg-slate-950 text-slate-300"><tr><th class="px-4 py-3">Endpoint</th><th class="px-4 py-3">Best fit</th><th class="px-4 py-3">Important caution</th></tr></thead>
-          <tbody class="divide-y divide-slate-800 text-slate-400">
-            <tr><td class="px-4 py-3 text-white">SQS</td><td class="px-4 py-3">Durable fan-out and independently scaled workers</td><td class="px-4 py-3">Queue policy must allow the topic; SQS charges still apply</td></tr>
-            <tr><td class="px-4 py-3 text-white">Lambda</td><td class="px-4 py-3">Short event handlers and serverless automation</td><td class="px-4 py-3">Control concurrency and make handlers idempotent</td></tr>
-            <tr><td class="px-4 py-3 text-white">HTTP/S</td><td class="px-4 py-3">Webhooks outside AWS</td><td class="px-4 py-3">Confirmation, signatures, retries, and endpoint availability matter</td></tr>
-            <tr><td class="px-4 py-3 text-white">Email / SMS</td><td class="px-4 py-3">Human notification</td><td class="px-4 py-3">Not an application integration; delivery and pricing vary</td></tr>
-            <tr><td class="px-4 py-3 text-white">Firehose</td><td class="px-4 py-3">Archive or analytics delivery</td><td class="px-4 py-3">Requires a service role and has downstream cost</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
     <section id="fanout" class="mt-12" aria-labelledby="fanout-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Session 3 · Architecture</p>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Architecture</p>
       <h2 id="fanout-title" class="mt-2 text-2xl font-semibold">Use SNS + SQS for production fan-out</h2>
       <div class="mt-6 grid gap-5 lg:grid-cols-2">
         <article class="rounded-2xl border border-rose-900/60 bg-slate-900 p-6"><p class="text-xs font-medium uppercase tracking-wider text-rose-300">Fragile: direct push only</p><div class="mt-5 flex items-center justify-center gap-3 text-xs"><span class="rounded-lg bg-slate-950 p-3">SNS</span><span>→</span><span class="rounded-lg bg-slate-950 p-3">HTTP worker</span></div><p class="mt-5 text-sm leading-6 text-slate-400">A slow worker depends on SNS retries. It has no queue depth for autoscaling, backlog to inspect, or broad recovery window.</p></article>
@@ -225,7 +191,7 @@
     </section>
 
     <section id="filter-lab" class="mt-12 rounded-2xl border border-violet-900/70 bg-slate-900 p-6 sm:p-8" aria-labelledby="filter-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Session 4 · Interactive example</p>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Interactive example</p>
       <h2 id="filter-title" class="mt-2 text-2xl font-semibold">See subscription filters route the same event</h2>
       <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Choose an event. This simulator evaluates three subscription policies. Real policies may inspect message attributes or a well-formed JSON message body.</p>
       <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Select a sample event">
@@ -243,7 +209,7 @@
     </section>
 
     <section id="delivery" class="mt-12" aria-labelledby="delivery-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Session 5 · Reliability</p>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Reliability</p>
       <h2 id="delivery-title" class="mt-2 text-2xl font-semibold">Design for unsuccessful delivery and duplicate processing</h2>
       <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><h3 class="font-semibold">Retries</h3><p class="mt-2 text-sm leading-6 text-slate-400">Behavior depends on protocol. HTTP/S policies can tune backoff and throttling. Do not build an endpoint that stays overloaded.</p></article>
@@ -287,7 +253,7 @@ print(response["MessageId"])</code></pre></details>
     </section>
 
     <section id="security" class="mt-12" aria-labelledby="security-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Session 6 · Security and governance</p>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Security and governance</p>
       <h2 id="security-title" class="mt-2 text-2xl font-semibold">Authorize every edge in the fan-out graph</h2>
       <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div class="rounded-xl border border-slate-800 bg-slate-900 p-5"><h3 class="font-semibold">Publishers</h3><p class="mt-2 text-sm leading-6 text-slate-400">Grant <span class="font-mono">sns:Publish</span> only to required topic ARNs. Use resource policies for cross-account publishers.</p></div>
@@ -300,7 +266,7 @@ print(response["MessageId"])</code></pre></details>
     </section>
 
     <section id="cost" class="mt-12 rounded-2xl border border-violet-900/60 bg-slate-900 p-6 sm:p-8" aria-labelledby="cost-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Session 7 · Cost model</p>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Cost model</p>
       <h2 id="cost-title" class="mt-2 text-2xl font-semibold">Count publishes, payload chunks, endpoint deliveries, and downstream work</h2>
       <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div class="rounded-xl bg-slate-950 p-5"><p class="font-semibold">API requests</p><p class="mt-2 text-sm leading-6 text-slate-400">Standard publish and management requests are metered. Payloads are billed in 64 KB chunks.</p></div>
@@ -312,7 +278,7 @@ print(response["MessageId"])</code></pre></details>
     </section>
 
     <section id="alternatives" class="mt-12" aria-labelledby="alternatives-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Session 8 · Alternatives</p>
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Alternatives</p>
       <h2 id="alternatives-title" class="mt-2 text-2xl font-semibold">Choose by interaction model, not familiarity</h2>
       <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900">
         <table class="w-full min-w-[850px] text-left text-sm">
@@ -355,6 +321,54 @@ print(response["MessageId"])</code></pre></details>
       </div>
       <div id="code-modal-body" class="px-6 py-5"></div>
     </div>
+  </div>
+
+  <div hidden data-rich="publishers">
+    <p class="text-sm leading-6 text-slate-300">A publisher is anything with <code class="text-violet-300">sns:Publish</code> permission on the topic. Your own code calls the Publish API, and many AWS services publish events for you.</p>
+    <div class="mt-5 rounded-xl border border-violet-900/70 bg-violet-950/20 p-4">
+      <p class="text-[11px] font-medium uppercase tracking-wider text-violet-300">Your applications</p>
+      <div class="mt-3 grid gap-2 text-sm text-slate-200 sm:grid-cols-3">
+        <p class="flex items-center gap-2 rounded-lg bg-slate-950 p-3"><span class="text-lg" aria-hidden="true">🧑‍💻</span>App code via AWS SDK</p>
+        <p class="flex items-center gap-2 rounded-lg bg-slate-950 p-3"><span class="text-lg" aria-hidden="true">⌨️</span>AWS CLI / console</p>
+        <p class="flex items-center gap-2 rounded-lg bg-slate-950 p-3"><img src="../assets/aws/lambda.svg" alt="" class="h-6 w-6" />Lambda function</p>
+      </div>
+    </div>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+      <article class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-sky-300">Monitoring and events</p>
+        <div class="mt-3 space-y-2 text-sm text-slate-200">
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><img src="../assets/aws/cloudwatch.svg" alt="" class="h-6 w-6" />CloudWatch alarms</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">🔀</span>EventBridge rules</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">🛡️</span>AWS Config rules</p>
+        </div>
+      </article>
+      <article class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">Storage and databases</p>
+        <div class="mt-3 space-y-2 text-sm text-slate-200">
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">🪣</span>S3 event notifications</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">🗄️</span>RDS event notifications</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">💾</span>AWS Backup job events</p>
+        </div>
+      </article>
+      <article class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-amber-300">Infrastructure and deployment</p>
+        <div class="mt-3 space-y-2 text-sm text-slate-200">
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">📈</span>EC2 Auto Scaling notifications</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">🧱</span>CloudFormation stack events</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">📟</span>IoT Core rule actions</p>
+        </div>
+      </article>
+      <article class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-fuchsia-300">Cost and audit</p>
+        <div class="mt-3 space-y-2 text-sm text-slate-200">
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">💰</span>AWS Budgets alerts</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">🧾</span>CloudTrail log-file delivery</p>
+          <p class="flex items-center gap-2 rounded-lg bg-slate-900 p-2.5"><span class="w-6 text-center text-lg" aria-hidden="true">🔔</span>Developer tools notifications</p>
+        </div>
+      </article>
+    </div>
+    <div class="mt-4 rounded-xl border border-amber-900/70 bg-amber-950/20 p-4 text-xs leading-5 text-slate-300"><strong class="text-amber-300">Exam memory:</strong> AWS service publishers need permission in the topic's access policy, and an encrypted topic also needs a KMS key policy that allows the service. Most AWS services publish to Standard topics only.</div>
+    <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-event-sources.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Official SNS event sources ↗</a><a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Publish API reference ↗</a></p>
   </div>
 
   <div hidden data-rich="subscribers">

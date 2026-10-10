@@ -35,7 +35,9 @@
       <div>
         <p class="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">Reference guide</p>
         <h1 class="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-6xl">One event. Many independent subscribers.</h1>
-        <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-400">Amazon SNS is a managed<button type="button" data-snippet="managed" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-violet-700 align-middle text-[11px] font-semibold text-violet-300 hover:bg-violet-950" aria-label="Show what managed means for a topic">i</button>publish/subscribe service. Publishers send once to a topic; SNS evaluates every subscription and pushes a copy to each matching endpoint.</p>
+        <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-400">
+          Amazon Simple Notification Service (Amazon SNS) is a fully managed<button type="button" data-snippet="managed" data-eyebrow="Fully managed" data-title="What AWS operates—and what you still own" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-violet-700 align-middle text-[11px] font-semibold text-violet-300 hover:bg-violet-950" aria-label="Show what fully managed means for an SNS topic">i</button>web service for building distributed, event-driven applications. A publisher sends once to a topic, and SNS pushes real-time notifications to interested subscribers<button type="button" data-snippet="subscribers" data-eyebrow="Two messaging families" data-title="Application-to-application and application-to-person" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-sky-700 align-middle text-[11px] font-semibold text-sky-300 hover:bg-sky-950" aria-label="Show application-to-application and application-to-person subscribers">i</button>over multiple delivery protocols<button type="button" data-snippet="protocols" data-eyebrow="Delivery protocols" data-title="Where an SNS topic can deliver" class="mx-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-emerald-700 align-middle text-[11px] font-semibold text-emerald-300 hover:bg-emerald-950" aria-label="Show SNS delivery protocols and integrations">i</button>.
+        </p>
         <div class="mt-7 flex flex-wrap gap-3">
           <a href="#sessions" class="rounded-lg bg-violet-500 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-400">View eight sessions</a>
         </div>
@@ -54,6 +56,7 @@
 
     <nav class="mt-12 flex flex-wrap gap-2 border-y border-slate-800 py-5 text-xs" aria-label="On this page">
       <a href="#sessions" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Sessions</a>
+      <a href="#how-it-works" class="rounded-full border border-violet-700 px-3 py-1.5 text-violet-300 hover:bg-violet-950">How it works</a>
       <a href="#concepts" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Concepts</a>
       <a href="#fanout" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Fan-out</a>
       <a href="#filter-lab" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Filter simulator</a>
@@ -77,6 +80,112 @@
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">07</span><h3 class="mt-2 font-semibold">Cost and scale</h3><p class="mt-2 text-sm leading-6 text-slate-400">Request units, payload size, endpoint delivery, quotas, and batching.</p></article>
         <article class="rounded-xl border border-slate-800 bg-slate-900 p-5"><span class="font-mono text-xs text-violet-400">08</span><h3 class="mt-2 font-semibold">Service selection</h3><p class="mt-2 text-sm leading-6 text-slate-400">SNS versus SQS, EventBridge, Kinesis, MQ, and direct invocation.</p></article>
       </div>
+    </section>
+
+    <section id="how-it-works" class="mt-12 rounded-2xl border border-violet-900/70 bg-gradient-to-br from-violet-950/30 to-slate-900 p-6 sm:p-8" aria-labelledby="how-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">How Amazon SNS works</p>
+      <h2 id="how-title" class="mt-2 text-2xl font-semibold">Publish once; SNS copies the message to every matching subscription</h2>
+      <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-300">A topic is a logical access point and communication channel. Publishers and subscribers do not need to know about each other. Each subscription chooses a protocol, an endpoint, an optional filter policy, retry behavior, and an optional SQS dead-letter queue.</p>
+
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950 p-5">
+        <div class="min-w-[760px]">
+          <div class="grid grid-cols-[150px_70px_150px_70px_1fr] items-center gap-2 text-center">
+            <div class="rounded-xl border border-slate-700 bg-slate-900 p-4">
+              <p class="text-2xl" aria-hidden="true">📦</p>
+              <p class="mt-2 text-sm font-semibold">Publishers</p>
+              <p class="mt-1 text-[11px] text-slate-400">apps and AWS services</p>
+            </div>
+            <div><p class="font-mono text-xs text-violet-300">Publish</p><p class="mt-1 text-2xl text-violet-400">→</p></div>
+            <div class="rounded-xl border border-violet-600 bg-violet-950/70 p-4 shadow-lg shadow-violet-950/50">
+              <img src="../assets/aws/sns.svg" alt="" class="mx-auto h-11 w-11" />
+              <p class="mt-2 text-sm font-semibold">SNS topic</p>
+              <p class="mt-1 text-[11px] text-violet-200">filter + fan-out</p>
+            </div>
+            <div><p class="font-mono text-xs text-violet-300">Push copies</p><p class="mt-1 text-2xl text-violet-400">→</p></div>
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="rounded-xl border border-sky-900 bg-sky-950/20 p-4">
+                <div class="flex items-center justify-between gap-2"><p class="text-xs font-semibold uppercase tracking-wider text-sky-300">A2A · applications</p><button type="button" data-snippet="subscribers" data-eyebrow="A2A and A2P" data-title="Two subscriber families" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-sky-700 text-[11px] font-semibold text-sky-300" aria-label="Explain A2A and A2P">i</button></div>
+                <ul class="mt-3 space-y-2 text-xs text-slate-300">
+                  <li class="flex items-center gap-2"><img src="../assets/aws/sqs.svg" alt="" class="h-6 w-6" />Amazon SQS</li>
+                  <li class="flex items-center gap-2"><img src="../assets/aws/lambda.svg" alt="" class="h-6 w-6" />AWS Lambda</li>
+                  <li>🌐 HTTP/S webhook</li>
+                  <li>🔥 Amazon Data Firehose</li>
+                </ul>
+              </div>
+              <div class="rounded-xl border border-fuchsia-900 bg-fuchsia-950/20 p-4">
+                <p class="text-xs font-semibold uppercase tracking-wider text-fuchsia-300">A2P · people</p>
+                <ul class="mt-3 space-y-2 text-xs text-slate-300">
+                  <li>✉️ Email and email-JSON</li>
+                  <li>💬 Mobile text message (SMS)</li>
+                  <li>📱 Mobile push notification</li>
+                </ul>
+                <p class="mt-3 text-[11px] leading-4 text-slate-500">Country, origination identity, sandbox, opt-out, and pricing rules apply to SMS.</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-3 gap-3 text-xs">
+            <p class="rounded-lg border border-slate-800 bg-slate-900 p-3 text-slate-400"><strong class="text-white">1 · Accept:</strong> SNS returns a message ID after durable acceptance.</p>
+            <p class="rounded-lg border border-slate-800 bg-slate-900 p-3 text-slate-400"><strong class="text-white">2 · Match:</strong> every subscription evaluates its own filter.</p>
+            <p class="rounded-lg border border-slate-800 bg-slate-900 p-3 text-slate-400"><strong class="text-white">3 · Deliver:</strong> SNS pushes one copy on the subscription protocol.</p>
+          </div>
+        </div>
+      </div>
+      <p class="mt-4 text-xs leading-5 text-slate-500">This is a service-behavior diagram based on AWS documentation. It is not a diagram of AWS's private host implementation.</p>
+      <a href="https://docs.aws.amazon.com/sns/latest/dg/welcome.html" target="_blank" rel="noreferrer" class="mt-3 inline-flex text-sm font-medium text-violet-300 hover:text-violet-200">Validate with the Amazon SNS Developer Guide ↗</a>
+    </section>
+
+    <section class="mt-12 grid gap-5 lg:grid-cols-2" aria-label="Amazon SNS core benefits">
+      <article class="rounded-2xl border border-violet-900/70 bg-slate-900 p-6">
+        <div class="flex items-start gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-xl" aria-hidden="true">⑴</div>
+          <div><p class="text-[11px] font-medium uppercase tracking-wider text-violet-300">Simplify your architecture</p><h2 class="mt-1 text-xl font-semibold">Move routing behavior out of every consumer</h2></div>
+        </div>
+        <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">Filtering</p><p class="mt-1 text-xs leading-5 text-slate-400">Deliver only matching attributes or JSON bodies.</p></div>
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">Batching</p><p class="mt-1 text-xs leading-5 text-slate-400">Publish up to 10 messages per batch API call.</p></div>
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">Ordering</p><p class="mt-1 text-xs leading-5 text-slate-400">FIFO topics order messages inside each message group.</p></div>
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">Deduplication</p><p class="mt-1 text-xs leading-5 text-slate-400">FIFO topics suppress repeated sends in the deduplication window.</p></div>
+        </div>
+        <a href="https://aws.amazon.com/sns/features/" target="_blank" rel="noreferrer" class="mt-5 inline-flex text-sm font-medium text-violet-300 hover:text-violet-200">Official SNS features ↗</a>
+      </article>
+      <article class="rounded-2xl border border-emerald-900/70 bg-slate-900 p-6">
+        <div class="flex items-start gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-xl" aria-hidden="true">⑵</div>
+          <div><p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">Increase message durability</p><h2 class="mt-1 text-xl font-semibold">Plan for unavailable subscribers and recovery</h2></div>
+        </div>
+        <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">Delivery retries</p><p class="mt-1 text-xs leading-5 text-slate-400">Protocol-specific retry policies handle temporary endpoint failures.</p></div>
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">Subscription DLQ</p><p class="mt-1 text-xs leading-5 text-slate-400">An SQS queue preserves messages SNS could not deliver.</p></div>
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">FIFO archive</p><p class="mt-1 text-xs leading-5 text-slate-400">Archive FIFO topic messages from 1 through 365 days.</p></div>
+          <div class="rounded-xl bg-slate-950 p-4"><p class="font-semibold text-white">Replay</p><p class="mt-1 text-xs leading-5 text-slate-400">Replay archived FIFO messages to a subscription after recovery.</p></div>
+        </div>
+        <p class="mt-4 text-xs leading-5 text-amber-300">Exam boundary: in-place archive and replay apply to A2A FIFO topics, not every SNS topic.</p>
+        <a href="https://docs.aws.amazon.com/sns/latest/dg/message-archiving-and-replay-topic-owner.html" target="_blank" rel="noreferrer" class="mt-3 inline-flex text-sm font-medium text-emerald-300 hover:text-emerald-200">Official archive and replay guide ↗</a>
+      </article>
+    </section>
+
+    <section class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8" aria-labelledby="access-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Accessing Amazon SNS</p>
+      <h2 id="access-title" class="mt-2 text-2xl font-semibold">Use the console to learn; use the CLI, SDK, or IaC to repeat</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-3">
+        <article class="rounded-xl bg-slate-950 p-5"><p class="text-2xl" aria-hidden="true">🖥️</p><h3 class="mt-3 font-semibold">AWS Management Console</h3><p class="mt-2 text-sm leading-6 text-slate-400">Create topics and subscriptions, publish a test message, inspect attributes, and view CloudWatch metrics. It does not receive messages from an SNS topic; delivery goes to the subscribed endpoint.</p></article>
+        <article class="rounded-xl bg-slate-950 p-5"><p class="font-mono text-xl text-violet-300">&gt;_</p><h3 class="mt-3 font-semibold">AWS CLI</h3><p class="mt-2 text-sm leading-6 text-slate-400">Call the SNS API from a terminal for repeatable administration and troubleshooting.</p><code class="mt-3 block overflow-x-auto rounded-lg bg-black p-3 text-xs text-emerald-300">aws sns publish --topic-arn ... --message '{"event":"OrderPlaced"}'</code></article>
+        <article class="rounded-xl bg-slate-950 p-5"><p class="text-2xl" aria-hidden="true">⌨️</p><h3 class="mt-3 font-semibold">AWS SDKs and IaC</h3><p class="mt-2 text-sm leading-6 text-slate-400">Publish from application code and define topics, policies, subscriptions, filters, encryption, DLQs, and alarms in version-controlled templates.</p></article>
+      </div>
+      <p class="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://docs.aws.amazon.com/cli/latest/reference/sns/" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">AWS CLI for SNS ↗</a><a href="https://aws.amazon.com/developer/tools/" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">AWS SDKs and toolkits ↗</a><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-getting-started.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Getting started ↗</a></p>
+    </section>
+
+    <section class="mt-12" aria-labelledby="scenarios-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Common SNS scenarios</p>
+      <h2 id="scenarios-title" class="mt-2 text-2xl font-semibold">Remember the use case by who receives the message</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="rounded-xl border border-sky-900/70 bg-sky-950/20 p-5"><p class="text-2xl" aria-hidden="true">⑴</p><h3 class="mt-3 font-semibold">Application integration</h3><p class="mt-2 text-sm leading-6 text-slate-400">An order topic fans out to billing SQS, shipping SQS, Lambda, HTTPS, and Firehose for parallel asynchronous work.</p></article>
+        <article class="rounded-xl border border-amber-900/70 bg-amber-950/20 p-5"><p class="text-2xl" aria-hidden="true">⚠️</p><h3 class="mt-3 font-semibold">Application alerts</h3><p class="mt-2 text-sm leading-6 text-slate-400">CloudWatch or an application publishes an alarm when a metric, Auto Scaling event, or system condition crosses a threshold.</p></article>
+        <article class="rounded-xl border border-fuchsia-900/70 bg-fuchsia-950/20 p-5"><p class="text-2xl" aria-hidden="true">✉️</p><h3 class="mt-3 font-semibold">User notifications</h3><p class="mt-2 text-sm leading-6 text-slate-400">Send an order confirmation or service notice to people by SMS or email. Consent, regional rules, and cost matter.</p></article>
+        <article class="rounded-xl border border-violet-900/70 bg-violet-950/20 p-5"><p class="text-2xl" aria-hidden="true">📱</p><h3 class="mt-3 font-semibold">Mobile push</h3><p class="mt-2 text-sm leading-6 text-slate-400">Send an update or deep link to a mobile application through supported push notification platforms.</p></article>
+      </div>
+      <div class="mt-5 rounded-xl border border-rose-900/60 bg-rose-950/20 p-5 text-sm leading-6 text-slate-300"><strong class="text-rose-300">Production-to-test fan-out:</strong> a test queue can subscribe to a production topic, but first remove or tokenize personal, payment, and confidential data. A convenient fan-out path does not override privacy boundaries.</div>
+      <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-common-scenarios.html" target="_blank" rel="noreferrer" class="mt-4 inline-flex text-sm font-medium text-violet-300 hover:text-violet-200">Official common scenarios ↗</a>
     </section>
 
     <section id="concepts" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8" aria-labelledby="concepts-title">
@@ -248,6 +357,52 @@ print(response["MessageId"])</code></pre></details>
     </div>
   </div>
 
+  <div hidden data-rich="subscribers">
+    <p class="text-sm leading-6 text-slate-300">“Interested” means the endpoint has an SNS subscription and, when configured, its filter policy matches the publication.</p>
+    <div class="mt-5 grid gap-4 sm:grid-cols-2">
+      <article class="rounded-xl border border-sky-900/70 bg-sky-950/20 p-5">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-sky-300">Application-to-application · A2A</p>
+        <h4 class="mt-2 font-semibold text-white">Software receives the message</h4>
+        <div class="mt-4 space-y-2 text-sm text-slate-300">
+          <p class="rounded-lg bg-slate-950 p-3">SNS → SQS → billing worker</p>
+          <p class="rounded-lg bg-slate-950 p-3">SNS → Lambda → automation</p>
+          <p class="rounded-lg bg-slate-950 p-3">SNS → HTTPS → partner webhook</p>
+          <p class="rounded-lg bg-slate-950 p-3">SNS → Firehose → S3 / analytics</p>
+        </div>
+        <p class="mt-4 text-xs leading-5 text-slate-400">Use A2A for event-driven systems. Add SQS when a worker needs a durable backlog, independent scaling, or a longer recovery window.</p>
+      </article>
+      <article class="rounded-xl border border-fuchsia-900/70 bg-fuchsia-950/20 p-5">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-fuchsia-300">Application-to-person · A2P</p>
+        <h4 class="mt-2 font-semibold text-white">A person receives the notification</h4>
+        <div class="mt-4 space-y-2 text-sm text-slate-300">
+          <p class="rounded-lg bg-slate-950 p-3">SNS → SMS → customer phone</p>
+          <p class="rounded-lg bg-slate-950 p-3">SNS → email → operations team</p>
+          <p class="rounded-lg bg-slate-950 p-3">SNS → mobile push → application user</p>
+        </div>
+        <p class="mt-4 text-xs leading-5 text-slate-400">Use A2P for time-sensitive human communication. Consent, opt-out, destination country, sender identity, sandbox status, and pricing are part of the design.</p>
+      </article>
+    </div>
+    <div class="mt-4 rounded-xl border border-amber-900/70 bg-amber-950/20 p-4 text-xs leading-5 text-slate-300"><strong class="text-amber-300">Exam memory:</strong> applications usually need SQS, Lambda, HTTPS, or Firehose. People receive email, SMS, or mobile push.</div>
+    <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://aws.amazon.com/sns/features/" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Official A2A and A2P features ↗</a><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-common-scenarios.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Common SNS scenarios ↗</a></p>
+  </div>
+
+  <div hidden data-rich="protocols">
+    <p class="text-sm leading-6 text-slate-300">The subscription protocol tells SNS how to deliver a copy. These are direct SNS subscription endpoints documented by AWS.</p>
+    <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <article class="rounded-xl border border-sky-900/60 bg-slate-950 p-4"><p class="font-semibold text-sky-300">Amazon SQS</p><p class="mt-2 text-xs leading-5 text-slate-400">Durable application fan-out. SNS pushes to the queue; workers poll and delete later.</p></article>
+      <article class="rounded-xl border border-orange-900/60 bg-slate-950 p-4"><p class="font-semibold text-orange-300">AWS Lambda</p><p class="mt-2 text-xs leading-5 text-slate-400">Invoke short serverless handlers asynchronously.</p></article>
+      <article class="rounded-xl border border-emerald-900/60 bg-slate-950 p-4"><p class="font-semibold text-emerald-300">HTTP / HTTPS</p><p class="mt-2 text-xs leading-5 text-slate-400">Push to webhooks. Confirm the subscription and verify SNS signatures.</p></article>
+      <article class="rounded-xl border border-amber-900/60 bg-slate-950 p-4"><p class="font-semibold text-amber-300">Amazon Data Firehose</p><p class="mt-2 text-xs leading-5 text-slate-400">Deliver Standard-topic notifications toward S3, Redshift, OpenSearch, and supported service providers.</p></article>
+      <article class="rounded-xl border border-fuchsia-900/60 bg-slate-950 p-4"><p class="font-semibold text-fuchsia-300">Email / email-JSON</p><p class="mt-2 text-xs leading-5 text-slate-400">Human-readable email or a JSON-formatted email endpoint.</p></article>
+      <article class="rounded-xl border border-rose-900/60 bg-slate-950 p-4"><p class="font-semibold text-rose-300">SMS / mobile push</p><p class="mt-2 text-xs leading-5 text-slate-400">Text messages and notifications through supported mobile push platforms.</p></article>
+    </div>
+    <div class="mt-4 rounded-xl border border-violet-900/60 bg-violet-950/20 p-4">
+      <p class="text-sm font-semibold text-white">What “many integrations” really means</p>
+      <p class="mt-2 text-xs leading-5 text-slate-400">AWS documents a wide variety of event sources and destinations, but it does not currently publish a stable “60+ direct SNS subscription protocols” figure. Direct protocols are the endpoints above. Many additional AWS services publish events to SNS, consume them through Lambda or SQS, or sit behind Firehose. This page avoids an unverified count.</p>
+    </div>
+    <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Official Subscribe API protocols ↗</a><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-common-scenarios.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Official fan-out scenarios ↗</a><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Firehose subscriptions ↗</a></p>
+  </div>
+
   <div hidden data-rich="managed">
     <p class="text-sm leading-6 text-slate-300">Managed means AWS runs the topic infrastructure. It does not design your event, your subscriptions, or your alarms. SNS pushes a copy to each match. It does not keep a backlog for a consumer to poll later.</p>
     <div class="mt-4 grid gap-3 sm:grid-cols-2">
@@ -391,7 +546,7 @@ print(response["MessageId"])</code></pre></details>
     </figure>
 
     <figure data-arch-panel="awsrun" hidden class="mt-4 rounded-xl border border-emerald-900/70 bg-slate-950 p-4">
-      <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-emerald-300">Amazon SNS · what AWS operates behind the API</figcaption>
+      <figcaption class="mb-3 text-[11px] font-medium uppercase tracking-wider text-emerald-300">Amazon SNS · documented behavior, drawn for teaching</figcaption>
       <div class="overflow-x-auto">
         <svg class="arch-svg min-w-[640px]" viewBox="0 0 760 400" role="img" aria-label="The order service publishes once to the SNS regional endpoint. SNS checks SigV4, stores copies across three Availability Zones, evaluates each subscription filter, and pushes a copy to the matching SQS, Lambda, and HTTPS endpoints. Failed deliveries retry and can land in a subscription dead-letter queue.">
           <defs>
@@ -477,7 +632,8 @@ print(response["MessageId"])</code></pre></details>
           <text class="s l" x="399" y="385">SQS backlog, idempotent subscribers, failed-delivery alarms</text>
         </svg>
       </div>
-      <p class="mt-3 text-xs leading-5 text-slate-400">Your account holds the publisher and the endpoints. Everything inside the green boundary is AWS's fleet: one HTTPS publish, then a push to each matching subscription. The backlog a worker polls lives in the SQS subscription, not in the topic.</p>
+      <p class="mt-3 text-xs leading-5 text-slate-400">AWS documents the behavior inside the green boundary: multiple copies stored across Availability Zones before Publish is acknowledged, then a push to each matching subscription. AWS does not publish the private host layout, so this drawing is not an official internal diagram. The backlog a worker polls lives in the SQS subscription, not in the topic.</p>
+      <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://aws.amazon.com/sns/faqs/" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">SNS FAQ: durability ↗</a><a href="https://docs.aws.amazon.com/sns/latest/dg/welcome-features.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Message durability ↗</a><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Filtering ↗</a><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Delivery retries ↗</a></p>
     </figure>
 
     <div class="mt-4 rounded-xl border border-amber-900/70 bg-amber-950/20 p-4">
@@ -542,6 +698,22 @@ print(response["MessageId"])</code></pre></details>
         <p class="mt-3 text-xs leading-5 text-slate-400">SNS delivers the matching copies. Whether shipping ignores a digital order, whether a duplicate publish charges a customer once, and whether a failed HTTPS call wakes someone up are decided by the amber boxes.</p>
       </figure>
     </div>
+    <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+      <p class="text-[11px] font-medium uppercase tracking-wider text-slate-400">Official sources for the AWS claims</p>
+      <p class="mt-2 text-xs leading-5 text-slate-400">The EC2 and RabbitMQ picture is a teaching example of a broker you would run. It is not an AWS architecture. These links are the AWS pages behind the SNS claims.</p>
+      <ul class="mt-3 space-y-1.5 text-xs leading-5">
+        <li><a href="https://aws.amazon.com/sns/faqs/" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">SNS FAQ: copies across Availability Zones before acknowledgement ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/welcome-features.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Developer Guide: durability, servers, and data centers ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-common-scenarios.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Fan-out to SQS, Lambda, HTTPS, and Firehose ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Subscription filter policies ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Delivery retry policies ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-dead-letter-queues.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Subscription dead-letter queues ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Server-side encryption with KMS ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-security.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Security, IAM, and topic policies ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">Signature Version 4 ↗</a></li>
+        <li><a href="https://docs.aws.amazon.com/sns/latest/dg/fifo-message-durability.html" target="_blank" rel="noreferrer" class="text-violet-300 hover:text-violet-200">FIFO topics: multi-AZ storage, DLQs, archive, and replay ↗</a></li>
+      </ul>
+    </div>
   </div>
 
   <script>
@@ -576,7 +748,11 @@ print(response["MessageId"])</code></pre></details>
 
     const codeModal = document.getElementById("code-modal");
     const codeModalBody = document.getElementById("code-modal-body");
-    function openSnippet(name) {
+    const codeModalEyebrow = document.getElementById("code-modal-eyebrow");
+    const codeModalTitle = document.getElementById("code-modal-title");
+    function openSnippet(name, button) {
+      codeModalEyebrow.textContent = button.dataset.eyebrow || "Amazon SNS";
+      codeModalTitle.textContent = button.dataset.title || "Learn more";
       codeModalBody.innerHTML = document.querySelector('[data-rich="' + name + '"]').innerHTML;
       codeModal.classList.remove("hidden");
       codeModal.classList.add("flex");
@@ -587,7 +763,7 @@ print(response["MessageId"])</code></pre></details>
     }
     document.querySelectorAll("[data-snippet]").forEach(function (button) {
       button.addEventListener("click", function () {
-        openSnippet(button.getAttribute("data-snippet"));
+        openSnippet(button.getAttribute("data-snippet"), button);
       });
     });
     codeModalBody.addEventListener("click", function (event) {

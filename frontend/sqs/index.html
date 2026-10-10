@@ -70,6 +70,7 @@
         <a href="#live-labs" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Live labs</a>
         <a href="#controls-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Operations</a>
         <a href="#dlq-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">DLQ</a>
+        <a href="#code" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Code</a>
         <a href="#cost-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Cost</a>
         <a href="#limits-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Limits</a>
         <a href="#alternatives-title" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-emerald-500">Alternatives</a>
@@ -1644,6 +1645,121 @@ COMMIT;</pre>
       </div>
 
       <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html" target="_blank" rel="noreferrer" class="mt-5 inline-flex text-sm font-medium text-emerald-400 hover:text-emerald-300">Official AWS dead-letter queue guidance ↗</a>
+    </section>
+
+    <section id="code" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8" aria-labelledby="code-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-400">Implementation frameworks</p>
+      <h2 id="code-title" class="mt-2 text-2xl font-semibold text-white">Use infrastructure as code; talk to the queue with the AWS SDK</h2>
+      <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-400">The live lab's <span class="font-mono text-slate-300">/buy-queue</span> path is API Gateway calling <span class="font-mono text-slate-300">SendMessage</span> for you. The queue worker is a Lambda event source mapping: Lambda polls, and it deletes the message when the handler succeeds. When your own service owns the calls, the three APIs below are the whole loop. Delete only after the work is durable.</p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold text-orange-300">AWS SDK</h3><p class="mt-2 text-sm leading-6 text-slate-400">Java, Python, JavaScript, .NET, Go, and the other SDKs support send, receive, delete, and the batch forms. Reuse the client. Log the message id, not the body.</p></div>
+        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold text-sky-300">AWS CDK</h3><p class="mt-2 text-sm leading-6 text-slate-400">A Queue construct can attach a dead-letter queue, encryption, and a Lambda event source. The grant methods add the send or consume actions.</p></div>
+        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold text-rose-300">Terraform</h3><p class="mt-2 text-sm leading-6 text-slate-400">Model <span class="font-mono">aws_sqs_queue</span>, the redrive policy, and the queue policy in the same stack. FIFO names must end in <span class="font-mono">.fifo</span>.</p></div>
+        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold text-amber-300">CloudFormation / SAM</h3><p class="mt-2 text-sm leading-6 text-slate-400"><span class="font-mono">AWS::SQS::Queue</span> plus a SAM SQS event creates the queue and the poller. Confirm the batch size and the failure reporting.</p></div>
+        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold text-emerald-300">Spring Cloud AWS</h3><p class="mt-2 text-sm leading-6 text-slate-400"><span class="font-mono">@SqsListener</span> hides the poll loop. It does not remove visibility timeout, at-least-once delivery, or the need for an idempotent handler.</p></div>
+        <div class="rounded-xl bg-slate-950 p-5"><h3 class="font-semibold text-violet-300">Lambda event source</h3><p class="mt-2 text-sm leading-6 text-slate-400">The poller calls receive and delete for you. Return batch item failures for the messages that did not commit, or the whole batch becomes visible again.</p></div>
+      </div>
+
+      <details class="mt-6 rounded-xl border border-slate-800 bg-black p-5" open>
+        <summary class="cursor-pointer font-semibold text-emerald-300">Send a message</summary>
+        <p class="mt-3 text-sm leading-6 text-slate-400">The producer needs <span class="font-mono text-slate-300">sqs:SendMessage</span> on that queue. A 200 from <span class="font-mono text-slate-300">SendMessage</span> means SQS stored the message. It does not mean a worker has committed the ledger.</p>
+        <pre class="mt-4 overflow-x-auto text-xs leading-6 text-slate-300"><code>import json
+import boto3
+
+sqs = boto3.client("sqs")
+
+response = sqs.send_message(
+    QueueUrl=QUEUE_URL,
+    MessageBody=json.dumps({
+        "transferId": "txn-1042",
+        "accountId": "ACC-9941",
+        "amount": "250.00"
+    })
+)
+print(response["MessageId"])</code></pre>
+        <p class="mt-4 text-sm leading-6 text-slate-400">A FIFO queue also needs a group id. With content-based deduplication off, send a deduplication id too. The group decides the order; the deduplication id drops a repeat send inside the 5-minute window.</p>
+        <pre class="mt-4 overflow-x-auto text-xs leading-6 text-slate-300"><code>sqs.send_message(
+    QueueUrl=FIFO_QUEUE_URL,
+    MessageBody=json.dumps({"transferId": "txn-1042", "amount": "250.00"}),
+    MessageGroupId="ACC-9941",
+    MessageDeduplicationId="txn-1042"
+)</code></pre>
+        <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">SendMessage API reference ↗</a><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sqs/client/send_message.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">boto3 send_message ↗</a><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">FIFO queues ↗</a></p>
+      </details>
+
+      <details class="mt-4 rounded-xl border border-slate-800 bg-black p-5">
+        <summary class="cursor-pointer font-semibold text-emerald-300">Read a message</summary>
+        <p class="mt-3 text-sm leading-6 text-slate-400">The consumer needs <span class="font-mono text-slate-300">sqs:ReceiveMessage</span>. Long polling waits up to 20 seconds instead of returning immediately when the queue is empty. An empty <span class="font-mono text-slate-300">Messages</span> list is a normal result, not an error. Keep the <span class="font-mono text-slate-300">ReceiptHandle</span>. That is what delete uses, and it is not the message id.</p>
+        <pre class="mt-4 overflow-x-auto text-xs leading-6 text-slate-300"><code>response = sqs.receive_message(
+    QueueUrl=QUEUE_URL,
+    MaxNumberOfMessages=10,
+    WaitTimeSeconds=20,
+    VisibilityTimeout=30
+)
+
+for message in response.get("Messages", []):
+    body = json.loads(message["Body"])
+    print(message["MessageId"], body["transferId"])
+    # message["ReceiptHandle"] is valid until the visibility timeout ends</code></pre>
+        <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">ReceiveMessage API reference ↗</a><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sqs/client/receive_message.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">boto3 receive_message ↗</a><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Short and long polling ↗</a><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Visibility timeout ↗</a></p>
+      </details>
+
+      <details class="mt-4 rounded-xl border border-slate-800 bg-black p-5">
+        <summary class="cursor-pointer font-semibold text-emerald-300">Delete a message</summary>
+        <p class="mt-3 text-sm leading-6 text-slate-400">The consumer needs <span class="font-mono text-slate-300">sqs:DeleteMessage</span>. Call it only after the ledger commit succeeds. If the process crashes before delete, SQS shows the message again when the visibility timeout ends. A second delivery is normal, so the handler must recognize the same <span class="font-mono text-slate-300">transferId</span>.</p>
+        <pre class="mt-4 overflow-x-auto text-xs leading-6 text-slate-300"><code>for message in response.get("Messages", []):
+    body = json.loads(message["Body"])
+    commit_ledger(body)  # durable write first
+    sqs.delete_message(
+        QueueUrl=QUEUE_URL,
+        ReceiptHandle=message["ReceiptHandle"]
+    )</code></pre>
+        <p class="mt-4 text-sm leading-6 text-slate-400">Delete up to ten at once with <span class="font-mono text-slate-300">delete_message_batch</span>. Each entry still needs the receipt handle from its own receive. If the work needs longer than the visibility timeout, call <span class="font-mono text-slate-300">change_message_visibility</span> before the timeout expires. After it expires, that receipt handle no longer deletes the message.</p>
+        <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs"><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessage.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">DeleteMessage API reference ↗</a><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessageBatch.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">DeleteMessageBatch ↗</a><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ChangeMessageVisibility.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">ChangeMessageVisibility ↗</a><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sqs/client/delete_message.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">boto3 delete_message ↗</a></p>
+      </details>
+
+      <div class="mt-6 rounded-xl border border-emerald-900/60 bg-slate-950 p-5">
+        <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-400">Official AWS references</p>
+        <div class="mt-4 grid gap-5 text-sm sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <h3 class="font-semibold text-white">Developer Guide</h3>
+            <ul class="mt-2 space-y-1.5">
+              <li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">What is Amazon SQS ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs_code_examples.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Code examples for every SDK ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Dead-letter queues ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-api-permissions-reference.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">API permissions for IAM ↗</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white">API and SDK</h3>
+            <ul class="mt-2 space-y-1.5">
+              <li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">SQS API actions ↗</a></li>
+              <li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sqs.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">boto3 SQS client (Python) ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/sqs/" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">SDK for JavaScript v3 ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/cli/latest/reference/sqs/" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">AWS CLI sqs commands ↗</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white">Integrations used here</h3>
+            <ul class="mt-2 space-y-1.5">
+              <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">API Gateway HTTP API to AWS services ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">SQS-SendMessage integration subtype ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Lambda with Amazon SQS ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Lambda SQS error handling and batch item failures ↗</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white">Infrastructure as code</h3>
+            <ul class="mt-2 space-y-1.5">
+              <li><a href="https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_sqs-readme.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">AWS CDK aws_sqs ↗</a></li>
+              <li><a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Terraform aws_sqs_queue ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">CloudFormation AWS::SQS::Queue ↗</a></li>
+              <li><a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-sqs.html" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">SAM SQS event source ↗</a></li>
+              <li><a href="https://github.com/awspring/spring-cloud-aws" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300">Spring Cloud AWS (community) ↗</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="mt-12 rounded-2xl border border-emerald-900/60 bg-slate-900 p-6 sm:p-8" aria-labelledby="cost-title">

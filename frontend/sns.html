@@ -42,15 +42,65 @@
           <a href="#how-it-works" class="rounded-lg bg-violet-500 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-400">See how SNS works</a>
         </div>
       </div>
-      <div class="rounded-2xl border border-violet-900/70 bg-slate-900 p-6">
+      <div class="rounded-2xl border border-violet-900/70 bg-slate-900 p-5">
         <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-300">Core mental model</p>
-        <div class="mt-6 flex items-center justify-center gap-2 text-center sm:gap-4">
-          <div class="rounded-xl border border-slate-700 bg-slate-950 p-4"><p class="text-2xl">📦</p><p class="mt-2 text-xs font-semibold">Publisher</p></div>
-          <span class="text-violet-400">→</span>
-          <div class="rounded-xl border border-violet-700 bg-violet-950/60 p-4"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-9 w-9" /><p class="mt-2 text-xs font-semibold">SNS topic</p></div>
-          <div class="grid gap-2 text-left text-xs"><p class="rounded-lg bg-slate-950 px-3 py-2">→ Billing queue</p><p class="rounded-lg bg-slate-950 px-3 py-2">→ Shipping queue</p><p class="rounded-lg bg-slate-950 px-3 py-2">→ Audit stream</p></div>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          <article class="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-violet-300">Pub/Sub</p>
+              <button type="button" data-snippet="pattern-pubsub" data-eyebrow="Pub/Sub" data-title="Publisher and subscriber stay strangers" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-violet-700 text-[11px] font-semibold text-violet-300 hover:bg-violet-950" aria-label="Why and when to use pub/sub">i</button>
+            </div>
+            <div class="mt-3 flex items-center justify-between gap-1 text-center text-[10px] leading-tight">
+              <div class="min-w-0 flex-1 rounded-lg border border-slate-800 bg-slate-900 px-1 py-2"><p class="text-base" aria-hidden="true">📦</p><p class="mt-1 font-medium">Publisher</p></div>
+              <span class="text-violet-400" aria-hidden="true">→</span>
+              <div class="min-w-0 flex-1 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
+              <span class="text-violet-400" aria-hidden="true">→</span>
+              <div class="min-w-0 flex-1 rounded-lg border border-slate-800 bg-slate-900 px-1 py-2"><p class="text-base" aria-hidden="true">📥</p><p class="mt-1 font-medium">Subscriber</p></div>
+            </div>
+          </article>
+          <article class="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-sky-300">Fan-out</p>
+              <button type="button" data-snippet="pattern-fanout" data-eyebrow="Fan-out" data-title="One publish, many independent queues" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-sky-700 text-[11px] font-semibold text-sky-300 hover:bg-sky-950" aria-label="Why and when to use fan-out">i</button>
+            </div>
+            <div class="mt-3 flex items-center gap-2">
+              <div class="w-16 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
+              <div class="grid flex-1 gap-1 text-[10px] text-slate-300">
+                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4" />Billing queue</p>
+                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4" />Shipping queue</p>
+                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4" />Audit queue</p>
+              </div>
+            </div>
+          </article>
+          <article class="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-emerald-300">App to app</p>
+              <button type="button" data-snippet="pattern-a2a" data-eyebrow="Application-to-application" data-title="Connect systems" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-emerald-700 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-950" aria-label="Why and when to use application-to-application">i</button>
+            </div>
+            <div class="mt-3 flex items-center gap-2">
+              <div class="w-16 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
+              <div class="grid flex-1 gap-1 text-[10px] text-slate-300">
+                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/lambda.svg" alt="" class="h-4 w-4" />Lambda</p>
+                <p class="rounded-md bg-slate-900 px-2 py-1">🌐 HTTPS webhook</p>
+                <p class="rounded-md bg-slate-900 px-2 py-1">🔥 Firehose</p>
+              </div>
+            </div>
+          </article>
+          <article class="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-fuchsia-300">App to person</p>
+              <button type="button" data-snippet="pattern-a2p" data-eyebrow="Application-to-person" data-title="Notify people" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-fuchsia-700 text-[11px] font-semibold text-fuchsia-300 hover:bg-fuchsia-950" aria-label="Why and when to use application-to-person">i</button>
+            </div>
+            <div class="mt-3 flex items-center gap-2">
+              <div class="w-16 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
+              <div class="grid flex-1 gap-1 text-[10px] text-slate-300">
+                <p class="rounded-md bg-slate-900 px-2 py-1">💬 SMS</p>
+                <p class="rounded-md bg-slate-900 px-2 py-1">✉️ Email</p>
+                <p class="rounded-md bg-slate-900 px-2 py-1">📱 Mobile push</p>
+              </div>
+            </div>
+          </article>
         </div>
-        <p class="mt-5 text-sm leading-6 text-slate-400">SNS does not store a backlog for consumers to poll later. Pair each asynchronous consumer with SQS when it needs buffering, replay time, or independent scaling.</p>
       </div>
     </section>
 
@@ -62,6 +112,7 @@
       <a href="#frameworks" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Frameworks</a>
       <a href="#security" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Security</a>
       <a href="#cost" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Cost</a>
+      <a href="#limits-title" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Limits</a>
       <a href="#alternatives" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Alternatives</a>
     </nav>
 
@@ -277,6 +328,38 @@ print(response["MessageId"])</code></pre></details>
       <div class="mt-6 rounded-xl bg-black p-5 text-sm leading-7 text-slate-300"><p><strong class="text-white">Worked example:</strong> 10 million 4 KB publications with three SQS subscriptions create 10 million SNS publish request units and 30 million SQS sends. Add SQS requests, optional KMS calls, transfer, consumers, logs, and DLQs.</p><p class="mt-2 text-slate-500">Use this as a worksheet, not a quote. Free tiers and regional prices change.</p><a href="https://aws.amazon.com/sns/pricing/" target="_blank" rel="noreferrer" class="mt-3 inline-flex font-medium text-violet-400">Verify official SNS pricing ↗</a></div>
     </section>
 
+    <section class="mt-12" aria-labelledby="limits-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Official quotas and behaviors</p>
+      <h2 id="limits-title" class="mt-2 text-2xl font-semibold">What Amazon SNS will not do for you</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Figures below are from the AWS General Reference and the Amazon SNS Developer Guide. Quotas can change, and some can be raised through Service Quotas or AWS Support.</p>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <thead class="bg-slate-950 text-slate-300">
+            <tr>
+              <th class="px-4 py-3 font-semibold">Limit</th>
+              <th class="px-4 py-3 font-semibold">Official value</th>
+              <th class="px-4 py-3 font-semibold">What it means</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 bg-slate-900 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">Message size</td><td class="px-4 py-3">256 KiB default. A topic can raise this to 1 MiB. The extended client supports up to 2 GB.</td><td class="px-4 py-3">A normal publish cannot carry a multi-megabyte body. The extended client stores the body in S3 and publishes a pointer.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Topics</td><td class="px-4 py-3">100,000 standard and 1,000 FIFO per account</td><td class="px-4 py-3">These are default account quotas. A FIFO topic is a separate, smaller quota.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Subscriptions</td><td class="px-4 py-3">12,500,000 per standard topic. 100 per FIFO topic. Firehose: 5 per topic, per subscription owner. Pending: 5,000 per account.</td><td class="px-4 py-3">FIFO fan-out is much smaller than standard. HTTP, email, and similar protocols stay pending until the endpoint confirms.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Publish rate</td><td class="px-4 py-3">Per account, per Region. N. Virginia: 30,000 messages/sec. Oregon and Ireland: 9,000. Ohio, N. California, Mumbai, Seoul, Singapore, Sydney, Tokyo, and Frankfurt: 1,500 standard and 3,000 FIFO. Other supported Regions: 300 standard and 3,000 FIFO.</td><td class="px-4 py-3">Publish and PublishBatch share this quota. A batch of 10 counts as 10 messages. This is a soft quota.</td></tr>
+            <tr><td class="px-4 py-3 text-white">FIFO throughput</td><td class="px-4 py-3">300 messages/sec per message group. With topic scope: 3,000 messages/sec or 20 MB/sec, whichever comes first.</td><td class="px-4 py-3">One busy message group cannot use the whole account quota. Cross-Region delivery can be slower because order is preserved.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Batch size</td><td class="px-4 py-3">10 messages</td><td class="px-4 py-3">One PublishBatch request holds at most 10 entries.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Filter policy</td><td class="px-4 py-3">256 KB. At most 5 keys. At most 150 value combinations. 200 policies per topic and 10,000 per account.</td><td class="px-4 py-3">A message that matches no filter is not delivered. String matching is case-sensitive. The policy count can be raised.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Email delivery</td><td class="px-4 py-3">10 messages/sec per email or email-JSON subscription</td><td class="px-4 py-3">This is a hard limit. It cannot be increased.</td></tr>
+            <tr><td class="px-4 py-3 text-white">SMS defaults</td><td class="px-4 py-3">1.00 USD spend threshold per account. 20 messages/sec for promotional SMS and 20 for transactional SMS.</td><td class="px-4 py-3">These defaults can be raised. Country, origination identity, sandbox, and opt-out rules still apply.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Retries, then discard</td><td class="px-4 py-3">SQS and Lambda: 100,015 attempts over 23 days. Email, SMS, and mobile push: 50 attempts over 6 hours. HTTP/S custom retry time cannot exceed 3,600 seconds.</td><td class="px-4 py-3">When the policy ends, SNS discards the message unless the subscription has a dead-letter queue. Only HTTP/S lets you replace the retry policy. Firehose throttling uses the shorter policy.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Order and duplicates</td><td class="px-4 py-3">Standard: best-effort order, at-least-once delivery. FIFO: order inside one message group, with duplicate suppression.</td><td class="px-4 py-3">A standard topic is the wrong choice when every subscriber must see one global order.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Backlog and replay</td><td class="px-4 py-3">Standard topics have no archive. FIFO topics can archive messages for up to 365 days and replay them to a subscriber.</td><td class="px-4 py-3">A subscriber cannot poll old messages from a standard topic. Replay is a FIFO feature, started on the subscription.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a href="https://docs.aws.amazon.com/general/latest/gr/sns.html" target="_blank" rel="noreferrer" class="mt-4 inline-flex text-sm font-medium text-violet-300 hover:text-violet-200">Amazon SNS quotas in the AWS General Reference ↗</a>
+    </section>
+
     <section id="alternatives" class="mt-12" aria-labelledby="alternatives-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Alternatives</p>
       <h2 id="alternatives-title" class="mt-2 text-2xl font-semibold">Choose by interaction model, not familiarity</h2>
@@ -321,6 +404,62 @@ print(response["MessageId"])</code></pre></details>
       </div>
       <div id="code-modal-body" class="px-6 py-5"></div>
     </div>
+  </div>
+
+  <div hidden data-rich="pattern-pubsub">
+    <p class="text-sm leading-6 text-slate-300">The publisher sends to a topic. The subscriber attaches to that topic. Neither one addresses the other.</p>
+    <div class="mt-4 rounded-xl border border-violet-900/70 bg-violet-950/20 p-4">
+      <p class="text-[11px] font-medium uppercase tracking-wider text-violet-300">Why</p>
+      <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+        <li>The publisher only needs the topic ARN and <code class="text-violet-300">sns:Publish</code>.</li>
+        <li>A new subscriber is added with Subscribe. The publisher's code does not change.</li>
+        <li>The topic is the contract between them.</li>
+      </ul>
+    </div>
+    <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> the sender should not know, name, or wait for whoever is listening.</p>
+    <p class="mt-4 text-xs leading-5 text-slate-400">A successful publish means SNS accepted the message. It does not mean the subscriber finished its work.</p>
+  </div>
+
+  <div hidden data-rich="pattern-fanout">
+    <p class="text-sm leading-6 text-slate-300">One topic pushes a copy to every matching subscription. In production, put a separate SQS queue in front of each worker.</p>
+    <div class="mt-4 rounded-xl border border-sky-900/70 bg-sky-950/20 p-4">
+      <p class="text-[11px] font-medium uppercase tracking-wider text-sky-300">Why</p>
+      <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+        <li>Billing, shipping, and audit each get their own copy and their own pace.</li>
+        <li>A slow or failing worker does not block the others.</li>
+        <li>The queue holds the backlog, lets that worker scale on its own, and gives it its own retry window.</li>
+      </ul>
+    </div>
+    <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> consumers need a buffer, independent scaling, or retries.</p>
+    <p class="mt-4 text-xs leading-5 text-slate-400">SNS does not keep a backlog for consumers to poll. The queue does. Each queue needs a policy that allows the topic, and SQS charges still apply.</p>
+  </div>
+
+  <div hidden data-rich="pattern-a2a">
+    <p class="text-sm leading-6 text-slate-300">The subscriber is software. SNS pushes the event straight to the system that should react.</p>
+    <div class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4">
+      <p class="text-[11px] font-medium uppercase tracking-wider text-emerald-300">Why</p>
+      <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+        <li>Lambda runs a short handler without a server to manage.</li>
+        <li>HTTPS reaches a webhook outside AWS.</li>
+        <li>Firehose lands the stream in S3, Redshift, OpenSearch, or a service provider.</li>
+      </ul>
+    </div>
+    <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> systems must react to the same event.</p>
+    <p class="mt-4 text-xs leading-5 text-slate-400">A Lambda or webhook that is down has a shorter recovery window than a queue. Put SQS in front when the work must wait.</p>
+  </div>
+
+  <div hidden data-rich="pattern-a2p">
+    <p class="text-sm leading-6 text-slate-300">The subscriber is a person. SNS delivers the notification to a phone, an inbox, or an app.</p>
+    <div class="mt-4 rounded-xl border border-fuchsia-900/70 bg-fuchsia-950/20 p-4">
+      <p class="text-[11px] font-medium uppercase tracking-wider text-fuchsia-300">Why</p>
+      <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+        <li>SMS reaches a phone.</li>
+        <li>Email and email-JSON reach an inbox.</li>
+        <li>Mobile push reaches someone using your app.</li>
+      </ul>
+    </div>
+    <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> a person must see the notification.</p>
+    <p class="mt-4 text-xs leading-5 text-slate-400">This is not application integration. Consent, opt-out, sender identity, sandbox status, destination country, and SMS pricing are part of the design.</p>
   </div>
 
   <div hidden data-rich="publishers">

@@ -22,6 +22,16 @@ output "learning_urls" {
 }
 
 output "api_gateway_custom_domain_url" {
-  description = "HTTPS custom domain for POST /buy-direct and POST /buy-queue. Point the dashboard BASE_URL at this value."
+  description = "HTTPS custom domain for POST /buy-direct, POST /buy-queue, and POST /orders."
   value       = "https://${aws_apigatewayv2_domain_name.api.domain_name}"
+}
+
+output "order_events_topic_arn" {
+  description = "SNS topic that receives one message per checkout."
+  value       = aws_sns_topic.orders.arn
+}
+
+output "order_api_url" {
+  description = "HTTPS endpoint the SNS order lab posts to."
+  value       = "https://${aws_apigatewayv2_domain_name.api.domain_name}/orders"
 }

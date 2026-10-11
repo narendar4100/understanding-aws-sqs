@@ -121,6 +121,7 @@
 
     <nav class="mt-12 flex flex-wrap gap-2 border-y border-slate-800 py-5 text-xs" aria-label="On this page">
       <a href="#how-it-works" class="rounded-full border border-violet-700 px-3 py-1.5 text-violet-300 hover:bg-violet-950">How it works</a>
+      <a href="#order-lab" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Order lab</a>
       <a href="#fanout" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Fan-out</a>
       <a href="#filter-lab" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Filter simulator</a>
       <a href="#delivery" class="rounded-full border border-slate-700 px-3 py-1.5 hover:border-violet-500">Delivery</a>
@@ -200,6 +201,55 @@
       <a href="https://docs.aws.amazon.com/sns/latest/dg/welcome.html" target="_blank" rel="noreferrer" class="mt-3 inline-flex text-sm font-medium text-violet-300 hover:text-violet-200">Validate with the Amazon SNS Developer Guide ↗</a>
     </section>
 
+    <section id="order-lab" class="mt-12 rounded-2xl border border-violet-900/70 bg-slate-900 p-6 sm:p-8" aria-labelledby="order-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">One checkout</p>
+      <h2 id="order-title" class="mt-2 text-2xl font-semibold">Place one order. Five subscribers decide for themselves.</h2>
+      <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-300">The website calls API Gateway. The order Lambda checks the card result and whether the shipping country matches the billing country, then publishes one message. It does not call billing, shipping, or email itself. Each subscription filter accepts or drops that message.</p>
+      <div class="mt-6 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
+        <p class="rounded-xl bg-slate-950 p-4 text-slate-300"><strong class="text-white">Billing queue</strong><br />payment = approved</p>
+        <p class="rounded-xl bg-slate-950 p-4 text-slate-300"><strong class="text-white">Shipping queue</strong><br />approved, physical, and risk = clear</p>
+        <p class="rounded-xl bg-slate-950 p-4 text-slate-300"><strong class="text-white">Risk Lambda</strong><br />shipping country differs from billing country</p>
+        <p class="rounded-xl bg-slate-950 p-4 text-slate-300"><strong class="text-white">Customer email</strong><br />approved, email present, and risk = clear. SES sends it, because SNS email cannot use the address typed on the form.</p>
+        <p class="rounded-xl bg-slate-950 p-4 text-slate-300"><strong class="text-white">Operations email</strong><br />one confirmed inbox. opsRoute is missing-email or urgent, because one SNS policy cannot OR two different attribute names.</p>
+      </div>
+      <form id="order-form" class="mt-6 grid gap-4 rounded-xl border border-slate-800 bg-slate-950 p-5 md:grid-cols-2">
+        <label class="text-sm text-slate-300">Item
+          <select id="order-item" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white">
+            <option value="physical">Physical</option>
+            <option value="digital">Digital</option>
+          </select>
+        </label>
+        <label class="text-sm text-slate-300">Card result
+          <select id="order-payment" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white">
+            <option value="approved">Approved</option>
+            <option value="declined">Declined</option>
+          </select>
+        </label>
+        <label class="text-sm text-slate-300">Billing country
+          <input id="order-bill" value="US" maxlength="2" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 uppercase text-white" />
+        </label>
+        <label class="text-sm text-slate-300">Shipping country
+          <input id="order-ship" value="US" maxlength="2" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 uppercase text-white" />
+        </label>
+        <label class="text-sm text-slate-300">Amount
+          <input id="order-amount" type="number" min="0" step="0.01" value="40" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+        </label>
+        <label class="text-sm text-slate-300">Customer email
+          <input id="order-email" type="email" placeholder="Leave empty to alert operations" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+        </label>
+        <div class="flex flex-wrap items-center gap-2 md:col-span-2">
+          <button type="button" data-order-preset="clear" class="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-violet-500">Physical, approved, same country</button>
+          <button type="button" data-order-preset="digital" class="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-violet-500">Digital download</button>
+          <button type="button" data-order-preset="review" class="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-violet-500">Ship to another country</button>
+          <button type="button" data-order-preset="missing" class="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-violet-500">No customer email</button>
+          <button type="button" data-order-preset="declined" class="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-violet-500">Card declined</button>
+          <button type="submit" class="rounded-lg bg-violet-500 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-400">Place order</button>
+        </div>
+      </form>
+      <pre id="order-result" class="mt-4 overflow-x-auto rounded-xl bg-black p-4 text-xs leading-6 text-violet-200" aria-live="polite">The matching subscribers appear here after you place an order.</pre>
+      <p class="mt-4 text-xs leading-5 text-slate-500">The page shows which filters match. Billing, shipping, and risk write to CloudWatch. Customer mail sends only after the SES from-address is verified; in the SES sandbox the shopper address must be verified too. The operations inbox must click the SNS confirmation before those alerts arrive.</p>
+    </section>
+
     <section class="mt-12 grid gap-5 lg:grid-cols-2" aria-label="Amazon SNS core benefits">
       <article class="rounded-2xl border border-violet-900/70 bg-slate-900 p-6">
         <div class="flex items-start gap-4">
@@ -267,17 +317,21 @@
     <section id="filter-lab" class="mt-12 rounded-2xl border border-violet-900/70 bg-slate-900 p-6 sm:p-8" aria-labelledby="filter-title">
       <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Interactive example</p>
       <h2 id="filter-title" class="mt-2 text-2xl font-semibold">See subscription filters route the same event</h2>
-      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Choose an event. This simulator evaluates three subscription policies. Real policies may inspect message attributes or a well-formed JSON message body.</p>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Choose an order. This simulator uses the same attribute rules as the live order lab. A policy matches only when every listed attribute matches.</p>
       <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Select a sample event">
-        <button type="button" data-event="physical-us" class="event-button rounded-lg bg-violet-500 px-4 py-2 text-sm font-semibold text-white">Physical · US · 125 USD</button>
-        <button type="button" data-event="digital-us" class="event-button rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300">Digital · US · 25 USD</button>
-        <button type="button" data-event="physical-eu" class="event-button rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300">Physical · EU · 220 USD</button>
+        <button type="button" data-event="approved-physical" class="event-button rounded-lg bg-violet-500 px-4 py-2 text-sm font-semibold text-white">Physical · approved · same country</button>
+        <button type="button" data-event="approved-digital" class="event-button rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300">Digital · approved</button>
+        <button type="button" data-event="country-review" class="event-button rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300">Ship to another country</button>
+        <button type="button" data-event="missing-email" class="event-button rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300">No customer email</button>
+        <button type="button" data-event="declined" class="event-button rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300">Card declined</button>
       </div>
       <pre id="event-json" class="mt-4 overflow-x-auto rounded-xl bg-black p-4 text-xs leading-6 text-violet-200" aria-live="polite"></pre>
       <div class="mt-5 grid gap-4 md:grid-cols-3">
-        <article data-subscriber="billing" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Billing queue</p><code class="mt-2 block text-xs text-slate-400">{"eventType":["OrderPlaced"]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
-        <article data-subscriber="shipping" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Shipping queue</p><code class="mt-2 block text-xs text-slate-400">{"itemType":["physical"]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
-        <article data-subscriber="review" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Manual review queue</p><code class="mt-2 block text-xs text-slate-400">{"amount":[{"numeric":[">=",100]}]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
+        <article data-subscriber="billing" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Billing queue</p><code class="mt-2 block text-xs text-slate-400">{"payment":["approved"]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
+        <article data-subscriber="shipping" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Shipping queue</p><code class="mt-2 block text-xs text-slate-400">{"payment":["approved"],"itemType":["physical"],"risk":["clear"]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
+        <article data-subscriber="risk" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Risk Lambda</p><code class="mt-2 block text-xs text-slate-400">{"risk":["review"]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
+        <article data-subscriber="customer" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Customer email</p><code class="mt-2 block text-xs text-slate-400">{"payment":["approved"],"hasCustomerEmail":["true"],"risk":["clear"]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
+        <article data-subscriber="operations" class="subscriber rounded-xl border border-slate-700 bg-slate-950 p-5"><p class="font-semibold">Operations email</p><code class="mt-2 block text-xs text-slate-400">{"opsRoute":["missing-email","urgent"]}</code><p class="route-result mt-4 text-sm font-semibold"></p></article>
       </div>
       <details class="mt-5 rounded-xl border border-slate-800 bg-slate-950 p-5"><summary class="cursor-pointer font-semibold text-violet-300">Filter policy rules worth testing</summary><ul class="mt-4 grid gap-2 text-sm leading-6 text-slate-400 sm:grid-cols-2"><li>• Multiple values in one property are OR.</li><li>• Different properties are AND.</li><li>• Operators include exact, prefix, suffix, anything-but, exists, IP, and numeric.</li><li>• Filter changes can take time to propagate; filters are not authorization.</li><li>• Missing required properties do not match.</li><li>• Keep contract tests for every policy.</li></ul></details>
     </section>
@@ -898,14 +952,18 @@ print(response["MessageId"])</code></pre></details>
 
   <script>
     const events = {
-      "physical-us": { eventId: "evt-1042", eventType: "OrderPlaced", itemType: "physical", region: "US", amount: 125 },
-      "digital-us": { eventId: "evt-1043", eventType: "OrderPlaced", itemType: "digital", region: "US", amount: 25 },
-      "physical-eu": { eventId: "evt-1044", eventType: "OrderPlaced", itemType: "physical", region: "EU", amount: 220 }
+      "approved-physical": { eventType: "OrderPlaced", payment: "approved", itemType: "physical", billCountry: "US", shipCountry: "US", hasCustomerEmail: "true", risk: "clear", opsRoute: "none" },
+      "approved-digital": { eventType: "OrderPlaced", payment: "approved", itemType: "digital", billCountry: "US", shipCountry: "US", hasCustomerEmail: "true", risk: "clear", opsRoute: "none" },
+      "country-review": { eventType: "OrderPlaced", payment: "approved", itemType: "physical", billCountry: "US", shipCountry: "CA", hasCustomerEmail: "true", risk: "review", opsRoute: "urgent" },
+      "missing-email": { eventType: "OrderPlaced", payment: "approved", itemType: "physical", billCountry: "US", shipCountry: "US", hasCustomerEmail: "false", risk: "clear", opsRoute: "missing-email" },
+      declined: { eventType: "OrderPlaced", payment: "declined", itemType: "physical", billCountry: "US", shipCountry: "US", hasCustomerEmail: "true", risk: "clear", opsRoute: "urgent" }
     };
     const matches = {
-      billing: event => event.eventType === "OrderPlaced",
-      shipping: event => event.itemType === "physical",
-      review: event => event.amount >= 100
+      billing: event => event.payment === "approved",
+      shipping: event => event.payment === "approved" && event.itemType === "physical" && event.risk === "clear",
+      risk: event => event.risk === "review",
+      customer: event => event.payment === "approved" && event.hasCustomerEmail === "true" && event.risk === "clear",
+      operations: event => event.opsRoute === "missing-email" || event.opsRoute === "urgent"
     };
     function renderEvent(name) {
       const event = events[name];
@@ -924,7 +982,53 @@ print(response["MessageId"])</code></pre></details>
       });
     }
     document.querySelectorAll(".event-button").forEach(button => button.addEventListener("click", () => renderEvent(button.dataset.event)));
-    renderEvent("physical-us");
+    renderEvent("approved-physical");
+
+    const orderForm = document.getElementById("order-form");
+    const orderResult = document.getElementById("order-result");
+    const orderPresets = {
+      clear: { item: "physical", payment: "approved", bill: "US", ship: "US", email: "shopper@example.com", amount: "40" },
+      digital: { item: "digital", payment: "approved", bill: "US", ship: "US", email: "shopper@example.com", amount: "15" },
+      review: { item: "physical", payment: "approved", bill: "US", ship: "CA", email: "shopper@example.com", amount: "80" },
+      missing: { item: "physical", payment: "approved", bill: "US", ship: "US", email: "", amount: "40" },
+      declined: { item: "physical", payment: "declined", bill: "US", ship: "US", email: "shopper@example.com", amount: "40" }
+    };
+    document.querySelectorAll("[data-order-preset]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const preset = orderPresets[button.getAttribute("data-order-preset")];
+        document.getElementById("order-item").value = preset.item;
+        document.getElementById("order-payment").value = preset.payment;
+        document.getElementById("order-bill").value = preset.bill;
+        document.getElementById("order-ship").value = preset.ship;
+        document.getElementById("order-email").value = preset.email;
+        document.getElementById("order-amount").value = preset.amount;
+      });
+    });
+    orderForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const payload = {
+        itemType: document.getElementById("order-item").value,
+        payment: document.getElementById("order-payment").value,
+        billCountry: document.getElementById("order-bill").value,
+        shipCountry: document.getElementById("order-ship").value,
+        customerEmail: document.getElementById("order-email").value,
+        amount: Number(document.getElementById("order-amount").value)
+      };
+      orderResult.textContent = "Publishing the order...";
+      fetch("https://demo.sisuraphotography.com/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function (response) {
+        return response.json().then(function (body) {
+          return { status: response.status, body: body };
+        });
+      }).then(function (result) {
+        orderResult.textContent = JSON.stringify(result.body, null, 2);
+      }).catch(function () {
+        orderResult.textContent = "No HTTP response. POST /orders is created by terraform/orders.tf on the next apply.";
+      });
+    });
 
     const codeModal = document.getElementById("code-modal");
     const codeModalBody = document.getElementById("code-modal-body");

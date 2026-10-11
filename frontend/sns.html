@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -54,7 +54,7 @@
               <div class="min-w-0 flex-1 rounded-lg border border-slate-800 bg-slate-900 px-1 py-2"><p class="text-base" aria-hidden="true">📦</p><p class="mt-1 font-medium">Publisher</p></div>
               <span class="text-violet-400" aria-hidden="true">→</span>
               <div class="min-w-0 flex-1 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <span class="text-violet-400" aria-hidden="true">→</span>
+              <span class="shrink-0 rounded bg-amber-500/20 px-1 py-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
               <div class="min-w-0 flex-1 rounded-lg border border-slate-800 bg-slate-900 px-1 py-2"><p class="text-base" aria-hidden="true">📥</p><p class="mt-1 font-medium">Subscriber</p></div>
             </div>
           </article>
@@ -63,12 +63,17 @@
               <p class="text-[11px] font-semibold uppercase tracking-wider text-sky-300">Fan-out</p>
               <button type="button" data-snippet="pattern-fanout" data-eyebrow="Fan-out" data-title="One publish, many independent queues" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-sky-700 text-[11px] font-semibold text-sky-300 hover:bg-sky-950" aria-label="Why and when to use fan-out">i</button>
             </div>
-            <div class="mt-3 flex items-center gap-2">
-              <div class="w-16 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <div class="grid flex-1 gap-1 text-[10px] text-slate-300">
-                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4" />Billing queue</p>
-                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4" />Shipping queue</p>
-                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4" />Audit queue</p>
+            <div class="mt-3 flex items-center gap-1">
+              <div class="w-12 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
+              <div class="grid shrink-0 gap-1">
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+              </div>
+              <div class="grid min-w-0 flex-1 gap-1 text-[10px] text-slate-300">
+                <p class="flex h-6 items-center gap-1 rounded-md bg-slate-900 px-1.5"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4 shrink-0" />Billing queue</p>
+                <p class="flex h-6 items-center gap-1 rounded-md bg-slate-900 px-1.5"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4 shrink-0" />Shipping queue</p>
+                <p class="flex h-6 items-center gap-1 rounded-md bg-slate-900 px-1.5"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4 shrink-0" />Audit queue</p>
               </div>
             </div>
           </article>
@@ -77,12 +82,17 @@
               <p class="text-[11px] font-semibold uppercase tracking-wider text-emerald-300">App to app</p>
               <button type="button" data-snippet="pattern-a2a" data-eyebrow="Application-to-application" data-title="Connect systems" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-emerald-700 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-950" aria-label="Why and when to use application-to-application">i</button>
             </div>
-            <div class="mt-3 flex items-center gap-2">
-              <div class="w-16 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <div class="grid flex-1 gap-1 text-[10px] text-slate-300">
-                <p class="flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-1"><img src="../assets/aws/lambda.svg" alt="" class="h-4 w-4" />Lambda</p>
-                <p class="rounded-md bg-slate-900 px-2 py-1">🌐 HTTPS webhook</p>
-                <p class="rounded-md bg-slate-900 px-2 py-1">🔥 Firehose</p>
+            <div class="mt-3 flex items-center gap-1">
+              <div class="w-12 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
+              <div class="grid shrink-0 gap-1">
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+              </div>
+              <div class="grid min-w-0 flex-1 gap-1 text-[10px] text-slate-300">
+                <p class="flex h-6 items-center gap-1 rounded-md bg-slate-900 px-1.5"><img src="../assets/aws/lambda.svg" alt="" class="h-4 w-4 shrink-0" />Lambda</p>
+                <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">🌐 HTTPS</p>
+                <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">🔥 Firehose</p>
               </div>
             </div>
           </article>
@@ -91,12 +101,17 @@
               <p class="text-[11px] font-semibold uppercase tracking-wider text-fuchsia-300">App to person</p>
               <button type="button" data-snippet="pattern-a2p" data-eyebrow="Application-to-person" data-title="Notify people" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-fuchsia-700 text-[11px] font-semibold text-fuchsia-300 hover:bg-fuchsia-950" aria-label="Why and when to use application-to-person">i</button>
             </div>
-            <div class="mt-3 flex items-center gap-2">
-              <div class="w-16 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <div class="grid flex-1 gap-1 text-[10px] text-slate-300">
-                <p class="rounded-md bg-slate-900 px-2 py-1">💬 SMS</p>
-                <p class="rounded-md bg-slate-900 px-2 py-1">✉️ Email</p>
-                <p class="rounded-md bg-slate-900 px-2 py-1">📱 Mobile push</p>
+            <div class="mt-3 flex items-center gap-1">
+              <div class="w-12 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
+              <div class="grid shrink-0 gap-1">
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+              </div>
+              <div class="grid min-w-0 flex-1 gap-1 text-[10px] text-slate-300">
+                <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">💬 SMS</p>
+                <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">✉️ Email</p>
+                <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">📱 Push</p>
               </div>
             </div>
           </article>
@@ -122,7 +137,7 @@
       <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-300">A topic is a logical access point and communication channel. Publishers and subscribers do not need to know about each other. Each subscription chooses a protocol, an endpoint, an optional filter policy, retry behavior, and an optional SQS dead-letter queue.</p>
 
       <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950 p-5">
-        <div class="min-w-[820px]">
+        <div class="min-w-[1080px]">
           <div class="flex items-center">
             <div class="relative w-[140px] shrink-0 rounded-xl border border-slate-700 bg-slate-900 p-4 text-center">
               <button type="button" data-snippet="publishers" data-eyebrow="Who can publish" data-title="Possible publishers" class="absolute right-2 top-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-violet-700 text-[11px] font-semibold text-violet-300 hover:bg-violet-950" aria-label="Show possible SNS publishers">i</button>
@@ -147,20 +162,28 @@
 
               <div class="rounded-xl border border-dashed border-sky-700 bg-sky-950/10 p-3">
                 <div class="mb-2 flex h-5 items-center justify-between gap-2"><p class="text-[11px] font-semibold uppercase tracking-wider text-sky-300">A2A · application-to-application</p><button type="button" data-snippet="subscribers" data-eyebrow="A2A and A2P" data-title="Two subscriber families" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-sky-700 text-[11px] font-semibold text-sky-300" aria-label="Explain A2A and A2P">i</button></div>
+                <div class="mb-1 grid grid-cols-[210px_1fr] gap-8 px-3 text-[9px] font-medium uppercase tracking-wider text-slate-500">
+                  <p>Subscription protocol / endpoint</p>
+                  <p>Subscriber / what happens next</p>
+                </div>
                 <div class="space-y-2 text-xs text-slate-200">
-                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><img src="../assets/aws/sqs.svg" alt="" class="h-6 w-6" />Amazon SQS queue</div>
-                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><img src="../assets/aws/lambda.svg" alt="" class="h-6 w-6" />AWS Lambda function</div>
-                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">🌐</span>HTTP/S webhook endpoint</div>
-                  <div class="relative flex min-h-9 flex-wrap items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">🔥</span>Amazon Data Firehose<span class="text-violet-400">→</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">S3</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">Redshift</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">OpenSearch</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">service providers</span></div>
+                  <div class="relative grid min-h-10 grid-cols-[210px_1fr] items-center gap-8 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="flex items-center gap-2"><img src="../assets/aws/sqs.svg" alt="" class="h-6 w-6" /><span><strong class="block font-medium text-white">Amazon SQS</strong><span class="text-[10px] text-slate-500">sqs protocol · billing queue</span></span></span><span class="relative flex items-center gap-2 rounded-md bg-sky-950/40 px-3 py-2"><span class="absolute right-full h-0.5 w-8 bg-sky-600" aria-hidden="true"></span><span class="text-base" aria-hidden="true">⚙️</span><span><strong class="block font-medium text-sky-200">Billing worker</strong><span class="text-[10px] text-slate-400">polls the queue and processes payment</span></span></span></div>
+                  <div class="relative grid min-h-10 grid-cols-[210px_1fr] items-center gap-8 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="flex items-center gap-2"><img src="../assets/aws/lambda.svg" alt="" class="h-6 w-6" /><span><strong class="block font-medium text-white">AWS Lambda</strong><span class="text-[10px] text-slate-500">lambda protocol · function</span></span></span><span class="relative flex items-center gap-2 rounded-md bg-sky-950/40 px-3 py-2"><span class="absolute right-full h-0.5 w-8 bg-sky-600" aria-hidden="true"></span><span class="text-base" aria-hidden="true">🤖</span><span><strong class="block font-medium text-sky-200">Automation</strong><span class="text-[10px] text-slate-400">function validates and updates the order</span></span></span></div>
+                  <div class="relative grid min-h-10 grid-cols-[210px_1fr] items-center gap-8 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="flex items-center gap-2"><span class="w-6 text-center text-base" aria-hidden="true">🌐</span><span><strong class="block font-medium text-white">HTTP/S</strong><span class="text-[10px] text-slate-500">https protocol · webhook URL</span></span></span><span class="relative flex items-center gap-2 rounded-md bg-sky-950/40 px-3 py-2"><span class="absolute right-full h-0.5 w-8 bg-sky-600" aria-hidden="true"></span><span class="text-base" aria-hidden="true">🤝</span><span><strong class="block font-medium text-sky-200">Partner order API</strong><span class="text-[10px] text-slate-400">receives the signed webhook request</span></span></span></div>
+                  <div class="relative grid min-h-10 grid-cols-[210px_1fr] items-center gap-8 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="flex items-center gap-2"><span class="w-6 text-center text-base" aria-hidden="true">🔥</span><span><strong class="block font-medium text-white">Amazon Data Firehose</strong><span class="text-[10px] text-slate-500">firehose protocol · delivery stream</span></span></span><span class="relative flex flex-wrap items-center gap-1.5 rounded-md bg-sky-950/40 px-3 py-2"><span class="absolute right-full h-0.5 w-8 bg-sky-600" aria-hidden="true"></span><strong class="mr-1 font-medium text-sky-200">Analytics destinations</strong><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px]">S3</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px]">Redshift</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px]">OpenSearch</span><span class="rounded bg-slate-800 px-1.5 py-0.5 text-[10px]">providers</span></span></div>
                 </div>
               </div>
 
               <div class="rounded-xl border border-dashed border-fuchsia-700 bg-fuchsia-950/10 p-3">
                 <div class="mb-2 flex h-5 items-center"><p class="text-[11px] font-semibold uppercase tracking-wider text-fuchsia-300">A2P · application-to-person</p></div>
+                <div class="mb-1 grid grid-cols-[210px_1fr] gap-8 px-3 text-[9px] font-medium uppercase tracking-wider text-slate-500">
+                  <p>Delivery protocol / endpoint</p>
+                  <p>Subscriber</p>
+                </div>
                 <div class="space-y-2 text-xs text-slate-200">
-                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">✉️</span>Email and email-JSON</div>
-                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">💬</span>Mobile text message (SMS)</div>
-                  <div class="relative flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="w-6 text-center text-base" aria-hidden="true">📱</span>Mobile push notification</div>
+                  <div class="relative grid min-h-10 grid-cols-[210px_1fr] items-center gap-8 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="flex items-center gap-2"><span class="w-6 text-center text-base" aria-hidden="true">✉️</span><span><strong class="block font-medium text-white">Email / email-JSON</strong><span class="text-[10px] text-slate-500">email protocol · email address</span></span></span><span class="relative flex items-center gap-2 rounded-md bg-fuchsia-950/40 px-3 py-2"><span class="absolute right-full h-0.5 w-8 bg-fuchsia-700" aria-hidden="true"></span><span class="text-base" aria-hidden="true">👩‍💻</span><span><strong class="block font-medium text-fuchsia-200">Operations team</strong><span class="text-[10px] text-slate-400">reads the alert in its inbox</span></span></span></div>
+                  <div class="relative grid min-h-10 grid-cols-[210px_1fr] items-center gap-8 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="flex items-center gap-2"><span class="w-6 text-center text-base" aria-hidden="true">💬</span><span><strong class="block font-medium text-white">SMS</strong><span class="text-[10px] text-slate-500">sms protocol · phone number</span></span></span><span class="relative flex items-center gap-2 rounded-md bg-fuchsia-950/40 px-3 py-2"><span class="absolute right-full h-0.5 w-8 bg-fuchsia-700" aria-hidden="true"></span><span class="text-base" aria-hidden="true">👤</span><span><strong class="block font-medium text-fuchsia-200">Customer</strong><span class="text-[10px] text-slate-400">receives a text notification</span></span></span></div>
+                  <div class="relative grid min-h-10 grid-cols-[210px_1fr] items-center gap-8 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5"><span class="absolute right-full top-1/2 h-0.5 w-[53px] -translate-y-1/2 bg-violet-500"><span class="absolute -right-0.5 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[7px] border-y-transparent border-l-violet-400"></span></span><span class="flex items-center gap-2"><span class="w-6 text-center text-base" aria-hidden="true">📱</span><span><strong class="block font-medium text-white">Mobile push</strong><span class="text-[10px] text-slate-500">application protocol · device endpoint</span></span></span><span class="relative flex items-center gap-2 rounded-md bg-fuchsia-950/40 px-3 py-2"><span class="absolute right-full h-0.5 w-8 bg-fuchsia-700" aria-hidden="true"></span><span class="text-base" aria-hidden="true">📲</span><span><strong class="block font-medium text-fuchsia-200">Mobile app user</strong><span class="text-[10px] text-slate-400">sees the app notification</span></span></span></div>
                 </div>
               </div>
             </div>
@@ -414,6 +437,7 @@ print(response["MessageId"])</code></pre></details>
         <li>The publisher only needs the topic ARN and <code class="text-violet-300">sns:Publish</code>.</li>
         <li>A new subscriber is added with Subscribe. The publisher's code does not change.</li>
         <li>The topic is the contract between them.</li>
+        <li>The subscriber can add a filter. The publisher still sends one message, and SNS delivers it only when that policy matches.</li>
       </ul>
     </div>
     <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> the sender should not know, name, or wait for whoever is listening.</p>
@@ -428,6 +452,7 @@ print(response["MessageId"])</code></pre></details>
         <li>Billing, shipping, and audit each get their own copy and their own pace.</li>
         <li>A slow or failing worker does not block the others.</li>
         <li>The queue holds the backlog, lets that worker scale on its own, and gives it its own retry window.</li>
+        <li>Each queue has its own filter. Shipping can take physical orders while audit takes every order. A miss is dropped, not stored on the topic.</li>
       </ul>
     </div>
     <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> consumers need a buffer, independent scaling, or retries.</p>
@@ -442,6 +467,7 @@ print(response["MessageId"])</code></pre></details>
         <li>Lambda runs a short handler without a server to manage.</li>
         <li>HTTPS reaches a webhook outside AWS.</li>
         <li>Firehose lands the stream in S3, Redshift, OpenSearch, or a service provider.</li>
+        <li>Lambda, the webhook, and Firehose each filter on their own. One event can wake Lambda and skip Firehose.</li>
       </ul>
     </div>
     <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> systems must react to the same event.</p>
@@ -456,6 +482,7 @@ print(response["MessageId"])</code></pre></details>
         <li>SMS reaches a phone.</li>
         <li>Email and email-JSON reach an inbox.</li>
         <li>Mobile push reaches someone using your app.</li>
+        <li>SMS can match only high-priority events while email matches everything. People are not sent every publication.</li>
       </ul>
     </div>
     <p class="mt-4 rounded-xl border border-emerald-900/70 bg-emerald-950/20 p-4 text-sm leading-6 text-slate-300"><strong class="text-emerald-300">Use it when</strong> a person must see the notification.</p>

@@ -54,7 +54,7 @@
               <div class="min-w-0 flex-1 rounded-lg border border-slate-800 bg-slate-900 px-1 py-2"><p class="text-base" aria-hidden="true">📦</p><p class="mt-1 font-medium">Publisher</p></div>
               <span class="text-violet-400" aria-hidden="true">→</span>
               <div class="min-w-0 flex-1 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <span class="shrink-0 rounded bg-amber-500/20 px-1 py-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
+              <span class="text-violet-400" aria-hidden="true">→</span>
               <div class="min-w-0 flex-1 rounded-lg border border-slate-800 bg-slate-900 px-1 py-2"><p class="text-base" aria-hidden="true">📥</p><p class="mt-1 font-medium">Subscriber</p></div>
             </div>
           </article>
@@ -65,11 +65,7 @@
             </div>
             <div class="mt-3 flex items-center gap-1">
               <div class="w-12 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <div class="grid shrink-0 gap-1">
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-              </div>
+              <span class="shrink-0 text-violet-400" aria-hidden="true">→</span>
               <div class="grid min-w-0 flex-1 gap-1 text-[10px] text-slate-300">
                 <p class="flex h-6 items-center gap-1 rounded-md bg-slate-900 px-1.5"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4 shrink-0" />Billing queue</p>
                 <p class="flex h-6 items-center gap-1 rounded-md bg-slate-900 px-1.5"><img src="../assets/aws/sqs.svg" alt="" class="h-4 w-4 shrink-0" />Shipping queue</p>
@@ -84,11 +80,7 @@
             </div>
             <div class="mt-3 flex items-center gap-1">
               <div class="w-12 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <div class="grid shrink-0 gap-1">
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-              </div>
+              <span class="shrink-0 text-violet-400" aria-hidden="true">→</span>
               <div class="grid min-w-0 flex-1 gap-1 text-[10px] text-slate-300">
                 <p class="flex h-6 items-center gap-1 rounded-md bg-slate-900 px-1.5"><img src="../assets/aws/lambda.svg" alt="" class="h-4 w-4 shrink-0" />Lambda</p>
                 <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">🌐 HTTPS</p>
@@ -103,11 +95,7 @@
             </div>
             <div class="mt-3 flex items-center gap-1">
               <div class="w-12 shrink-0 rounded-lg border border-violet-800 bg-violet-950/50 px-1 py-2 text-center text-[10px] leading-tight"><img src="../assets/aws/sns.svg" alt="" class="mx-auto h-5 w-5" /><p class="mt-1 font-medium">Topic</p></div>
-              <div class="grid shrink-0 gap-1">
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-                <span class="flex h-6 items-center rounded bg-amber-500/20 px-1 font-mono text-[9px] leading-none text-amber-200">filter</span>
-              </div>
+              <span class="shrink-0 text-violet-400" aria-hidden="true">→</span>
               <div class="grid min-w-0 flex-1 gap-1 text-[10px] text-slate-300">
                 <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">💬 SMS</p>
                 <p class="flex h-6 items-center rounded-md bg-slate-900 px-1.5">✉️ Email</p>
@@ -455,10 +443,34 @@ print(response["MessageId"])</code></pre></details>
       </div>
     </section>
 
-    <section class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8" aria-labelledby="questions-title">
-      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Architecture review</p>
-      <h2 id="questions-title" class="mt-2 text-2xl font-semibold">Questions every SNS design should answer</h2>
-      <div class="mt-6 grid gap-3 text-sm leading-6 text-slate-400 md:grid-cols-2"><p>1. Why pub/sub instead of one work queue?</p><p>2. Does each subscriber need an SQS buffer?</p><p>3. What stable event id makes processing idempotent?</p><p>4. Which fields may filters depend on?</p><p>5. Where do delivery and processing failures go?</p><p>6. Who owns redrive, alarms, and schema evolution?</p><p>7. Are topic, queue, and KMS policies least privilege?</p><p>8. What is the cost multiplied by subscribers?</p></div>
+    <section class="mt-12 rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-6 sm:p-8" aria-labelledby="questions-title">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-violet-400">Questions that should create a buzz</p>
+      <h2 id="questions-title" class="mt-2 text-2xl font-semibold text-white">Can your design answer these before production does?</h2>
+      <p class="mt-2 text-sm text-slate-400">Twenty questions across the six Well-Architected pillars: operational excellence, security, reliability, performance efficiency, cost, and sustainability. Click one. The list scrolls inside this panel.</p>
+      <div class="mt-6 max-h-80 overflow-y-auto pr-1">
+        <div class="grid gap-3 md:grid-cols-2">
+          <button type="button" data-snippet="q01" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">01</span> A Publish call returned a message ID. Did every subscriber finish?</button>
+          <button type="button" data-snippet="q02" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">02</span> Which SNS and subscriber metrics deserve an alarm?</button>
+          <button type="button" data-snippet="q03" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">03</span> Who owns a message in a subscription dead-letter queue, and how is it redriven?</button>
+          <button type="button" data-snippet="q04" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">04</span> What permission does a publisher need when the topic is encrypted?</button>
+          <button type="button" data-snippet="q05" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">05</span> How do you stop another topic from writing to your SQS queue?</button>
+          <button type="button" data-snippet="q06" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">06</span> How does an HTTPS endpoint prove a post came from your topic?</button>
+          <button type="button" data-snippet="q07" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">07</span> What should you refuse to put in the message body?</button>
+          <button type="button" data-snippet="q08" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">08</span> What does durable acceptance actually promise?</button>
+          <button type="button" data-snippet="q09" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">09</span> When do you choose a standard topic, and when do you choose FIFO?</button>
+          <button type="button" data-snippet="q10" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">10</span> Which subscribers need their own SQS queue?</button>
+          <button type="button" data-snippet="q11" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">11</span> What happens after SNS finishes its delivery retries?</button>
+          <button type="button" data-snippet="q12" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">12</span> Can a subscriber read an older message from the topic?</button>
+          <button type="button" data-snippet="q13" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">13</span> Where does a payload larger than 256 KiB go?</button>
+          <button type="button" data-snippet="q14" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">14</span> How does a subscription filter combine attributes, and what are its limits?</button>
+          <button type="button" data-snippet="q15" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">15</span> What caps the publish rate, and what caps one FIFO message group?</button>
+          <button type="button" data-snippet="q16" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">16</span> Does one slow subscriber stop the others?</button>
+          <button type="button" data-snippet="q17" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">17</span> Why does the tenth subscriber change the bill?</button>
+          <button type="button" data-snippet="q18" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">18</span> Why is email or SMS a different cost and operations problem?</button>
+          <button type="button" data-snippet="q19" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">19</span> How do filters avoid waking subscribers that do not care?</button>
+          <button type="button" data-snippet="q20" class="rounded-lg border border-slate-800 bg-black/40 p-4 text-left text-sm leading-6 text-slate-300 hover:border-violet-700"><span class="font-mono text-violet-400">20</span> When is the answer SNS, SQS, EventBridge, or Kinesis?</button>
+        </div>
+      </div>
     </section>
 
     <footer class="mt-12 border-t border-slate-800 py-8 text-sm text-slate-500">
@@ -1034,10 +1046,42 @@ print(response["MessageId"])</code></pre></details>
     const codeModalBody = document.getElementById("code-modal-body");
     const codeModalEyebrow = document.getElementById("code-modal-eyebrow");
     const codeModalTitle = document.getElementById("code-modal-title");
+    const questions = {
+      q01: { eyebrow: "Operational excellence", title: "Publish accepted is not work finished", answer: "A successful Publish returns a message ID after SNS accepts the message. It does not mean billing, shipping, or a person finished the work. Correlate that message ID with the subscriber's own log, and alarm on failed deliveries rather than only on the API response." },
+      q02: { eyebrow: "Operational excellence", title: "What you alarm on", answer: "Watch NumberOfNotificationsFailed, the depth of each subscription dead-letter queue, and, for an SQS subscriber, the age of the oldest message. A rising publish count can hide one subscriber that is down." },
+      q03: { eyebrow: "Operational excellence", title: "Who owns a delivery failure", answer: "A subscription dead-letter queue holds a message SNS could not deliver after the retry policy. SQS, Lambda, and HTTP/S subscriptions can use one. It does not catch a bug after the subscriber has already accepted the message. That failure belongs to the queue's own dead-letter queue or to the function. The owning team alarms, fixes the endpoint, and redrives." },
+      q04: { eyebrow: "Security", title: "Publisher permission, including KMS", answer: "The publisher needs sns:Publish on that topic ARN. An AWS service or another account also needs an Allow statement in the topic access policy. If the topic uses a customer managed KMS key, the key policy must let the publisher and SNS use the key. Without that, Publish fails even when the topic policy looks correct." },
+      q05: { eyebrow: "Security", title: "Lock the queue side of a fan-out", answer: "The SQS queue policy must allow sqs:SendMessage from sns.amazonaws.com. Constrain aws:SourceArn to the topic ARN so a different topic cannot write to the queue. Do the same in the topic policy for a service that publishes, such as S3 or CloudWatch." },
+      q06: { eyebrow: "Security", title: "Trust an HTTPS endpoint", answer: "Require HTTPS, confirm the subscription on purpose, and validate the SNS signature and the topic ARN on every post. A body that merely looks like an SNS notification is not proof it came from your topic." },
+      q07: { eyebrow: "Security", title: "What you put in the message", answer: "One publication is copied to every matching subscriber and can land in logs and dead-letter queues. Send an identifier. Keep secrets, payment data, and full customer records in a system the subscriber is allowed to read." },
+      q08: { eyebrow: "Reliability", title: "What durable acceptance means", answer: "SNS stores copies across Availability Zones before it acknowledges the publish. That protects the accepted message. It still does not mean every subscriber is available or has finished its own work." },
+      q09: { eyebrow: "Reliability", title: "Standard or FIFO", answer: "A standard topic gives the highest throughput, with best-effort order and at-least-once delivery. A FIFO topic keeps order inside one message group and suppresses duplicates for five minutes. FIFO topics can archive messages for up to 365 days and replay them. A standard topic cannot. Most AWS services publish to standard topics only, and a FIFO topic allows far fewer subscriptions." },
+      q10: { eyebrow: "Reliability", title: "When the subscriber needs a queue", answer: "SNS pushes. It does not keep a backlog for a consumer to poll later. Put SQS in front of a worker that needs a buffer, its own scale, or a longer recovery window. A Lambda or HTTPS endpoint that is down has a shorter retry window than a queue." },
+      q11: { eyebrow: "Reliability", title: "After the last retry", answer: "SQS and Lambda get 100,015 attempts over about 23 days. Email, SMS, and mobile push get 50 attempts over about 6 hours. An HTTP/S policy you write cannot run longer than 3,600 seconds. When the policy ends, SNS discards the message unless that subscription has a dead-letter queue. Only HTTP/S lets you replace the default retry policy. Firehose throttling uses the shorter policy." },
+      q12: { eyebrow: "Reliability", title: "Reading a message again", answer: "A subscriber cannot poll old messages from a standard topic. Archive and replay exist for FIFO topics, for up to 365 days, and a subscriber starts the replay. If a worker must reread on its own schedule, put the copy in SQS, S3, or a stream." },
+      q13: { eyebrow: "Performance efficiency", title: "Message size", answer: "The default maximum is 256 KiB. A topic can raise MaximumMessageSize to 1 MiB. For a larger body, the extended client stores up to 2 GB in S3 and publishes a pointer. One PublishBatch request holds at most 10 messages." },
+      q14: { eyebrow: "Performance efficiency", title: "How a filter matches", answer: "Each subscription has its own policy. Several values of one attribute are OR. Different attribute names are AND. A message that matches nothing is dropped, not stored on the topic. A policy is at most 256 KB, five keys, and 150 value combinations. The default quota is 200 policies per topic. String matching is case-sensitive. When the business rule is an OR across two facts, the publisher sets one attribute, such as opsRoute, and the subscription lists the values it accepts." },
+      q15: { eyebrow: "Performance efficiency", title: "Publish rate and FIFO throughput", answer: "Publish and PublishBatch share a per-account, per-Region quota. In N. Virginia that is 30,000 messages per second. A batch of 10 counts as 10 messages. Other Regions are lower, down to 300 per second for standard topics. Inside one FIFO topic, one message group is limited to 300 messages per second. With topic scope, the topic is limited to 3,000 messages per second or 20 MB per second, whichever comes first." },
+      q16: { eyebrow: "Performance efficiency", title: "One slow subscriber", answer: "Subscriptions are independent. A slow Lambda does not stop an SQS subscription on the same topic. The queue is what isolates the worker: it holds the backlog and lets that worker scale and retry on its own. A direct webhook has no such buffer." },
+      q17: { eyebrow: "Cost optimization", title: "The subscriber multiplier", answer: "You pay for the publish, and the payload is metered in 64 KB chunks. Each subscriber is another delivery path and another downstream workload. Ten subscriptions do not cost the same as one. SQS and Lambda deliveries have no extra SNS per-message delivery charge, but SQS, Lambda, KMS, and data transfer are still billed." },
+      q18: { eyebrow: "Cost optimization", title: "Email and SMS are different", answer: "Delivery price depends on the protocol. Email is hard-capped at 10 messages per second per subscription. SMS starts with a 1.00 USD account spend threshold and a default of 20 messages per second. Country, origination, sandbox, and opt-out rules still apply. An SNS email subscription is one confirmed address. To send to the address typed on a form, use Lambda and SES." },
+      q19: { eyebrow: "Sustainability", title: "Do not wake a subscriber that does not care", answer: "A filter policy avoids the wasted work. Shipping does not run for a digital order, and operations mail does not send for a clear, approved checkout. That saves compute, queue traffic, and messages to people. The filter is not a security boundary. Authorization still belongs in IAM and the topic policy." },
+      q20: { eyebrow: "All six pillars", title: "SNS, SQS, EventBridge, or Kinesis", answer: "Use SNS when you know the subscribers and want one push to many endpoints. Use SQS when one worker pool should pull a buffer. Use EventBridge when the route depends on the event content, or you need SaaS sources, archive, and replay on a bus. Use Kinesis when several consumers must reread an ordered stream. Run your own broker only when an application already requires a protocol such as AMQP or MQTT." }
+    };
     function openSnippet(name, button) {
-      codeModalEyebrow.textContent = button.dataset.eyebrow || "Amazon SNS";
-      codeModalTitle.textContent = button.dataset.title || "Learn more";
-      codeModalBody.innerHTML = document.querySelector('[data-rich="' + name + '"]').innerHTML;
+      const question = questions[name];
+      if (question) {
+        codeModalEyebrow.textContent = question.eyebrow;
+        codeModalTitle.textContent = question.title;
+        const body = document.createElement("p");
+        body.className = "text-sm leading-7 text-slate-300";
+        body.textContent = question.answer;
+        codeModalBody.replaceChildren(body);
+      } else {
+        codeModalEyebrow.textContent = button.dataset.eyebrow || "Amazon SNS";
+        codeModalTitle.textContent = button.dataset.title || "Learn more";
+        codeModalBody.innerHTML = document.querySelector('[data-rich="' + name + '"]').innerHTML;
+      }
       codeModal.classList.remove("hidden");
       codeModal.classList.add("flex");
     }

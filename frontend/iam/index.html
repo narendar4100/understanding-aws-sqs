@@ -46,6 +46,7 @@
   <main class="mx-auto max-w-6xl px-6 py-8">
     <div class="flex flex-wrap gap-2 text-xs">
       <a href="#core" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Core</a>
+      <a href="#policies" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Policies</a>
       <a href="#best-lab" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Best lab</a>
       <a href="#live-lab" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Live lab</a>
       <a href="#limits" class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-300 hover:border-slate-400">Limits</a>
@@ -92,6 +93,101 @@
             <tr><td class="px-4 py-3 text-white">Session policy</td><td class="px-4 py-3">No</td><td class="px-4 py-3">Shrinks one role session. Useful when a broker assumes a broad role for a narrower job.</td></tr>
           </tbody>
         </table>
+      </div>
+    </section>
+
+    <section id="policies" class="mt-12 rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+      <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-amber-400">Policies</p>
+      <h2 class="mt-2 text-2xl font-semibold text-white">Identity policies say what you may do. Resource policies say who may touch this.</h2>
+      <p class="mt-4 max-w-4xl text-sm leading-7 text-slate-300">Both are JSON, and both can allow a call. The difference is where the policy is attached. An identity policy has no Principal, because the person or role it is attached to is already the caller. A resource policy must name a Principal, because the resource is asking who is allowed to reach it.</p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-amber-300">Identity-based</p>
+          <h3 class="mt-2 text-lg font-semibold text-white">What am I allowed to do?</h3>
+          <ul class="mt-4 space-y-2 text-sm leading-6 text-slate-400">
+            <li>• Attach it to a user, a group, or a role. A group policy reaches the users in that group.</li>
+            <li>• Leave out Principal. IAM rejects an identity policy that includes one.</li>
+            <li>• Use it for every service the caller touches: a Lambda role that reads one SQS queue, an EC2 role that reads one S3 bucket, a person who may describe EC2 instances.</li>
+          </ul>
+        </article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-amber-300">Resource-based</p>
+          <h3 class="mt-2 text-lg font-semibold text-white">Who can touch me?</h3>
+          <ul class="mt-4 space-y-2 text-sm leading-6 text-slate-400">
+            <li>• Attach it to the resource. Principal is required.</li>
+            <li>• Common places: an S3 bucket policy, an SQS queue policy, an SNS topic policy, a Lambda permission for who may invoke it, a KMS key policy, and a role trust policy.</li>
+            <li>• Use it when the caller is another account or an AWS service. SNS has no user policy in your account, so the queue policy is what lets that topic send a message.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <article class="rounded-xl border border-emerald-900/70 bg-black/40 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-emerald-300">Same account</p>
+          <h3 class="mt-2 text-lg font-semibold text-white">Either Allow is enough</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-400">AWS reads the identity policy and the resource policy as one checklist. If either says Allow, and nothing says Deny, the call is allowed. A Lambda role in this account with sqs:ReceiveMessage on the queue does not also need a queue policy. Add the queue policy when the caller is SNS, S3, or another service.</p>
+        </article>
+        <article class="rounded-xl border border-rose-900/70 bg-black/40 p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-rose-300">Cross account</p>
+          <h3 class="mt-2 text-lg font-semibold text-white">Both sides must Allow</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-400">The caller's identity policy must allow the call out. The resource policy must allow that caller in. A bucket policy that names a role in another account is not enough when that role has no S3 Allow. One explicit Deny on either side still blocks the call.</p>
+        </article>
+      </div>
+      <h3 class="mt-8 text-lg font-semibold text-white">A role has two different policies</h3>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-slate-800">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <thead class="bg-slate-950 text-slate-300"><tr><th class="px-4 py-3">Policy</th><th class="px-4 py-3">Question it answers</th><th class="px-4 py-3">Example</th></tr></thead>
+          <tbody class="divide-y divide-slate-800 text-slate-400">
+            <tr><td class="px-4 py-3 text-white">Trust policy</td><td class="px-4 py-3">Who may call sts:AssumeRole and receive temporary credentials?</td><td class="px-4 py-3">Principal is lambda.amazonaws.com, or another account. This is required even in the same account. It does not allow S3 or SQS.</td></tr>
+            <tr><td class="px-4 py-3 text-white">Permissions policy</td><td class="px-4 py-3">After the role is assumed, what may those credentials do?</td><td class="px-4 py-3">Allow sqs:ReceiveMessage and sqs:DeleteMessage on one queue ARN. This is an identity policy, so it has no Principal.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="mt-8 text-lg font-semibold text-white">Explicit deny wins</h3>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <article class="rounded-xl bg-slate-950 p-5"><p class="font-mono text-xs text-slate-500">1</p><h3 class="mt-2 font-semibold">Start at deny</h3><p class="mt-2 text-sm leading-6 text-slate-400">A new role can do nothing. No matching Allow means the call stays denied.</p></article>
+        <article class="rounded-xl bg-slate-950 p-5"><p class="font-mono text-xs text-slate-500">2</p><h3 class="mt-2 font-semibold">An Allow opens it</h3><p class="mt-2 text-sm leading-6 text-slate-400">An identity Allow or a resource Allow permits the action. In another account, you need the Allow on both sides.</p></article>
+        <article class="rounded-xl bg-slate-950 p-5"><p class="font-mono text-xs text-slate-500">3</p><h3 class="mt-2 font-semibold">A Deny closes it</h3><p class="mt-2 text-sm leading-6 text-slate-400">An explicit Deny beats every Allow. A resource policy Deny blocks a role even when that role's identity policy says Allow.</p></article>
+      </div>
+      <h3 class="mt-8 text-lg font-semibold text-white">One statement does one job</h3>
+      <p class="mt-3 max-w-4xl text-sm leading-7 text-slate-300">Each statement has one Effect, either Allow or Deny. It cannot contain both. Action, Resource, and Principal each accept one value or a list of values. To allow reads and deny deletes, add a second statement. The Statement array can hold many statements until the policy reaches its size quota. A managed policy stops at 6,144 characters.</p>
+      <div class="mt-4 grid gap-4 lg:grid-cols-2">
+        <article class="rounded-xl bg-black p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-amber-300">Identity policy on the Lambda role</p>
+          <pre class="mt-3 overflow-x-auto font-mono text-xs leading-6 text-slate-300">{
+  "Statement": [
+    {
+      "Sid": "ReadOneQueue",
+      "Effect": "Allow",
+      "Action": ["sqs:ReceiveMessage", "sqs:DeleteMessage"],
+      "Resource": "arn:aws:sqs:us-east-1:111122223333:orders"
+    },
+    {
+      "Sid": "NoBucketDelete",
+      "Effect": "Deny",
+      "Action": "s3:DeleteBucket",
+      "Resource": "*"
+    }
+  ]
+}</pre>
+        </article>
+        <article class="rounded-xl bg-black p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-amber-300">Queue policy for SNS, and the role trust</p>
+          <pre class="mt-3 overflow-x-auto font-mono text-xs leading-6 text-slate-300">Queue policy. Principal is required:
+{
+  "Sid": "LetTheTopicSend",
+  "Effect": "Allow",
+  "Principal": { "Service": "sns.amazonaws.com" },
+  "Action": "sqs:SendMessage",
+  "Resource": "arn:aws:sqs:us-east-1:111122223333:orders"
+}
+
+Trust policy. This only allows assume:
+{
+  "Effect": "Allow",
+  "Principal": { "Service": "lambda.amazonaws.com" },
+  "Action": "sts:AssumeRole"
+}</pre>
+        </article>
       </div>
     </section>
 
@@ -212,6 +308,8 @@
         <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">Lambda should read one bucket. The team wants an access key in an environment variable. What do you choose?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-3" aria-expanded="false">Show the decision</button><p id="exam-3" hidden class="mt-3 text-sm leading-6 text-slate-300">An execution role with s3:GetObject on that bucket ARN. The function receives temporary credentials.</p></article>
         <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">Account B must read a bucket in account A. The bucket policy allows the role, but the role has no S3 allow. What happens?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-4" aria-expanded="false">Show the decision</button><p id="exam-4" hidden class="mt-3 text-sm leading-6 text-slate-300">Deny. Cross-account access needs an allow on both the identity policy and the resource policy, and no explicit deny.</p></article>
         <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">A permission boundary includes only S3. An administrator attaches EC2 full access. Can the role start an instance?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-5" aria-expanded="false">Show the decision</button><p id="exam-5" hidden class="mt-3 text-sm leading-6 text-slate-300">No. The boundary is the maximum. EC2 actions are outside it, so they are denied.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">A Lambda role in this account allows sqs:ReceiveMessage. The queue has no policy. Can the function read the queue?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-6" aria-expanded="false">Show the decision</button><p id="exam-6" hidden class="mt-3 text-sm leading-6 text-slate-300">Allow. In the same account, the identity Allow is enough. Add a queue policy when the sender is SNS, S3, or another account.</p></article>
+        <article class="rounded-xl border border-slate-800 bg-slate-950 p-5"><h3 class="font-semibold leading-6 text-white">A role trust policy allows only lambda.amazonaws.com to assume it. Does that trust policy let the function delete an SQS message?</h3><button type="button" class="exam-toggle mt-4 rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-400" data-target="exam-7" aria-expanded="false">Show the decision</button><p id="exam-7" hidden class="mt-3 text-sm leading-6 text-slate-300">No. The trust policy only allows sts:AssumeRole. The role still needs an identity policy that allows sqs:DeleteMessage on that queue.</p></article>
       </div>
     </section>
 
